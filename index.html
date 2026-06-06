@@ -47,7 +47,7 @@
     .sel-card.selected,.sel-card.on{border-color:#F97316;background:linear-gradient(135deg,#DC262612,#F9731612)}
     .day-pill{transition:all .2s;cursor:pointer;border:1.5px solid var(--border);border-radius:.75rem;padding:.5rem;text-align:center;color:var(--text)}
     .day-pill.on{background:linear-gradient(135deg,#DC2626,#F97316);border-color:transparent;color:white}
-    .inp{width:100%;background:var(--bg-inner);border:1.5px solid var(--border-in);border-radius:.875rem;padding:.875rem 1rem;color:var(--text);font-size:.875rem;transition:border-color .2s,background .25s;outline:none;-webkit-appearance:none}
+    .inp{width:100%;background:var(--bg-inner);border:1.5px solid var(--border-in);border-radius:.875rem;padding:.75rem 1rem;color:var(--text);font-size:16px;transition:border-color .2s,background .25s;outline:none;-webkit-appearance:none}
     .inp:focus{border-color:#F97316}
     .inp::placeholder{color:var(--text-muted)}
     .prog-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,#DC2626,#F97316);transition:width .5s ease}
@@ -164,7 +164,7 @@
 </div>
 
 <!-- ═══ ONBOARDING ══════════════════════════════════ -->
-<div id="screen-onboarding" class="screen min-h-screen flex-col px-5 py-6 max-w-sm mx-auto w-full">
+<div id="screen-onboarding" class="screen flex-col px-5 py-6 max-w-sm mx-auto w-full" style="height:100dvh;overflow:hidden">
   <div class="flex items-center justify-between mb-3">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 38" height="30" aria-label="FitFlex">
       <defs>
@@ -218,96 +218,112 @@
   </div>
   <!-- Step 3 — Stats & niveau -->
   <div id="ob-3" class="ob-step hidden flex-1 flex flex-col">
-    <h1 class="font-display text-4xl font-bold mb-1">TON PROFIL</h1>
-    <p class="text-sm mb-5" style="color:var(--text-muted)">Pour adapter le programme à toi.</p>
-    <div class="flex gap-3 mb-4">
+    <h1 class="font-display text-3xl font-bold mb-0.5">TON PROFIL</h1>
+    <p class="text-xs mb-3" style="color:var(--text-muted)">Pour adapter le programme à toi.</p>
+    <!-- Poids actuel + objectif + âge -->
+    <div class="flex gap-2 mb-2">
       <div class="flex-1">
-        <label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">ÂGE</label>
-        <input id="ob-age" class="inp" type="number" min="10" max="99" placeholder="Ex: 22" oninput="checkObStats()"/>
+        <label class="text-xs font-semibold mb-1 block" style="color:var(--text-muted)">ÂGE</label>
+        <input id="ob-age" class="inp" type="number" min="10" max="99" placeholder="22" inputmode="numeric" oninput="checkObStats()"/>
       </div>
       <div class="flex-1">
-        <label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">POIDS (kg)</label>
-        <input id="ob-weight" class="inp" type="number" step="0.5" min="30" max="250" placeholder="Ex: 75" oninput="checkObStats()"/>
+        <label class="text-xs font-semibold mb-1 block" style="color:var(--text-muted)">POIDS (kg)</label>
+        <input id="ob-weight" class="inp" type="number" step="0.5" min="30" max="250" placeholder="75" inputmode="decimal" oninput="checkObStats()"/>
+      </div>
+      <div class="flex-1">
+        <label class="text-xs font-semibold mb-1 block" style="color:var(--text-muted)">OBJECTIF (kg)</label>
+        <input id="ob-weight-goal" class="inp" type="number" step="0.5" min="30" max="250" placeholder="70" inputmode="decimal" oninput="checkObStats()"/>
       </div>
     </div>
-    <label class="text-xs font-semibold mb-3 block" style="color:var(--text-muted)">NIVEAU</label>
-    <div class="grid grid-cols-3 gap-2 mb-5">
-      <div class="sel-card p-3 card flex flex-col items-center text-center" onclick="pickLevel('beginner',this)">
-        <div class="text-2xl mb-1">🌱</div>
+    <!-- Niveau -->
+    <label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">NIVEAU</label>
+    <div id="ob-level-grid" class="grid grid-cols-3 gap-2 mb-2">
+      <div class="sel-card p-2.5 card flex flex-col items-center text-center" onclick="pickLevel('beginner',this)">
+        <div class="text-xl mb-0.5">🌱</div>
         <div class="font-display text-sm font-bold">DÉBUTANT</div>
-        <div class="text-xs mt-1" style="color:var(--text-muted)">Moins de 6 mois</div>
+        <div class="text-xs" style="color:var(--text-muted)">< 6 mois</div>
       </div>
-      <div class="sel-card p-3 card flex flex-col items-center text-center" onclick="pickLevel('intermediate',this)">
-        <div class="text-2xl mb-1">⚡</div>
+      <div class="sel-card p-2.5 card flex flex-col items-center text-center" onclick="pickLevel('intermediate',this)">
+        <div class="text-xl mb-0.5">⚡</div>
         <div class="font-display text-sm font-bold">INTER</div>
-        <div class="text-xs mt-1" style="color:var(--text-muted)">6 mois – 2 ans</div>
+        <div class="text-xs" style="color:var(--text-muted)">6m – 2 ans</div>
       </div>
-      <div class="sel-card p-3 card flex flex-col items-center text-center" onclick="pickLevel('advanced',this)">
-        <div class="text-2xl mb-1">🔥</div>
+      <div class="sel-card p-2.5 card flex flex-col items-center text-center" onclick="pickLevel('advanced',this)">
+        <div class="text-xl mb-0.5">🔥</div>
         <div class="font-display text-sm font-bold">AVANCÉ</div>
-        <div class="text-xs mt-1" style="color:var(--text-muted)">2+ ans</div>
+        <div class="text-xs" style="color:var(--text-muted)">2+ ans</div>
+      </div>
+    </div>
+    <!-- Régime alimentaire -->
+    <label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">RÉGIME ALIMENTAIRE</label>
+    <div id="ob-diet-grid" class="grid grid-cols-2 gap-2 mb-2">
+      <div class="sel-card p-2.5 card flex items-center gap-2" onclick="pickDiet('omnivore',this)">
+        <span class="text-xl">🥩</span>
+        <div><div class="font-display text-sm font-bold">OMNIVORE</div><div class="text-xs" style="color:var(--text-muted)">Viande, poisson…</div></div>
+      </div>
+      <div class="sel-card p-2.5 card flex items-center gap-2" onclick="pickDiet('vegetarian',this)">
+        <span class="text-xl">🌿</span>
+        <div><div class="font-display text-sm font-bold">VÉGÉTARIEN</div><div class="text-xs" style="color:var(--text-muted)">Sans viande/poisson</div></div>
       </div>
     </div>
     <div class="flex gap-3 mt-auto">
-      <button onclick="obStep(2)" class="rounded-2xl py-4 px-5 card font-display text-xl font-bold">←</button>
-      <button id="ob-next-3" onclick="obStep(4)" class="btn-fire flex-1 rounded-2xl py-4 text-white font-display text-xl font-bold" disabled>CONTINUER →</button>
+      <button onclick="obStep(2)" class="rounded-2xl py-3.5 px-5 card font-display text-xl font-bold">←</button>
+      <button id="ob-next-3" onclick="obStep(4)" class="btn-fire flex-1 rounded-2xl py-3.5 text-white font-display text-xl font-bold" disabled>CONTINUER →</button>
     </div>
   </div>
   <!-- Step 4 — Jours -->
   <div id="ob-4" class="ob-step hidden flex-1 flex flex-col">
-    <h1 class="font-display text-4xl font-bold mb-1">TES JOURS DISPO</h1>
-    <p class="text-sm mb-5" style="color:var(--text-muted)">Sélectionne les jours où tu t'entraînes habituellement.</p>
-    <!-- Jours en grandes cartes verticales -->
-    <div class="grid grid-cols-7 gap-2 mb-5">
-      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('L',this)">
-        <div class="text-xs font-semibold" style="color:var(--text-muted)">LUN</div>
-        <div class="text-lg font-display font-bold">L</div>
+    <h1 class="font-display text-3xl font-bold mb-0.5">TES JOURS DISPO</h1>
+    <p class="text-xs mb-3" style="color:var(--text-muted)">Sélectionne tes jours d'entraînement habituels.</p>
+    <div class="grid grid-cols-7 gap-1.5 mb-3">
+      <div class="day-pill flex flex-col items-center py-2.5 gap-0.5" onclick="toggleDay('L',this)">
+        <div class="text-xs font-bold" style="color:var(--text-muted)">LU</div>
+        <div class="text-base font-display font-bold">L</div>
       </div>
-      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('M',this)">
-        <div class="text-xs font-semibold" style="color:var(--text-muted)">MAR</div>
-        <div class="text-lg font-display font-bold">M</div>
+      <div class="day-pill flex flex-col items-center py-2.5 gap-0.5" onclick="toggleDay('M',this)">
+        <div class="text-xs font-bold" style="color:var(--text-muted)">MA</div>
+        <div class="text-base font-display font-bold">M</div>
       </div>
-      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('Me',this)">
-        <div class="text-xs font-semibold" style="color:var(--text-muted)">MER</div>
-        <div class="text-lg font-display font-bold">M</div>
+      <div class="day-pill flex flex-col items-center py-2.5 gap-0.5" onclick="toggleDay('Me',this)">
+        <div class="text-xs font-bold" style="color:var(--text-muted)">ME</div>
+        <div class="text-base font-display font-bold">M</div>
       </div>
-      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('J',this)">
-        <div class="text-xs font-semibold" style="color:var(--text-muted)">JEU</div>
-        <div class="text-lg font-display font-bold">J</div>
+      <div class="day-pill flex flex-col items-center py-2.5 gap-0.5" onclick="toggleDay('J',this)">
+        <div class="text-xs font-bold" style="color:var(--text-muted)">JE</div>
+        <div class="text-base font-display font-bold">J</div>
       </div>
-      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('V',this)">
-        <div class="text-xs font-semibold" style="color:var(--text-muted)">VEN</div>
-        <div class="text-lg font-display font-bold">V</div>
+      <div class="day-pill flex flex-col items-center py-2.5 gap-0.5" onclick="toggleDay('V',this)">
+        <div class="text-xs font-bold" style="color:var(--text-muted)">VE</div>
+        <div class="text-base font-display font-bold">V</div>
       </div>
-      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('S',this)">
-        <div class="text-xs font-semibold" style="color:var(--text-muted)">SAM</div>
-        <div class="text-lg font-display font-bold">S</div>
+      <div class="day-pill flex flex-col items-center py-2.5 gap-0.5" onclick="toggleDay('S',this)">
+        <div class="text-xs font-bold" style="color:var(--text-muted)">SA</div>
+        <div class="text-base font-display font-bold">S</div>
       </div>
-      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('D',this)">
-        <div class="text-xs font-semibold" style="color:var(--text-muted)">DIM</div>
-        <div class="text-lg font-display font-bold">D</div>
+      <div class="day-pill flex flex-col items-center py-2.5 gap-0.5" onclick="toggleDay('D',this)">
+        <div class="text-xs font-bold" style="color:var(--text-muted)">DI</div>
+        <div class="text-base font-display font-bold">D</div>
       </div>
     </div>
-    <!-- Suggestions de fréquence -->
-    <p class="text-xs font-semibold mb-2" style="color:var(--text-muted)">SUGGESTIONS RAPIDES</p>
-    <div class="flex flex-col gap-2 mb-5">
-      <button onclick="quickDays(['L','Me','V'])" class="card rounded-xl px-4 py-3 flex items-center gap-3 text-left">
-        <span class="text-lg">3️⃣</span>
+    <p class="text-xs font-semibold mb-1.5" style="color:var(--text-muted)">SUGGESTIONS RAPIDES</p>
+    <div class="flex flex-col gap-1.5 mb-3">
+      <button onclick="quickDays(['L','Me','V'])" class="card rounded-xl px-3 py-2 flex items-center gap-2.5 text-left">
+        <span class="text-base">3️⃣</span>
         <div><div class="text-sm font-semibold">3 fois/semaine</div><div class="text-xs" style="color:var(--text-muted)">Lun · Mer · Ven — idéal pour débuter</div></div>
       </button>
-      <button onclick="quickDays(['L','M','J','V'])" class="card rounded-xl px-4 py-3 flex items-center gap-3 text-left">
-        <span class="text-lg">4️⃣</span>
-        <div><div class="text-sm font-semibold">4 fois/semaine</div><div class="text-xs" style="color:var(--text-muted)">Lun · Mar · Jeu · Ven — programme intermédiaire</div></div>
+      <button onclick="quickDays(['L','M','J','V'])" class="card rounded-xl px-3 py-2 flex items-center gap-2.5 text-left">
+        <span class="text-base">4️⃣</span>
+        <div><div class="text-sm font-semibold">4 fois/semaine</div><div class="text-xs" style="color:var(--text-muted)">Lun · Mar · Jeu · Ven</div></div>
       </button>
-      <button onclick="quickDays(['L','M','Me','J','V'])" class="card rounded-xl px-4 py-3 flex items-center gap-3 text-left">
-        <span class="text-lg">5️⃣</span>
+      <button onclick="quickDays(['L','M','Me','J','V'])" class="card rounded-xl px-3 py-2 flex items-center gap-2.5 text-left">
+        <span class="text-base">5️⃣</span>
         <div><div class="text-sm font-semibold">5 fois/semaine</div><div class="text-xs" style="color:var(--text-muted)">Lun → Ven — pour les confirmés</div></div>
       </button>
     </div>
-    <div id="days-info" class="text-center text-sm font-semibold py-2 rounded-xl mb-3" style="color:var(--text-muted);background:var(--bg-inner)">Aucun jour sélectionné</div>
+    <div id="days-info" class="text-center text-sm font-semibold py-1.5 rounded-xl mb-2" style="color:var(--text-muted);background:var(--bg-inner)">Aucun jour sélectionné</div>
     <div class="flex gap-3 mt-auto">
-      <button onclick="obStep(3)" class="rounded-2xl py-4 px-5 card font-display text-xl font-bold">←</button>
-      <button id="ob-next-4" onclick="finishOnboarding()" class="btn-fire flex-1 rounded-2xl py-4 text-white font-display text-xl font-bold" disabled>COMMENCER 🚀</button>
+      <button onclick="obStep(3)" class="rounded-2xl py-3.5 px-5 card font-display text-xl font-bold">←</button>
+      <button id="ob-next-4" onclick="finishOnboarding()" class="btn-fire flex-1 rounded-2xl py-3.5 text-white font-display text-xl font-bold" disabled>COMMENCER 🚀</button>
     </div>
   </div>
 </div>
@@ -494,28 +510,28 @@ const ZONE_META = {
 
 const MEALS = {
   breakfast:[
-    {n:"Bowl Protéiné",e:"🥣",cal:420,t:"10 min",tags:["Protéines","Fibres"],d:"Fromage blanc 0%, flocons d'avoine, banane, miel, amandes.",mac:{p:32,g:52,l:8}},
-    {n:"Omelette Épinards",e:"🍳",cal:380,t:"12 min",tags:["Protéines","Keto"],d:"3 œufs, épinards, champignons.",mac:{p:28,g:6,l:22}},
-    {n:"Toast Avocat Œuf",e:"🥑",cal:460,t:"8 min",tags:["Équilibré"],d:"Pain complet, avocat, œuf poché.",mac:{p:20,g:38,l:24}},
-    {n:"Smoothie Vert",e:"🥤",cal:290,t:"5 min",tags:["Vegan"],d:"Épinard, pomme, gingembre, citron, eau de coco.",mac:{p:8,g:56,l:5}},
+    {n:"Bowl Protéiné",e:"🥣",cal:420,t:"10 min",tags:["Protéines","Fibres"],d:"Fromage blanc 0%, flocons d'avoine, banane, miel, amandes.",mac:{p:32,g:52,l:8},veg:true},
+    {n:"Omelette Épinards",e:"🍳",cal:380,t:"12 min",tags:["Protéines","Keto"],d:"3 œufs, épinards, champignons.",mac:{p:28,g:6,l:22},veg:true},
+    {n:"Toast Avocat Œuf",e:"🥑",cal:460,t:"8 min",tags:["Équilibré"],d:"Pain complet, avocat, œuf poché.",mac:{p:20,g:38,l:24},veg:true},
+    {n:"Smoothie Vert",e:"🥤",cal:290,t:"5 min",tags:["Vegan"],d:"Épinard, pomme, gingembre, citron, eau de coco.",mac:{p:8,g:56,l:5},veg:true},
   ],
   lunch:[
-    {n:"Bowl Poulet Quinoa",e:"🍚",cal:580,t:"20 min",tags:["Équilibré"],d:"Quinoa, poulet grillé, légumes rôtis, tahini.",mac:{p:45,g:62,l:14}},
-    {n:"Steak + Patate douce",e:"🥩",cal:620,t:"25 min",tags:["Force"],d:"Steak 150g, patate douce rôtie, salade.",mac:{p:50,g:48,l:18}},
-    {n:"Saumon + Riz complet",e:"🐟",cal:560,t:"20 min",tags:["Oméga-3"],d:"Saumon vapeur, riz complet, brocolis.",mac:{p:42,g:55,l:16}},
-    {n:"Wrap Thon",e:"🌯",cal:440,t:"10 min",tags:["Rapide"],d:"Tortilla, thon, avocat, tomates, roquette.",mac:{p:35,g:40,l:12}},
+    {n:"Bowl Poulet Quinoa",e:"🍚",cal:580,t:"20 min",tags:["Équilibré"],d:"Quinoa, poulet grillé, légumes rôtis, tahini.",mac:{p:45,g:62,l:14},veg:false,vegAlt:{n:"Bowl Tofu Quinoa",e:"🍚",cal:520,t:"20 min",tags:["Végé","Équilibré"],d:"Quinoa, tofu mariné grillé, légumes rôtis, tahini.",mac:{p:36,g:62,l:14}}},
+    {n:"Steak + Patate douce",e:"🥩",cal:620,t:"25 min",tags:["Force"],d:"Steak 150g, patate douce rôtie, salade.",mac:{p:50,g:48,l:18},veg:false,vegAlt:{n:"Lentilles + Patate douce",e:"🫘",cal:550,t:"20 min",tags:["Végé","Force"],d:"Lentilles beluga, patate douce rôtie, salade verte.",mac:{p:28,g:68,l:8}}},
+    {n:"Saumon + Riz complet",e:"🐟",cal:560,t:"20 min",tags:["Oméga-3"],d:"Saumon vapeur, riz complet, brocolis.",mac:{p:42,g:55,l:16},veg:false,vegAlt:{n:"Tempeh + Riz complet",e:"🌾",cal:510,t:"20 min",tags:["Végé","Protéines"],d:"Tempeh sauté sauce tamari, riz complet, brocolis.",mac:{p:34,g:55,l:16}}},
+    {n:"Wrap Thon",e:"🌯",cal:440,t:"10 min",tags:["Rapide"],d:"Tortilla, thon, avocat, tomates, roquette.",mac:{p:35,g:40,l:12},veg:false,vegAlt:{n:"Wrap Pois Chiches",e:"🌯",cal:410,t:"10 min",tags:["Végé","Rapide"],d:"Tortilla, pois chiches épicés, avocat, tomates, roquette.",mac:{p:18,g:52,l:12}}},
   ],
   dinner:[
-    {n:"Curry Pois Chiches",e:"🍛",cal:490,t:"30 min",tags:["Vegan"],d:"Pois chiches, lait de coco, épinards, riz basmati.",mac:{p:22,g:72,l:14}},
-    {n:"Cabillaud Légumes",e:"🐠",cal:380,t:"25 min",tags:["Léger"],d:"Cabillaud en papillote, courgettes, herbes.",mac:{p:38,g:18,l:12}},
-    {n:"Chicken Stir-fry",e:"🥘",cal:520,t:"20 min",tags:["Rapide"],d:"Poulet sauté, légumes, sauce soja-sésame, riz.",mac:{p:42,g:50,l:12}},
-    {n:"Omelette Complète",e:"🍳",cal:440,t:"15 min",tags:["Protéines"],d:"4 œufs, fromage, jambon, poivrons.",mac:{p:38,g:8,l:26}},
+    {n:"Curry Pois Chiches",e:"🍛",cal:490,t:"30 min",tags:["Vegan"],d:"Pois chiches, lait de coco, épinards, riz basmati.",mac:{p:22,g:72,l:14},veg:true},
+    {n:"Cabillaud Légumes",e:"🐠",cal:380,t:"25 min",tags:["Léger"],d:"Cabillaud en papillote, courgettes, herbes.",mac:{p:38,g:18,l:12},veg:false,vegAlt:{n:"Tofu Légumes",e:"🥦",cal:340,t:"20 min",tags:["Végé","Léger"],d:"Tofu ferme en papillote, courgettes, poivrons, herbes.",mac:{p:24,g:18,l:14}}},
+    {n:"Chicken Stir-fry",e:"🥘",cal:520,t:"20 min",tags:["Rapide"],d:"Poulet sauté, légumes, sauce soja-sésame, riz.",mac:{p:42,g:50,l:12},veg:false,vegAlt:{n:"Tofu Stir-fry",e:"🥢",cal:460,t:"20 min",tags:["Végé","Rapide"],d:"Tofu croustillant, légumes sautés, sauce soja-sésame, riz.",mac:{p:28,g:50,l:14}}},
+    {n:"Omelette Complète",e:"🍳",cal:440,t:"15 min",tags:["Protéines"],d:"4 œufs, fromage, jambon, poivrons.",mac:{p:38,g:8,l:26},veg:false,vegAlt:{n:"Omelette Végétarienne",e:"🍳",cal:380,t:"12 min",tags:["Végé","Protéines"],d:"4 œufs, fromage, poivrons, champignons, épinards.",mac:{p:28,g:10,l:22}}},
   ],
   snacks:[
-    {n:"Shake Post-training",e:"🥤",cal:280,t:"2 min",tags:["Récup"],d:"Whey, lait, banane. Dans les 30 min post-séance.",mac:{p:30,g:28,l:4}},
-    {n:"Yaourt + Fruits secs",e:"🫙",cal:220,t:"2 min",tags:["Calcium"],d:"Yaourt grec, noix de cajou, amandes, miel.",mac:{p:14,g:22,l:10}},
-    {n:"Crackers + Houmous",e:"🫘",cal:180,t:"2 min",tags:["Fibres"],d:"Crackers sésame, houmous, carottes.",mac:{p:6,g:26,l:7}},
-    {n:"Banane + Beurre amande",e:"🍌",cal:250,t:"1 min",tags:["Énergie"],d:"1 banane + beurre d'amande naturel.",mac:{p:6,g:36,l:10}},
+    {n:"Shake Post-training",e:"🥤",cal:280,t:"2 min",tags:["Récup"],d:"Whey, lait, banane. Dans les 30 min post-séance.",mac:{p:30,g:28,l:4},veg:true},
+    {n:"Yaourt + Fruits secs",e:"🫙",cal:220,t:"2 min",tags:["Calcium"],d:"Yaourt grec, noix de cajou, amandes, miel.",mac:{p:14,g:22,l:10},veg:true},
+    {n:"Crackers + Houmous",e:"🫘",cal:180,t:"2 min",tags:["Fibres"],d:"Crackers sésame, houmous, carottes.",mac:{p:6,g:26,l:7},veg:true},
+    {n:"Banane + Beurre amande",e:"🍌",cal:250,t:"1 min",tags:["Énergie"],d:"1 banane + beurre d'amande naturel.",mac:{p:6,g:36,l:10},veg:true},
   ]
 };
 
@@ -788,7 +804,7 @@ const ANIM_SVG = {
 // ── State ──────────────────────────────────────────
 let currentUser = null;   // Firebase user object
 let userData    = null;   // Firestore data {username, profile, workouts, weight}
-let obData      = {location:null, goal:null, days:[], age:null, weight:null, level:null};
+let obData      = {location:null, goal:null, days:[], age:null, weight:null, weight_goal:null, level:null, diet:null};
 let currentZone = null;
 let nutTab      = 'breakfast';
 let isDark      = true;
@@ -955,16 +971,25 @@ window.obStep = (n) => {
 };
 window.pickLevel = (v,el) => {
   obData.level=v;
-  document.querySelectorAll('#ob-3 .sel-card').forEach(c=>c.classList.remove('selected'));
+  // only deselect level cards (first 3 sel-cards)
+  document.querySelectorAll('#ob-level-grid .sel-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  checkObStats();
+};
+window.pickDiet = (v,el) => {
+  obData.diet=v;
+  document.querySelectorAll('#ob-diet-grid .sel-card').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
   checkObStats();
 };
 window.checkObStats = () => {
   const age=parseInt(document.getElementById('ob-age').value);
   const w=parseFloat(document.getElementById('ob-weight').value);
+  const wg=parseFloat(document.getElementById('ob-weight-goal').value);
   if(age>=10&&age<=99) obData.age=age; else obData.age=null;
   if(w>=30&&w<=250) obData.weight=w; else obData.weight=null;
-  document.getElementById('ob-next-3').disabled=!(obData.age&&obData.weight&&obData.level);
+  if(wg>=30&&wg<=250) obData.weight_goal=wg; else obData.weight_goal=null;
+  document.getElementById('ob-next-3').disabled=!(obData.age&&obData.weight&&obData.weight_goal&&obData.level&&obData.diet);
 };
 window.finishOnboarding = async () => {
   const profile={
@@ -973,6 +998,8 @@ window.finishOnboarding = async () => {
     days:obData.days,
     age:obData.age,
     weight_start:obData.weight,
+    weight_goal:obData.weight_goal,
+    diet:obData.diet||'omnivore',
     level:obData.level||'intermediate'
   };
   const weight=[{date:todayStr(),kg:obData.weight}];
@@ -1205,17 +1232,31 @@ function closeSession(){
 // ── Nutrition ───────────────────────────────────────
 window.renderNutrition=(tab)=>{
   if(tab) nutTab=tab;
+  const p=userData?.profile||{};
+  const isVeg=p.diet==='vegetarian';
+  const wStart=p.weight_start||p.weight||70;
+  const wGoal=p.weight_goal||wStart;
+  const diff=wGoal-wStart;
+  // calorie adjustment: +200 kcal/day to gain, -300 kcal/day to lose
+  const calAdj=diff>0.5?200:diff<-0.5?-300:0;
+  const goalLabel=diff>0.5?`🎯 Objectif : prendre ${(diff).toFixed(1)} kg — +200 kcal/j`:diff<-0.5?`🎯 Objectif : perdre ${(-diff).toFixed(1)} kg — -300 kcal/j`:'🎯 Objectif : maintien du poids';
+  const goalColor=diff>0.5?'#16a34a':diff<-0.5?'#DC2626':'#F97316';
+
   const tabs=[{k:'breakfast',l:'Petit-déj',e:'🌅'},{k:'lunch',l:'Déjeuner',e:'☀️'},{k:'dinner',l:'Dîner',e:'🌙'},{k:'snacks',l:'Collation',e:'⚡'}];
   const tabsHtml=tabs.map(t=>`<button onclick="renderNutrition('${t.k}')" class="flex-1 py-2 text-xs font-semibold rounded-xl" style="${nutTab===t.k?'background:linear-gradient(135deg,#DC2626,#F97316);color:white':'color:var(--text-muted)'}">${t.e} ${t.l}</button>`).join('');
-  const mealsHtml=MEALS[nutTab].map(m=>{
+  const mealsHtml=MEALS[nutTab].map(raw=>{
+    // pick vegetarian alternative if available and user is veg
+    const m=(isVeg&&!raw.veg&&raw.vegAlt)?raw.vegAlt:raw;
+    const adjCal=m.cal+calAdj;
     const tot=m.mac.p+m.mac.g+m.mac.l;
+    const vegBadge=(isVeg&&!raw.veg&&raw.vegAlt)?'<span class="badge" style="background:#16a34a22;color:#16a34a">🌿 Végé</span>':'';
     return`<div class="card rounded-xl p-3.5 cursor-pointer" onclick="this.querySelector('.meal-d').classList.toggle('hidden')">
       <div class="flex items-start gap-3">
         <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${m.e}</div>
         <div class="flex-1">
           <div class="flex items-center justify-between"><div class="font-semibold text-sm">${m.n}</div>
-            <div><span class="font-display font-bold text-fire">${m.cal}</span><span class="text-xs" style="color:var(--text-faint)"> kcal</span></div></div>
-          <div class="flex gap-1.5 mt-1">${m.tags.map(t=>`<span class="badge" style="background:var(--bg-inner);color:var(--text-muted)">${t}</span>`).join('')}<span class="badge" style="background:var(--bg-inner);color:var(--text-muted)">⏱ ${m.t}</span></div>
+            <div><span class="font-display font-bold text-fire">${adjCal}</span><span class="text-xs" style="color:var(--text-faint)"> kcal</span></div></div>
+          <div class="flex flex-wrap gap-1.5 mt-1">${vegBadge}${m.tags.map(t=>`<span class="badge" style="background:var(--bg-inner);color:var(--text-muted)">${t}</span>`).join('')}<span class="badge" style="background:var(--bg-inner);color:var(--text-muted)">⏱ ${m.t}</span></div>
         </div>
       </div>
       <div class="meal-d hidden mt-3 pt-3" style="border-top:1px solid var(--border)">
@@ -1224,17 +1265,26 @@ window.renderNutrition=(tab)=>{
           <div class="flex items-center gap-2 mb-1.5"><span class="text-xs w-16" style="color:var(--text-muted)">${l}</span>
             <div class="flex-1 h-1.5 rounded-full" style="background:var(--bg-faint)"><div class="h-full rounded-full" style="width:${Math.round(v/tot*100)}%;background:${c}"></div></div>
             <span class="text-xs font-semibold w-7 text-right">${v}g</span></div>`).join('')}
+        ${calAdj!==0?`<p class="text-xs mt-2" style="color:var(--text-faint)">${calAdj>0?'+'+calAdj:calAdj} kcal ajustés selon ton objectif</p>`:''}
       </div>
     </div>`;
   }).join('');
 
+  const dietBadge=isVeg?'🌿 Végétarien':'🥩 Omnivore';
   document.getElementById('tab-nutrition').innerHTML=`<div class="max-w-sm mx-auto">
-    <div class="mb-5"><p class="text-sm" style="color:var(--text-muted)">Alimentation adaptée</p><h1 class="font-display text-4xl font-bold mt-0.5">NUTRITION</h1></div>
+    <div class="mb-4"><p class="text-sm" style="color:var(--text-muted)">Alimentation adaptée</p><h1 class="font-display text-4xl font-bold mt-0.5">NUTRITION</h1></div>
+    <!-- goal + diet banner -->
+    <div class="card rounded-xl p-3 mb-4 flex items-center gap-3">
+      <div class="flex-1">
+        <div class="text-xs font-semibold" style="color:${goalColor}">${goalLabel}</div>
+      </div>
+      <div class="badge" style="background:var(--bg-inner);color:var(--text-muted)">${dietBadge}</div>
+    </div>
     <div class="flex gap-1 p-1 rounded-2xl card mb-4">${tabsHtml}</div>
     <div class="space-y-2.5 mb-5">${mealsHtml}</div>
     <div class="card rounded-2xl p-4">
       <h3 class="font-display text-sm font-bold mb-3">FOCUS NUTRITIONNEL</h3>
-      ${[['💧','Hydratation','2L min/jour, 3L les jours d\'effort'],['🥩','Protéines','1.6-2g/kg de poids'],['🍚','Glucides','Complexes avant l\'effort'],['🥑','Lipides','Avocat, noix, huile d\'olive']].map(([e,t,d])=>`
+      ${[['💧','Hydratation','2L min/jour, 3L les jours d\'effort'],[isVeg?'🌿':'🥩','Protéines',isVeg?'Légumineuses, tofu, tempeh, œufs':'1.6-2g/kg de poids corporel'],['🍚','Glucides','Complexes avant l\'effort'],['🥑','Lipides','Avocat, noix, huile d\'olive']].map(([e,t,d])=>`
         <div class="flex gap-3 mb-3"><span class="text-lg">${e}</span><div><div class="font-semibold text-sm">${t}</div><div class="text-xs" style="color:var(--text-muted)">${d}</div></div></div>`).join('')}
     </div>
   </div>`;
@@ -1314,12 +1364,18 @@ window.renderProfile=()=>{
           <div class="font-display text-base font-bold text-fire">${p.level==='beginner'?'Déb.':p.level==='advanced'?'Avancé':'Inter.'}</div>
           <div class="text-xs" style="color:var(--text-muted)">Niveau</div>
         </div>
+        <div class="rounded-xl p-2.5 text-center" style="background:var(--bg-inner)">
+          <div class="text-base">🎯</div>
+          <div class="font-display text-lg font-bold text-fire">${p.weight_goal||'—'}</div>
+          <div class="text-xs" style="color:var(--text-muted)">kg objectif</div>
+        </div>
       </div>
+      ${p.diet?`<div class="text-xs rounded-xl p-2 mb-1" style="background:var(--bg-sub);color:var(--text-muted)">${p.diet==='vegetarian'?'🌿 Régime Végétarien — alternatives végé affichées en nutrition':'🥩 Régime Omnivore'}</div>`:''}
       ${p.age&&p.weight_start?`<div class="text-xs rounded-xl p-2.5" style="background:var(--bg-sub);color:var(--text-muted)">
         💡 Apport conseillé&nbsp;: <span class="font-semibold text-fire">${Math.round(p.weight_start*({'shape':30,'strength':35,'endurance':33,'loss':25}[p.goal]||30))} kcal/jour</span>
         · Protéines&nbsp;: <span class="font-semibold text-fire">${Math.round(p.weight_start*1.8)}g</span>
       </div>`:''}
-      <button onclick="showEditStats()" class="w-full mt-3 rounded-xl py-2 text-sm font-semibold" style="background:var(--bg-inner);color:var(--text-muted)">✏️ Modifier âge / poids / niveau</button>
+      <button onclick="showEditStats()" class="w-full mt-3 rounded-xl py-2 text-sm font-semibold" style="background:var(--bg-inner);color:var(--text-muted)">✏️ Modifier profil</button>
     </div>
     <div class="card rounded-2xl p-4 mb-4">
       <h3 class="font-display text-sm font-bold mb-3">SUIVI DU POIDS</h3>
@@ -1334,7 +1390,7 @@ window.renderProfile=()=>{
     <div class="card rounded-2xl p-4 mb-4"><h3 class="font-display text-sm font-bold mb-1">HISTORIQUE</h3>${histHtml}</div>
     <div class="card rounded-2xl p-4">
       <h3 class="font-display text-sm font-bold mb-3">PARAMÈTRES</h3>
-      <button onclick="showScreen('onboarding');obData={location:null,goal:null,days:[],age:null,weight:null,level:null}" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
+      <button onclick="showScreen('onboarding');obData={location:null,goal:null,days:[],age:null,weight:null,weight_goal:null,level:null,diet:null};obStep(1)" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
         <span>⚙️</span><span>Reconfigurer le profil</span><span class="ml-auto" style="color:#444">›</span></button>
       <button onclick="toggleTheme()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
         <span>🌙</span><span>Thème sombre / clair</span><span class="ml-auto" style="color:#444">›</span></button>
@@ -1353,15 +1409,21 @@ window.showEditStats=()=>{
         <div class="font-display text-xl font-bold">MON PROFIL</div>
         <button onclick="closeEditStats()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer">✕</button>
       </div>
-      <div class="flex gap-3 mb-4">
+      <div class="flex gap-2 mb-3">
         <div class="flex-1"><label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">ÂGE</label>
-          <input id="es-age" class="inp" type="number" min="10" max="99" value="${p.age||''}" placeholder="Ex: 22"/></div>
+          <input id="es-age" class="inp" type="number" min="10" max="99" value="${p.age||''}" placeholder="22" inputmode="numeric"/></div>
         <div class="flex-1"><label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">POIDS (kg)</label>
-          <input id="es-weight" class="inp" type="number" step="0.5" min="30" max="250" value="${p.weight_start||''}" placeholder="Ex: 75"/></div>
+          <input id="es-weight" class="inp" type="number" step="0.5" min="30" max="250" value="${p.weight_start||''}" placeholder="75" inputmode="decimal"/></div>
+        <div class="flex-1"><label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">OBJECTIF (kg)</label>
+          <input id="es-weight-goal" class="inp" type="number" step="0.5" min="30" max="250" value="${p.weight_goal||''}" placeholder="70" inputmode="decimal"/></div>
       </div>
-      <label class="text-xs font-semibold mb-2 block" style="color:var(--text-muted)">NIVEAU</label>
-      <div class="flex gap-2 mb-5">
+      <label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">NIVEAU</label>
+      <div class="flex gap-2 mb-3">
         ${lvls.map(([k,l])=>`<button onclick="esPickLevel('${k}',this)" class="flex-1 rounded-xl py-2.5 text-xs font-bold transition" style="${p.level===k?'background:linear-gradient(90deg,#DC2626,#F97316);color:white':'background:var(--bg-inner);color:var(--text-muted)'}">${l}</button>`).join('')}
+      </div>
+      <label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">RÉGIME ALIMENTAIRE</label>
+      <div class="flex gap-2 mb-4">
+        ${[['omnivore','🥩 Omnivore'],['vegetarian','🌿 Végétarien']].map(([k,l])=>`<button onclick="esPickDiet('${k}',this)" class="flex-1 rounded-xl py-2.5 text-xs font-bold transition" style="${p.diet===k?'background:linear-gradient(90deg,#DC2626,#F97316);color:white':'background:var(--bg-inner);color:var(--text-muted)'}">${l}</button>`).join('')}
       </div>
       <button onclick="saveEditStats()" class="btn-fire w-full rounded-2xl py-3.5 text-white font-display text-lg font-bold">ENREGISTRER</button>
     </div>
@@ -1369,22 +1431,28 @@ window.showEditStats=()=>{
   document.body.insertAdjacentHTML('beforeend',html);
 };
 window.esPickLevel=(v,el)=>{
-  document.querySelectorAll('#edit-stats-modal button[onclick^="esPickLevel"]').forEach(b=>{b.style.background='#1e1e1e';b.style.color='#9ca3af';});
+  document.querySelectorAll('#edit-stats-modal button[onclick^="esPickLevel"]').forEach(b=>{b.style.background='var(--bg-inner)';b.style.color='var(--text-muted)';});
   el.style.background='linear-gradient(90deg,#DC2626,#F97316)';el.style.color='white';
-  el.dataset.level=v;
   window._esLevel=v;
+};
+window.esPickDiet=(v,el)=>{
+  document.querySelectorAll('#edit-stats-modal button[onclick^="esPickDiet"]').forEach(b=>{b.style.background='var(--bg-inner)';b.style.color='var(--text-muted)';});
+  el.style.background='linear-gradient(90deg,#DC2626,#F97316)';el.style.color='white';
+  window._esDiet=v;
 };
 window.closeEditStats=()=>{const m=document.getElementById('edit-stats-modal');if(m)m.remove();};
 window.saveEditStats=async()=>{
   const age=parseInt(document.getElementById('es-age').value);
   const w=parseFloat(document.getElementById('es-weight').value);
+  const wg=parseFloat(document.getElementById('es-weight-goal').value);
   const level=window._esLevel||userData.profile.level;
+  const diet=window._esDiet||userData.profile.diet||'omnivore';
   if(!age||age<10||age>99){toast('Âge invalide','⚠️');return;}
   if(!w||w<30||w>250){toast('Poids invalide','⚠️');return;}
-  const profile={...userData.profile,age,weight_start:w,level};
+  const profile={...userData.profile,age,weight_start:w,weight_goal:(!isNaN(wg)&&wg>=30&&wg<=250)?wg:userData.profile.weight_goal,level,diet};
   await saveUserData({profile});
   closeEditStats();
-  delete window._esLevel;
+  delete window._esLevel;delete window._esDiet;
   toast('Profil mis à jour ✅');
   renderProfile();
 };

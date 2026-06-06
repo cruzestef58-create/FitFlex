@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>FitFlex</title>
+
+  <!-- PWA / iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FitFlex" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0d0d0d" />
+  <meta name="description" content="Ton compagnon fitness & nutrition personnalisé" />
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="manifest" href="manifest.json" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            energy: '#DC2626',
+            sunset: '#F97316',
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:#0d0d0d;color:#f9fafb}
+    .font-display,.h1,.h2{font-family:'Barlow Condensed',Impact,sans-serif}
+    .text-fire{background:linear-gradient(135deg,#DC2626,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .btn-fire{background:linear-gradient(135deg,#DC2626,#F97316);transition:all .2s;position:relative;overflow:hidden}
+    .btn-fire:hover{filter:brightness(1.1)}
+    .btn-fire:active{transform:scale(.97)}
+    .btn-fire:disabled{opacity:.4;cursor:not-allowed;filter:none}
+
+    /* screens */
+    .screen{display:none}
+    .screen.active{display:flex;flex-direction:column}
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+
+    /* cards */
+    .card{background:#161616;border:1px solid #252525;border-radius:1rem}
+    .card2{background:#1e1e1e;border:1px solid #252525;border-radius:.75rem}
+    html:not(.dark) body{background:#f3f4f6;color:#111827}
+    html:not(.dark) .card{background:#fff;border-color:#e5e7eb}
+    html:not(.dark) .card2{background:#f9fafb;border-color:#e5e7eb}
+
+    /* nav */
+    .nav-btn.active .nav-dot{background:linear-gradient(135deg,#DC2626,#F97316)}
+    .nav-btn.active .nav-lbl{color:#F97316}
+
+    /* selectable */
+    .sel-card{transition:all .2s;cursor:pointer;border:2px solid #252525}
+    .sel-card:hover{transform:translateY(-3px)}
+    .sel-card.on{border-color:#F97316;background:linear-gradient(135deg,#DC262612,#F9731612)}
+    .day-pill{transition:all .2s;cursor:pointer;border:1.5px solid #252525;border-radius:.75rem;padding:.5rem;text-align:center}
+    .day-pill.on{background:linear-gradient(135deg,#DC2626,#F97316);border-color:transparent;color:white}
+
+    /* progress bar */
+    .prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#DC2626,#F97316);transition:width .5s ease}
+
+    /* onboarding progress */
+    .ob-prog{height:3px;border-radius:99px;background:#252525;overflow:hidden}
+
+    /* exercise check */
+    .ex-check{transition:all .2s;cursor:pointer}
+    .ex-check.done{opacity:.5}
+    .ex-check.done .check-circle{background:linear-gradient(135deg,#DC2626,#F97316);border-color:transparent}
+
+    /* avatar */
+    .avatar{background:linear-gradient(135deg,#DC2626,#F97316);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;color:white}
+
+    /* streak flame */
+    @keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.1) rotate(2deg)}}
+    .flame{display:inline-block;animation:flicker 1.5s ease-in-out infinite}
+
+    /* modal */
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:flex-end;justify-content:center}
+    .modal-box{background:#161616;border:1px solid #252525;border-radius:1.5rem 1.5rem 0 0;width:100%;max-width:480px;padding:1.5rem;max-height:92vh;overflow-y:auto}
+
+    /* input */
+    .inp{width:100%;background:#1e1e1e;border:1.5px solid #2a2a2a;border-radius:.875rem;padding:.875rem 1rem;color:#f9fafb;font-size:.875rem;transition:border-color .2s;outline:none}
+    .inp:focus{border-color:#F97316}
+    html:not(.dark) .inp{background:#f3f4f6;border-color:#e5e7eb;color:#111827}
+
+    /* toast */
+    #toast{position:fixed;top:1rem;left:50%;transform:translateX(-50%) translateY(-4rem);background:#1e1e1e;border:1px solid #333;color:#f9fafb;padding:.75rem 1.5rem;border-radius:99px;font-size:.875rem;font-weight:500;z-index:999;transition:transform .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
+    #toast.show{transform:translateX(-50%) translateY(0)}
+
+    /* chart bar */
+    .chart-bar{background:linear-gradient(180deg,#F97316,#DC2626);border-radius:4px 4px 0 0;transition:height .5s ease;min-width:24px}
+
+    /* tab switch */
+    .auth-tab{transition:all .2s;cursor:pointer;border-bottom:2px solid transparent}
+    .auth-tab.active{border-bottom-color:#F97316;color:#F97316}
+
+    /* workout session overlay */
+    #session-overlay{position:fixed;inset:0;background:#0d0d0d;z-index:150;overflow-y:auto;display:none}
+
+    /* scroll */
+    ::-webkit-scrollbar{width:3px}
+    ::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+
+    /* iOS safe areas */
+    body{padding-top:env(safe-area-inset-top)}
+    #screen-auth{padding-top:max(2rem,env(safe-area-inset-top))}
+    nav{padding-bottom:env(safe-area-inset-bottom)}
+
+    /* Prevent iOS tap highlight & text select on buttons */
+    button{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+    input{-webkit-appearance:none;border-radius:.875rem}
+
+    /* glow */
+    .glow{box-shadow:0 0 30px rgba(220,38,38,.15)}
+    .badge{font-size:.65rem;padding:2px 8px;border-radius:99px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     TOAST
+═══════════════════════════════════════════════ -->
+<div id="toast"></div>
+
+<!-- ═══════════════════════════════════════════════
+     AUTH SCREEN
+═══════════════════════════════════════════════ -->
+<div id="screen-auth" class="screen active min-h-screen px-5 py-8 flex-col justify-between max-w-sm mx-auto w-full">
+  <div>
+    <!-- Logo -->
+    <div class="text-center mb-10 mt-4">
+      <div class="font-display text-5xl font-bold mb-2"><span class="text-fire">FIT</span><span>FLEX</span></div>
+      <p class="text-sm" style="color:#9ca3af">Ton compagnon fitness personnalisé</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex gap-6 mb-6 border-b" style="border-color:#252525">
+      <button class="auth-tab active pb-3 font-semibold text-sm" onclick="switchAuthTab('login',this)">Connexion</button>
+      <button class="auth-tab pb-3 font-semibold text-sm" style="color:#9ca3af" onclick="switchAuthTab('register',this)">Inscription</button>
+    </div>
+
+    <!-- Login form -->
+    <div id="auth-login" class="tab-content active space-y-3">
+      <div>
+        <label class="text-xs font-medium mb-1 block" style="color:#9ca3af">Pseudo</label>
+        <input id="login-user" class="inp" type="text" placeholder="Ton pseudo" />
+      </div>
+      <div>
+        <label class="text-xs font-medium mb-1 block" style="color:#9ca3af">Mot de passe</label>
+        <input id="login-pass" class="inp" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" />
+      </div>
+      <button onclick="doLogin()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold mt-2">SE CONNECTER</button>
+    </div>
+
+    <!-- Register form -->
+    <div id="auth-register" class="tab-content space-y-3">
+      <div>
+        <label class="text-xs font-medium mb-1 block" style="color:#9ca3af">Pseudo</label>
+        <input id="reg-user" class="inp" type="text" placeholder="Choisis un pseudo" />
+      </div>
+      <div>
+        <label class="text-xs font-medium mb-1 block" style="color:#9ca3af">Mot de passe</label>
+        <input id="reg-pass" class="inp" type="password" placeholder="Min. 6 caractères" />
+      </div>
+      <div>
+        <label class="text-xs font-medium mb-1 block" style="color:#9ca3af">Confirmer</label>
+        <input id="reg-pass2" class="inp" type="password" placeholder="Répète le mot de passe" onkeydown="if(event.key==='Enter')doRegister()" />
+      </div>
+      <button onclick="doRegister()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold mt-2">CRÉER MON COMPTE</button>
+    </div>
+  </div>
+
+  <p class="text-center text-xs mt-8" style="color:#6b7280">Données stockées localement sur ton appareil.<br>Aucun serveur, 100% privé.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     ONBOARDING SCREEN
+═══════════════════════════════════════════════ -->
+<div id="screen-onboarding" class="screen min-h-screen flex-col px-5 py-6 max-w-sm mx-auto w-full">
+  <div class="flex items-center justify-between mb-3">
+    <div class="font-display text-2xl font-bold"><span class="text-fire">FIT</span><span>FLEX</span></div>
+    <span id="ob-step-lbl" class="text-xs font-medium" style="color:#9ca3af">Étape 1/3</span>
+  </div>
+  <div class="ob-prog mb-6"><div id="ob-prog-fill" class="prog-fill" style="width:33%"></div></div>
+
+  <!-- Step 1: Location -->
+  <div id="ob-1" class="ob-step flex-1 flex flex-col">
+    <h1 class="font-display text-4xl font-bold mb-1">OÙ T'ENTRAÎNES-TU ?</h1>
+    <p class="text-sm mb-6" style="color:#9ca3af">Ça détermine les exercices adaptés.</p>
+    <div class="grid grid-cols-2 gap-3 flex-1">
+      <div class="sel-card rounded-2xl p-5 card flex flex-col" onclick="pickLoc('gym',this)">
+        <div class="text-4xl mb-3">🏋️</div>
+        <div class="font-display text-xl font-bold">SALLE</div>
+        <p class="text-xs mt-1" style="color:#9ca3af">Machines, barres, haltères</p>
+      </div>
+      <div class="sel-card rounded-2xl p-5 card flex flex-col" onclick="pickLoc('home',this)">
+        <div class="text-4xl mb-3">🏠</div>
+        <div class="font-display text-xl font-bold">MAISON</div>
+        <p class="text-xs mt-1" style="color:#9ca3af">Poids corps, élastiques</p>
+      </div>
+    </div>
+    <button id="ob-next-1" onclick="obStep(2)" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold mt-5" disabled>CONTINUER →</button>
+  </div>
+
+  <!-- Step 2: Goal -->
+  <div id="ob-2" class="ob-step hidden flex-1 flex flex-col">
+    <h1 class="font-display text-4xl font-bold mb-1">TON OBJECTIF ?</h1>
+    <p class="text-sm mb-6" style="color:#9ca3af">Le programme s'adapte en conséquence.</p>
+    <div class="grid grid-cols-2 gap-3">
+      <div class="sel-card rounded-2xl p-4 card" onclick="pickGoal('shape',this)"><div class="text-3xl mb-2">🔥</div><div class="font-display text-base font-bold">REMISE EN FORME</div></div>
+      <div class="sel-card rounded-2xl p-4 card" onclick="pickGoal('strength',this)"><div class="text-3xl mb-2">💪</div><div class="font-display text-base font-bold">GAIN DE FORCE</div></div>
+      <div class="sel-card rounded-2xl p-4 card" onclick="pickGoal('endurance',this)"><div class="text-3xl mb-2">🏃</div><div class="font-display text-base font-bold">ENDURANCE</div></div>
+      <div class="sel-card rounded-2xl p-4 card" onclick="pickGoal('loss',this)"><div class="text-3xl mb-2">⚡</div><div class="font-display text-base font-bold">PERTE DE POIDS</div></div>
+    </div>
+    <div class="flex gap-3 mt-5">
+      <button onclick="obStep(1)" class="rounded-2xl py-4 px-5 card font-display text-xl font-bold">←</button>
+      <button id="ob-next-2" onclick="obStep(3)" class="btn-fire flex-1 rounded-2xl py-4 text-white font-display text-xl font-bold" disabled>CONTINUER →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Days -->
+  <div id="ob-3" class="ob-step hidden flex-1 flex flex-col">
+    <h1 class="font-display text-4xl font-bold mb-1">TES JOURS DISPO</h1>
+    <p class="text-sm mb-6" style="color:#9ca3af">Sélectionne tes jours d'entraînement.</p>
+    <div class="grid grid-cols-7 gap-1.5 mb-4">
+      <div class="day-pill" onclick="toggleDay('L',this)"><div class="text-xs" style="color:#9ca3af">L</div><div class="text-sm font-bold">Lu</div></div>
+      <div class="day-pill" onclick="toggleDay('M',this)"><div class="text-xs" style="color:#9ca3af">M</div><div class="text-sm font-bold">Ma</div></div>
+      <div class="day-pill" onclick="toggleDay('Me',this)"><div class="text-xs" style="color:#9ca3af">M</div><div class="text-sm font-bold">Me</div></div>
+      <div class="day-pill" onclick="toggleDay('J',this)"><div class="text-xs" style="color:#9ca3af">J</div><div class="text-sm font-bold">Je</div></div>
+      <div class="day-pill" onclick="toggleDay('V',this)"><div class="text-xs" style="color:#9ca3af">V</div><div class="text-sm font-bold">Ve</div></div>
+      <div class="day-pill" onclick="toggleDay('S',this)"><div class="text-xs" style="color:#9ca3af">S</div><div class="text-sm font-bold">Sa</div></div>
+      <div class="day-pill" onclick="toggleDay('D',this)"><div class="text-xs" style="color:#9ca3af">D</div><div class="text-sm font-bold">Di</div></div>
+    </div>
+    <div id="days-info" class="text-center text-sm mb-4" style="color:#9ca3af">Sélectionne au moins 1 jour</div>
+    <div class="flex gap-3 mt-auto">
+      <button onclick="obStep(2)" class="rounded-2xl py-4 px-5 card font-display text-xl font-bold">←</button>
+      <button id="ob-next-3" onclick="finishOnboarding()" class="btn-fire flex-1 rounded-2xl py-4 text-white font-display text-xl font-bold" disabled>COMMENCER 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MAIN APP
+═══════════════════════════════════════════════ -->
+<div id="screen-app" class="screen min-h-screen flex-col" style="padding-bottom:72px">
+
+  <!-- Top bar -->
+  <div class="flex items-center justify-between px-5 py-4 sticky top-0 z-30" style="background:#0d0d0d;border-bottom:1px solid #1e1e1e">
+    <div class="font-display text-2xl font-bold"><span class="text-fire">FIT</span><span>FLEX</span></div>
+    <div class="flex items-center gap-2">
+      <div id="streak-badge" class="hidden items-center gap-1 px-3 py-1 rounded-full text-sm font-bold" style="background:#1e1e1e;border:1px solid #333">
+        <span class="flame">🔥</span><span id="streak-num" class="text-fire"></span>
+      </div>
+      <button onclick="toggleTheme()" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1e1e;border:1px solid #2a2a2a">
+        <svg id="theme-icon" class="w-4 h-4" style="color:#9ca3af" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Tab contents -->
+  <div id="tab-home" class="tab-content active px-5 pt-4 flex-1"></div>
+  <div id="tab-exercise" class="tab-content px-5 pt-4"></div>
+  <div id="tab-nutrition" class="tab-content px-5 pt-4"></div>
+  <div id="tab-profile" class="tab-content px-5 pt-4"></div>
+
+  <!-- Bottom nav -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 flex" style="background:#0d0d0d;border-top:1px solid #1e1e1e;padding-bottom:env(safe-area-inset-bottom)">
+    <button class="nav-btn active flex-1 flex flex-col items-center py-2.5 gap-1" onclick="showTab('home',this)">
+      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:#1e1e1e">
+        <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+      </div>
+      <span class="nav-lbl text-xs font-semibold" style="color:#F97316">Accueil</span>
+    </button>
+    <button class="nav-btn flex-1 flex flex-col items-center py-2.5 gap-1" onclick="showTab('exercise',this)">
+      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:#1e1e1e">
+        <svg class="w-3.5 h-3.5" style="color:#9ca3af" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      </div>
+      <span class="nav-lbl text-xs font-semibold" style="color:#9ca3af">Exercices</span>
+    </button>
+    <button class="nav-btn flex-1 flex flex-col items-center py-2.5 gap-1" onclick="showTab('nutrition',this)">
+      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:#1e1e1e">
+        <svg class="w-3.5 h-3.5" style="color:#9ca3af" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+      </div>
+      <span class="nav-lbl text-xs font-semibold" style="color:#9ca3af">Nutrition</span>
+    </button>
+    <button class="nav-btn flex-1 flex flex-col items-center py-2.5 gap-1" onclick="showTab('profile',this)">
+      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:#1e1e1e">
+        <svg class="w-3.5 h-3.5" style="color:#9ca3af" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+      </div>
+      <span class="nav-lbl text-xs font-semibold" style="color:#9ca3af">Profil</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     WORKOUT SESSION OVERLAY
+═══════════════════════════════════════════════ -->
+<div id="session-overlay">
+  <div class="max-w-sm mx-auto px-5 py-6">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <div class="text-xs font-semibold mb-1" style="color:#9ca3af">SÉANCE EN COURS</div>
+        <div id="sess-title" class="font-display text-2xl font-bold"></div>
+      </div>
+      <div id="sess-timer" class="font-display text-2xl font-bold text-fire">00:00</div>
+    </div>
+    <div class="ob-prog mb-5" style="height:4px"><div id="sess-prog" class="prog-fill" style="width:0%"></div></div>
+    <div id="sess-exercises" class="space-y-3 mb-6"></div>
+    <button onclick="finishSession()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold">TERMINER LA SÉANCE ✓</button>
+    <button onclick="cancelSession()" class="w-full rounded-2xl py-3 mt-2 text-sm font-medium" style="color:#9ca3af">Annuler</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCRIPT
+═══════════════════════════════════════════════ -->
+<script>
+// ══════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════
+const EXERCISES = {
+  gym:{
+    upper:[
+      {n:"Développé couché",s:"4×8-10",r:"90s",e:"🏋️",m:"Pectoraux · Triceps · Épaules",d:"Barre à largeur d'épaules, descendre jusqu'à effleurer la poitrine, pousser en explosif.",tip:"Omoplates rétractées, pieds à plat."},
+      {n:"Rowing barre",s:"4×10",r:"75s",e:"🔗",m:"Dos · Biceps · Trapèzes",d:"Penché à 45°, tirer vers le nombril en serrant les omoplates.",tip:"Dos plat, ne pas arrondir."},
+      {n:"Développé militaire",s:"3×10-12",r:"75s",e:"⬆️",m:"Épaules · Triceps",d:"Barre de la clavicule jusqu'à l'extension complète au-dessus de la tête.",tip:"Évite de cambrer le bas du dos."},
+      {n:"Curl barre EZ",s:"3×12",r:"60s",e:"💪",m:"Biceps · Avant-bras",d:"Fléchir les coudes jusqu'à hauteur des épaules, descendre lentement.",tip:"Coudes collés, sans balancement."},
+      {n:"Dips aux barres",s:"3×10-12",r:"60s",e:"↘️",m:"Triceps · Pectoraux inf.",d:"Descendre à 90° aux coudes, pousser en haut.",tip:"Légèrement penché pour cibler les pec."},
+    ],
+    lower:[
+      {n:"Squat barre",s:"4×6-8",r:"120s",e:"🦵",m:"Quadriceps · Fessiers · Ischio",d:"Pieds largeur épaules, descendre cuisses parallèles au sol.",tip:"Genoux dans l'axe des pieds."},
+      {n:"Leg press",s:"4×12",r:"90s",e:"⬆️",m:"Quadriceps · Fessiers",d:"Pieds mi-hauteur plateforme, pousser en extension.",tip:"Ne jamais verrouiller les genoux."},
+      {n:"Fentes marchées",s:"3×12/jambe",r:"75s",e:"🚶",m:"Quadriceps · Fessiers · Ischio",d:"Grand pas en avant, genou arrière vers le sol.",tip:"Buste droit, regard devant."},
+      {n:"Romanian Deadlift",s:"3×10",r:"90s",e:"🔻",m:"Ischio · Fessiers · Dos",d:"Jambes quasi-tendues, pousser les hanches en arrière.",tip:"Barre glisse le long des jambes."},
+      {n:"Presse mollets",s:"4×15-20",r:"45s",e:"🦶",m:"Mollets",d:"Extension maximale de la cheville, descendre lentement.",tip:"Amplitude maximale."},
+    ],
+    core:[
+      {n:"Crunch câble",s:"4×15",r:"45s",e:"📎",m:"Abdominaux",d:"À genoux face à la poulie, fléchir le buste vers le sol.",tip:"Mouvement part des abdos, pas du cou."},
+      {n:"Planche",s:"3×45-60s",r:"30s",e:"📏",m:"Core · Abdos",d:"Avant-bras et orteils, corps droit, maintenir.",tip:"Contracter fessiers et ventre en même temps."},
+      {n:"Leg raise suspendu",s:"3×12-15",r:"45s",e:"⬆️",m:"Abdos inf. · Hip flexors",d:"Suspendu à la barre, monter les jambes à l'horizontale.",tip:"Contrôler la descente, pas de balancement."},
+      {n:"Vélo elliptique HIIT",s:"8×(20s/40s)",r:"—",e:"🚴",m:"Cardio · Full body",d:"20s effort max, 40s récup. 8 rounds.",tip:"Pousser à fond pendant les efforts."},
+      {n:"Battle ropes",s:"5×30s",r:"30s",e:"🌊",m:"Épaules · Cardio · Core",d:"Créer des vagues continues le plus fort possible.",tip:"Position semi-fléchie, core contracté."},
+    ],
+    fullbody:[
+      {n:"Deadlift",s:"4×5",r:"120s",e:"🏋️",m:"Dos · Fessiers · Ischio · Trapèzes",d:"Barre au sol, pousser dans le sol en redressant le buste.",tip:"Le roi des exercices. Dos plat absolu."},
+      {n:"Tractions",s:"4×max",r:"90s",e:"⬆️",m:"Dos · Biceps · Core",d:"Monter le menton au-dessus de la barre, descendre complet.",tip:"Initier par les coudes, pas les bras."},
+      {n:"Squat gobelet",s:"3×15",r:"60s",e:"🏆",m:"Quadriceps · Fessiers · Core",d:"Haltère contre la poitrine, squatter profond.",tip:"Excellent pour la mobilité des hanches."},
+      {n:"Thruster haltères",s:"4×10",r:"75s",e:"🚀",m:"Full body · Épaules · Quad",d:"Squat + pousser haltères au-dessus de la tête en un mouvement.",tip:"Mouvement fluide et enchaîné."},
+      {n:"Kettlebell swing",s:"4×15",r:"60s",e:"⚙️",m:"Fessiers · Ischio · Core",d:"Balancer le KB entre les jambes puis propulser les hanches.",tip:"Mouvement vient des hanches, pas des bras."},
+    ],
+  },
+  home:{
+    upper:[
+      {n:"Pompes classiques",s:"4×12-15",r:"60s",e:"💪",m:"Pectoraux · Triceps · Épaules",d:"Corps aligné, descendre au sol, remonter en extension.",tip:"Coudes à 45°, pas écartés à 90°."},
+      {n:"Pompes diamant",s:"3×10-12",r:"60s",e:"💎",m:"Triceps · Pec internes",d:"Paumes en triangle sous la poitrine.",tip:"Plus difficile que les pompes classiques."},
+      {n:"Pompes déclinées",s:"3×10",r:"60s",e:"🔼",m:"Pec sup. · Épaules",d:"Pieds surélevés sur une chaise, même mouvement.",tip:"Plus les pieds sont hauts, plus les épaules travaillent."},
+      {n:"Dips sur chaise",s:"3×12-15",r:"60s",e:"🪑",m:"Triceps · Pec inf.",d:"Mains sur le bord, jambes tendues, descendre.",tip:"Descendre jusqu'à 90° aux coudes."},
+      {n:"Pike push-up",s:"3×10",r:"60s",e:"🔻",m:"Épaules · Triceps",d:"En V inversé, descendre la tête vers le sol.",tip:"Plus les hanches sont hautes, plus c'est efficace."},
+    ],
+    lower:[
+      {n:"Squat poids de corps",s:"4×20",r:"45s",e:"🦵",m:"Quadriceps · Fessiers",d:"Pieds largeur épaules, cuisses parallèles au sol.",tip:"Pousser les genoux vers l'extérieur à la montée."},
+      {n:"Jump squat",s:"4×12",r:"45s",e:"🦘",m:"Quadriceps · Fessiers · Cardio",d:"Squat puis explosion vers le haut.",tip:"Atterrir doucement genoux fléchis."},
+      {n:"Fentes statiques",s:"3×12/jambe",r:"45s",e:"🚶",m:"Quadriceps · Fessiers",d:"Jambe avant à 90°, genou arrière vers le sol.",tip:"Buste droit, genou ne dépasse pas la pointe du pied."},
+      {n:"Hip thrust",s:"4×15",r:"45s",e:"🍑",m:"Fessiers · Ischio",d:"Allongé, genoux fléchis, pousser les hanches vers le haut.",tip:"Serrer fort les fessiers en haut."},
+      {n:"Mollets debout",s:"3×25",r:"30s",e:"🦶",m:"Mollets",d:"Sur les orteils, monter au max, descendre lentement.",tip:"Amplitude maximale, pause en bas."},
+    ],
+    core:[
+      {n:"Crunch",s:"4×20",r:"30s",e:"🌀",m:"Abdominaux",d:"Lever les épaules du sol en contractant les abdos.",tip:"Mains derrière la tête sans tirer sur le cou."},
+      {n:"Planche",s:"3×45-60s",r:"30s",e:"📏",m:"Core · Épaules",d:"Avant-bras et orteils, corps droit.",tip:"Contracter fessiers et ventre simultanément."},
+      {n:"Mountain climbers",s:"4×30s",r:"20s",e:"⛰️",m:"Abdos · Core · Cardio",d:"En position pompe, ramener les genoux alternativement.",tip:"Plus vite = plus de cardio."},
+      {n:"Burpees",s:"4×10",r:"30s",e:"🔄",m:"Full body · Cardio",d:"Debout→squat→pompe→saut. Sans pause.",tip:"L'exercice le plus complet."},
+      {n:"Bicycle crunch",s:"3×20",r:"30s",e:"🚵",m:"Obliques · Abdos",d:"Coude gauche vers genou droit et inversement.",tip:"Vraie rotation du buste."},
+    ],
+    fullbody:[
+      {n:"Burpees",s:"5×10",r:"45s",e:"🔄",m:"Full body · Cardio",d:"Debout→squat→pompe→saut explosif.",tip:"L'exercice le plus complet."},
+      {n:"AMRAP 10 min",s:"10 min",r:"—",e:"⏱️",m:"Full body",d:"Max rounds : 10 pompes→15 squats→20 mountain climbers.",tip:"AMRAP = As Many Rounds As Possible."},
+      {n:"Pompes explosives",s:"4×8",r:"60s",e:"💥",m:"Pectoraux · Triceps · Core",d:"Pousser explosif pour décoller les mains du sol.",tip:"Gainage actif pour protéger le dos."},
+      {n:"Squat jump + pompe",s:"4×8",r:"60s",e:"🔁",m:"Full body · Cardio",d:"1 squat jump + 1 pompe = 1 rep.",tip:"Mouvement fluide avec la pratique."},
+      {n:"Tabata 20/10",s:"8×(20s/10s)",r:"—",e:"🔥",m:"Full body · Cardio",d:"20s effort max, 10s récup. 8 rounds. Burpees, squats ou mountain climbers.",tip:"4 min mais très intense."},
+    ],
+  }
+};
+
+const ZONE_META = {
+  upper:{label:"HAUT DU CORPS",e:"💪",desc:"Pectoraux · Dos · Épaules · Bras"},
+  lower:{label:"BAS DU CORPS",e:"🦵",desc:"Quadriceps · Fessiers · Mollets"},
+  core:{label:"ABDOS & CARDIO",e:"🔥",desc:"Abdominaux · Core · Cardio"},
+  fullbody:{label:"FULL BODY",e:"⚡",desc:"Corps complet · Multi-articulaire"},
+};
+
+const MEALS = {
+  breakfast:[
+    {n:"Bowl Protéiné",e:"🥣",cal:420,t:"10 min",tags:["Protéines","Fibres"],d:"Fromage blanc 0%, flocons d'avoine, banane, miel, amandes.",mac:{p:32,g:52,l:8}},
+    {n:"Omelette Épinards",e:"🍳",cal:380,t:"12 min",tags:["Protéines","Keto"],d:"3 œufs, épinards, champignons, sel, poivre.",mac:{p:28,g:6,l:22}},
+    {n:"Toast Avocat Œuf",e:"🥑",cal:460,t:"8 min",tags:["Équilibré","Bon gras"],d:"Pain complet grillé, avocat, œuf poché, levure de bière.",mac:{p:20,g:38,l:24}},
+    {n:"Smoothie Vert",e:"🥤",cal:290,t:"5 min",tags:["Vegan","Détox"],d:"Épinard, pomme verte, gingembre, citron, eau de coco, chia.",mac:{p:8,g:56,l:5}},
+  ],
+  lunch:[
+    {n:"Bowl Poulet Quinoa",e:"🍚",cal:580,t:"20 min",tags:["Équilibré","Meal prep"],d:"Quinoa, poulet grillé, légumes rôtis, sauce tahini.",mac:{p:45,g:62,l:14}},
+    {n:"Steak + Patate douce",e:"🥩",cal:620,t:"25 min",tags:["Protéines","Force"],d:"Steak 150g, patate douce rôtie aux herbes, salade.",mac:{p:50,g:48,l:18}},
+    {n:"Saumon + Riz complet",e:"🐟",cal:560,t:"20 min",tags:["Oméga-3","Équilibré"],d:"Saumon vapeur, riz complet, brocolis, sauce soja légère.",mac:{p:42,g:55,l:16}},
+    {n:"Wrap Thon Légumes",e:"🌯",cal:440,t:"10 min",tags:["Rapide","Protéines"],d:"Tortilla complète, thon, avocat, tomates cerises, roquette.",mac:{p:35,g:40,l:12}},
+  ],
+  dinner:[
+    {n:"Curry Pois Chiches",e:"🍛",cal:490,t:"30 min",tags:["Vegan","Fibres"],d:"Pois chiches, lait de coco, épinards, curry, riz basmati.",mac:{p:22,g:72,l:14}},
+    {n:"Cabillaud Légumes",e:"🐠",cal:380,t:"25 min",tags:["Léger","Équilibré"],d:"Dos de cabillaud en papillote, courgettes, herbes.",mac:{p:38,g:18,l:12}},
+    {n:"Chicken Stir-fry",e:"🥘",cal:520,t:"20 min",tags:["Rapide","Force"],d:"Poulet sauté, légumes croquants, sauce soja-sésame, riz.",mac:{p:42,g:50,l:12}},
+    {n:"Omelette Complète",e:"🍳",cal:440,t:"15 min",tags:["Protéines","Éco"],d:"4 œufs, fromage, jambon, poivrons, champignons.",mac:{p:38,g:8,l:26}},
+  ],
+  snacks:[
+    {n:"Shake Post-training",e:"🥤",cal:280,t:"2 min",tags:["Protéines","Récup"],d:"Whey, lait demi-écrémé, banane. Dans les 30 min post-séance.",mac:{p:30,g:28,l:4}},
+    {n:"Yaourt + Fruits secs",e:"🫙",cal:220,t:"2 min",tags:["Calcium","Énergie"],d:"Yaourt grec, noix de cajou, amandes, canneberges, miel.",mac:{p:14,g:22,l:10}},
+    {n:"Crackers + Houmous",e:"🫘",cal:180,t:"2 min",tags:["Fibres","Vegan"],d:"Crackers sésame, houmous, carottes et concombre.",mac:{p:6,g:26,l:7}},
+    {n:"Banane + Beurre amande",e:"🍌",cal:250,t:"1 min",tags:["Rapide","Énergie"],d:"1 banane + 1 cuillère de beurre d'amande naturel.",mac:{p:6,g:36,l:10}},
+  ]
+};
+
+const GOAL_LBL = {shape:"Remise en forme",strength:"Gain de force",endurance:"Endurance",loss:"Perte de poids"};
+
+// ══════════════════════════════════════════════════
+// STATE & DB
+// ══════════════════════════════════════════════════
+let currentUser = null;
+let session = {active:false,zone:null,start:null,timer:null,done:[]};
+
+function db() { return JSON.parse(localStorage.getItem('ff_db') || '{}'); }
+function saveDb(d) { localStorage.setItem('ff_db', JSON.stringify(d)); }
+function getUser(n) { return db()[n] || null; }
+function saveUser(n, d) { const data = db(); data[n] = d; saveDb(data); }
+function me() { return getUser(currentUser); }
+function saveMe(d) { saveUser(currentUser, d); }
+
+// ══════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════
+function switchAuthTab(tab, el) {
+  document.querySelectorAll('.auth-tab').forEach(b => { b.classList.remove('active'); b.style.color='#9ca3af'; });
+  el.classList.add('active'); el.style.color='';
+  document.querySelectorAll('.tab-content[id^="auth-"]').forEach(c => c.classList.remove('active'));
+  document.getElementById('auth-'+tab).classList.add('active');
+}
+
+function hash(s) {
+  let h=0;
+  for(let i=0;i<s.length;i++) h=(Math.imul(31,h)+s.charCodeAt(i))|0;
+  return h.toString(36);
+}
+
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim().toLowerCase();
+  const p = document.getElementById('login-pass').value;
+  if (!u||!p) { toast('Remplis tous les champs','⚠️'); return; }
+  const user = getUser(u);
+  if (!user) { toast('Compte introuvable','❌'); return; }
+  if (user.pwd !== hash(p)) { toast('Mot de passe incorrect','❌'); return; }
+  currentUser = u;
+  localStorage.setItem('ff_current', u);
+  toast(`Bon retour ${u} 👋`,'✅');
+  afterAuth();
+}
+
+function doRegister() {
+  const u = document.getElementById('reg-user').value.trim().toLowerCase();
+  const p = document.getElementById('reg-pass').value;
+  const p2 = document.getElementById('reg-pass2').value;
+  if (!u||!p||!p2) { toast('Remplis tous les champs','⚠️'); return; }
+  if (u.length<2) { toast('Pseudo trop court','⚠️'); return; }
+  if (p.length<6) { toast('Mot de passe trop court (min 6)','⚠️'); return; }
+  if (p!==p2) { toast('Mots de passe différents','⚠️'); return; }
+  if (getUser(u)) { toast('Pseudo déjà pris','❌'); return; }
+  saveUser(u,{pwd:hash(p),profile:null,workouts:[],weight:[],createdAt:new Date().toISOString()});
+  currentUser = u;
+  localStorage.setItem('ff_current',u);
+  toast(`Compte créé, bienvenue ${u} 🎉`,'✅');
+  afterAuth();
+}
+
+function afterAuth() {
+  const user = me();
+  if (!user.profile) { showScreen('onboarding'); }
+  else { showScreen('app'); initApp(); }
+}
+
+function logout() {
+  currentUser = null;
+  localStorage.removeItem('ff_current');
+  showScreen('auth');
+}
+
+// ══════════════════════════════════════════════════
+// SCREENS
+// ══════════════════════════════════════════════════
+function showScreen(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-'+n).classList.add('active');
+}
+
+// ══════════════════════════════════════════════════
+// ONBOARDING
+// ══════════════════════════════════════════════════
+let obData = {location:null,goal:null,days:[]};
+
+function pickLoc(v,el) {
+  obData.location = v;
+  document.querySelectorAll('#ob-1 .sel-card').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('ob-next-1').disabled = false;
+}
+function pickGoal(v,el) {
+  obData.goal = v;
+  document.querySelectorAll('#ob-2 .sel-card').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('ob-next-2').disabled = false;
+}
+function toggleDay(v,el) {
+  if (obData.days.includes(v)) { obData.days=obData.days.filter(d=>d!==v); el.classList.remove('on'); }
+  else { obData.days.push(v); el.classList.add('on'); }
+  const n = obData.days.length;
+  document.getElementById('days-info').textContent = n ? `${n} jour${n>1?'s':''} sélectionné${n>1?'s':''}` : 'Sélectionne au moins 1 jour';
+  document.getElementById('ob-next-3').disabled = n===0;
+}
+function obStep(n) {
+  document.querySelectorAll('.ob-step').forEach(s => s.classList.add('hidden'));
+  document.getElementById('ob-'+n).classList.remove('hidden');
+  document.getElementById('ob-step-lbl').textContent = `Étape ${n}/3`;
+  document.getElementById('ob-prog-fill').style.width = (n/3*100)+'%';
+}
+function finishOnboarding() {
+  const user = me();
+  user.profile = {location:obData.location,goal:obData.goal,days:obData.days};
+  saveMe(user);
+  showScreen('app');
+  initApp();
+  toast('Profil configuré 🎉','✅');
+}
+
+// ══════════════════════════════════════════════════
+// APP
+// ══════════════════════════════════════════════════
+function initApp() {
+  updateStreak();
+  renderHome();
+}
+
+function showTab(name, btnEl) {
+  document.querySelectorAll('.tab-content[id^="tab-"]').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.remove('active');
+    b.querySelector('.nav-dot').style.background = '#1e1e1e';
+    b.querySelector('.nav-lbl').style.color = '#9ca3af';
+  });
+  btnEl.classList.add('active');
+  btnEl.querySelector('.nav-lbl').style.color = '#F97316';
+  if (name==='home') renderHome();
+  if (name==='exercise') renderExercise();
+  if (name==='nutrition') renderNutrition();
+  if (name==='profile') renderProfile();
+}
+
+// ── STREAK ─────────────────────────────────────────
+function updateStreak() {
+  const s = calcStreak();
+  const badge = document.getElementById('streak-badge');
+  if (s>0) { badge.classList.remove('hidden'); badge.classList.add('flex'); document.getElementById('streak-num').textContent=s+' j'; }
+  else { badge.classList.add('hidden'); }
+}
+function calcStreak() {
+  const user = me();
+  if (!user||!user.workouts||!user.workouts.length) return 0;
+  const days = [...new Set(user.workouts.map(w=>w.date))].sort((a,b)=>b.localeCompare(a));
+  let streak=0, cur=todayStr();
+  for (const d of days) {
+    if (d===cur) { streak++; cur=prevDay(cur); }
+    else if (d<cur) break;
+  }
+  return streak;
+}
+function todayStr() { return new Date().toISOString().slice(0,10); }
+function prevDay(s) { const d=new Date(s); d.setDate(d.getDate()-1); return d.toISOString().slice(0,10); }
+function formatDate(s) { return new Date(s).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}); }
+
+// ── HOME ────────────────────────────────────────────
+function renderHome() {
+  const user = me();
+  const p = user.profile;
+  const dayKeys = ['D','L','M','Me','J','V','S'];
+  const todayKey = dayKeys[new Date().getDay()];
+  const isTraining = p.days.includes(todayKey);
+  const workouts = user.workouts||[];
+  const last7 = getLast7();
+  const streak = calcStreak();
+  const totalXP = workouts.reduce((a,w)=>a+(w.xp||0),0);
+
+  const weekDays = ['L','M','Me','J','V','S','D'];
+  const weekLabels = ['L','M','M','J','V','S','D'];
+  const weekBars = weekDays.map((d,i) => {
+    const active = p.days.includes(d);
+    const isToday = d===todayKey;
+    const done = workouts.some(w=>w.date===todayStr()&&dayKeys[new Date(w.date).getDay()]===d);
+    return `<div class="flex flex-col items-center gap-1">
+      <div class="text-xs" style="color:#6b7280">${weekLabels[i]}</div>
+      <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold${isToday?' ring-2 ring-orange-500 ring-offset-1':''}"
+        style="${done?'background:linear-gradient(135deg,#DC2626,#F97316);color:white':active?'background:#2a2a2a;color:#9ca3af':'background:#1a1a1a;color:#333'}">
+        ${done?'✓':active?'●':''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const recentHtml = workouts.length
+    ? [...workouts].reverse().slice(0,3).map(w=>{
+        const z=ZONE_META[w.zone];
+        return `<div class="flex items-center gap-3 py-2.5" style="border-bottom:1px solid #1a1a1a">
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${z?z.e:'⚡'}</div>
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-semibold">${z?z.label:w.zone}</div>
+            <div class="text-xs" style="color:#9ca3af">${formatDate(w.date)} · ${w.duration} min · ${w.exDone}/${w.exTotal} ex.</div>
+          </div>
+          <div class="text-xs font-bold text-fire">+${w.xp} XP</div>
+        </div>`;
+      }).join('')
+    : `<div class="text-center py-4 text-sm" style="color:#6b7280">Aucune séance encore. Vas-y ! 🚀</div>`;
+
+  document.getElementById('tab-home').innerHTML = `
+    <div class="max-w-sm mx-auto">
+      <div class="mb-5">
+        <p class="text-sm" style="color:#9ca3af">${isTraining?'💪 Jour d\'entraînement !':'😴 Journée de récupération'}</p>
+        <h1 class="font-display text-4xl font-bold mt-0.5">BONJOUR, <span class="text-fire">${currentUser.toUpperCase()}</span> !</h1>
+      </div>
+      <div class="rounded-2xl p-5 mb-4 relative overflow-hidden glow" style="background:linear-gradient(135deg,#DC2626,#F97316)">
+        <div class="absolute top-0 right-0 w-32 h-32 rounded-full opacity-20" style="background:white;transform:translate(30%,-30%)"></div>
+        <div class="relative">
+          <div class="text-white/70 text-xs font-semibold mb-1">AUJOURD'HUI</div>
+          <div class="text-white font-display text-2xl font-bold mb-3">${isTraining?'PRÊT À SUER ?':'REPOS ACTIF'}</div>
+          ${isTraining
+            ? `<button onclick="showTab('exercise',document.querySelectorAll('.nav-btn')[1])" class="text-white rounded-xl px-4 py-2 text-sm font-bold transition" style="background:rgba(255,255,255,.2)">Démarrer une séance →</button>`
+            : `<p class="text-white/80 text-sm">Hydrate-toi et mange propre.</p>`}
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 mb-4">
+        ${[['🔥',streak,'Streak'],[' 🏆',workouts.length,'Séances'],['⭐',totalXP,'XP']].map(([e,v,l])=>`
+          <div class="card p-3 text-center rounded-2xl">
+            <div class="font-display text-2xl font-bold text-fire">${v}</div>
+            <div class="text-xs mt-0.5" style="color:#9ca3af">${e} ${l}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="card rounded-2xl p-4 mb-4">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-display text-sm font-bold">SEMAINE</h2>
+          <span class="text-xs" style="color:#9ca3af">${p.days.length} j/sem · ${p.location==='gym'?'🏋️':'🏠'}</span>
+        </div>
+        <div class="grid grid-cols-7 gap-1">${weekBars}</div>
+      </div>
+      <div class="card rounded-2xl p-4 mb-4">
+        <h2 class="font-display text-sm font-bold mb-1">DERNIÈRES SÉANCES</h2>
+        ${recentHtml}
+      </div>
+    </div>
+  `;
+}
+
+function getLast7() {
+  const user=me();
+  const out=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const ds=d.toISOString().slice(0,10);
+    out.push((user.workouts||[]).filter(w=>w.date===ds).length);
+  }
+  return out;
+}
+
+// ── EXERCISE ────────────────────────────────────────
+let currentZone = null;
+function renderExercise(zone) {
+  if (zone) currentZone=zone;
+  const p=me().profile;
+  const zoneCards = Object.entries(ZONE_META).map(([k,v])=>`
+    <div onclick="renderExercise('${k}')" class="sel-card rounded-2xl p-4 card ${currentZone===k?'on':''}">
+      <div class="text-3xl mb-2">${v.e}</div>
+      <div class="font-display text-sm font-bold leading-tight">${v.label}</div>
+      <div class="text-xs mt-1" style="color:#9ca3af">${v.desc}</div>
+    </div>
+  `).join('');
+
+  let listHtml='';
+  if (currentZone) {
+    const list=EXERCISES[p.location][currentZone];
+    listHtml=`
+      <div class="mt-5">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-display text-xl font-bold">${ZONE_META[currentZone].label}</h2>
+          <button onclick="startSession('${currentZone}')" class="btn-fire text-white rounded-xl px-4 py-2 text-sm font-bold">▶ Démarrer</button>
+        </div>
+        <div class="space-y-2.5">
+          ${list.map(ex=>`
+            <div class="card rounded-xl p-3.5 cursor-pointer" onclick="this.querySelector('.ex-detail').classList.toggle('hidden')">
+              <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${ex.e}</div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="font-semibold text-sm">${ex.n}</div>
+                    <svg class="w-4 h-4 flex-shrink-0" style="color:#6b7280" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                  </div>
+                  <div class="flex gap-2 mt-0.5">
+                    <span class="text-xs font-bold text-fire">${ex.s}</span>
+                    <span class="text-xs" style="color:#6b7280">· ${ex.r}</span>
+                  </div>
+                  <div class="text-xs mt-0.5" style="color:#9ca3af">${ex.m}</div>
+                </div>
+              </div>
+              <div class="ex-detail hidden mt-3 pt-3" style="border-top:1px solid #252525">
+                <p class="text-sm mb-2">${ex.d}</p>
+                <div class="flex gap-2"><span>💡</span><p class="text-sm italic" style="color:#9ca3af">${ex.tip}</p></div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById('tab-exercise').innerHTML = `
+    <div class="max-w-sm mx-auto">
+      <div class="mb-5">
+        <p class="text-sm" style="color:#9ca3af">Sélectionne une zone</p>
+        <h1 class="font-display text-4xl font-bold mt-0.5">PROGRAMME</h1>
+      </div>
+      <div class="grid grid-cols-2 gap-2.5">${zoneCards}</div>
+      ${listHtml}
+      ${!currentZone?`<div class="text-center py-12"><div class="text-4xl mb-2">👆</div><p class="text-sm" style="color:#6b7280">Choisis une zone pour voir les exercices</p></div>`:''}
+    </div>
+  `;
+}
+
+// ── SESSION ─────────────────────────────────────────
+function startSession(zone) {
+  session={active:true,zone,start:Date.now(),timer:null,done:[]};
+  const list=EXERCISES[me().profile.location][zone];
+  const overlay=document.getElementById('session-overlay');
+  overlay.style.display='block';
+  document.getElementById('sess-title').textContent=ZONE_META[zone].label;
+  document.getElementById('sess-exercises').innerHTML=list.map((ex,i)=>`
+    <div id="scard-${i}" class="ex-check card rounded-xl p-3 flex items-center gap-3" onclick="toggleExDone(${i})">
+      <div class="check-circle w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center border-2 text-white text-sm" style="border-color:#333">✓</div>
+      <div class="flex-1 min-w-0">
+        <div class="font-semibold text-sm">${ex.e} ${ex.n}</div>
+        <div class="text-xs mt-0.5 text-fire">${ex.s} · Repos ${ex.r}</div>
+      </div>
+    </div>
+  `).join('');
+  updateSessProg();
+  session.timer=setInterval(()=>{
+    const e=Math.floor((Date.now()-session.start)/1000);
+    document.getElementById('sess-timer').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;
+  },1000);
+}
+
+function toggleExDone(i) {
+  const card=document.getElementById('scard-'+i);
+  if (session.done.includes(i)){session.done=session.done.filter(x=>x!==i);card.classList.remove('done');}
+  else{session.done.push(i);card.classList.add('done');}
+  updateSessProg();
+}
+
+function updateSessProg() {
+  const list=EXERCISES[me().profile.location][session.zone];
+  document.getElementById('sess-prog').style.width=Math.round(session.done.length/list.length*100)+'%';
+}
+
+function finishSession() {
+  const duration=Math.max(1,Math.round((Date.now()-session.start)/60000));
+  clearInterval(session.timer);
+  const list=EXERCISES[me().profile.location][session.zone];
+  const xp=session.done.length*10+duration*2;
+  const user=me();
+  user.workouts=user.workouts||[];
+  user.workouts.push({date:todayStr(),zone:session.zone,duration,exDone:session.done.length,exTotal:list.length,xp});
+  saveMe(user);
+  closeSession();
+  updateStreak();
+  toast(`Séance terminée ! +${xp} XP 🔥`,'🎉');
+  renderHome();
+}
+
+function cancelSession() { clearInterval(session.timer); closeSession(); }
+function closeSession() {
+  session={active:false,zone:null,start:null,timer:null,done:[]};
+  document.getElementById('session-overlay').style.display='none';
+}
+
+// ── NUTRITION ────────────────────────────────────────
+let nutTab='breakfast';
+function renderNutrition(tab) {
+  if (tab) nutTab=tab;
+  const tabs=[{k:'breakfast',l:'Petit-déj',e:'🌅'},{k:'lunch',l:'Déjeuner',e:'☀️'},{k:'dinner',l:'Dîner',e:'🌙'},{k:'snacks',l:'Collation',e:'⚡'}];
+  const tabsHtml=tabs.map(t=>`
+    <button onclick="renderNutrition('${t.k}')" class="flex-1 py-2 text-xs font-semibold rounded-xl transition ${nutTab===t.k?'text-white':''}" style="${nutTab===t.k?'background:linear-gradient(135deg,#DC2626,#F97316)':'color:#9ca3af'}">
+      ${t.e} ${t.l}
+    </button>
+  `).join('');
+  const mealsHtml=MEALS[nutTab].map(m=>{
+    const tot=m.mac.p+m.mac.g+m.mac.l;
+    return `
+      <div class="card rounded-xl p-3.5 cursor-pointer" onclick="this.querySelector('.meal-detail').classList.toggle('hidden')">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${m.e}</div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold text-sm">${m.n}</div>
+              <div><span class="font-display font-bold text-fire">${m.cal}</span><span class="text-xs" style="color:#6b7280"> kcal</span></div>
+            </div>
+            <div class="flex gap-1.5 mt-1 flex-wrap">
+              ${m.tags.map(t=>`<span class="badge" style="background:#1e1e1e;color:#9ca3af">${t}</span>`).join('')}
+              <span class="badge" style="background:#1e1e1e;color:#9ca3af">⏱ ${m.t}</span>
+            </div>
+          </div>
+        </div>
+        <div class="meal-detail hidden mt-3 pt-3" style="border-top:1px solid #252525">
+          <p class="text-sm mb-3">${m.d}</p>
+          ${[['Protéines',m.mac.p,'#DC2626'],['Glucides',m.mac.g,'#F97316'],['Lipides',m.mac.l,'#FBBF24']].map(([l,v,c])=>`
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="text-xs w-16" style="color:#9ca3af">${l}</span>
+              <div class="flex-1 h-1.5 rounded-full" style="background:#252525">
+                <div class="h-full rounded-full" style="width:${Math.round(v/tot*100)}%;background:${c};transition:width .5s"></div>
+              </div>
+              <span class="text-xs font-semibold w-7 text-right">${v}g</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('tab-nutrition').innerHTML=`
+    <div class="max-w-sm mx-auto">
+      <div class="mb-5">
+        <p class="text-sm" style="color:#9ca3af">Alimentation adaptée</p>
+        <h1 class="font-display text-4xl font-bold mt-0.5">NUTRITION</h1>
+      </div>
+      <div class="flex gap-1 p-1 rounded-2xl card mb-4">${tabsHtml}</div>
+      <div class="space-y-2.5 mb-5">${mealsHtml}</div>
+      <div class="card rounded-2xl p-4">
+        <h3 class="font-display text-sm font-bold mb-3">FOCUS NUTRITIONNEL</h3>
+        ${[['💧','Hydratation','2L min/jour, 3L les jours d\'effort'],['🥩','Protéines','1.6-2g par kg de poids'],['🍚','Glucides','Complexes avant l\'effort'],['🥑','Lipides','Avocat, noix, huile d\'olive']].map(([e,t,d])=>`
+          <div class="flex gap-3 mb-3">
+            <span class="text-lg">${e}</span>
+            <div><div class="font-semibold text-sm">${t}</div><div class="text-xs" style="color:#9ca3af">${d}</div></div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ── PROFILE ──────────────────────────────────────────
+function renderProfile() {
+  const user=me();
+  const p=user.profile;
+  const workouts=user.workouts||[];
+  const totalXP=workouts.reduce((a,w)=>a+(w.xp||0),0);
+  const streak=calcStreak();
+  const totalMin=workouts.reduce((a,w)=>a+(w.duration||0),0);
+  const lvl=Math.floor(totalXP/500)+1;
+  const xpInLvl=totalXP%500;
+  const xpPct=Math.round(xpInLvl/500*100);
+  const initials=currentUser.slice(0,2).toUpperCase();
+
+  const zoneCounts={};
+  workouts.forEach(w=>{zoneCounts[w.zone]=(zoneCounts[w.zone]||0)+1;});
+  const favZone=Object.entries(zoneCounts).sort((a,b)=>b[1]-a[1])[0];
+
+  const last7=getLast7();
+  const maxBar=Math.max(...last7,1);
+  const chartHtml=last7.map((v,i)=>{
+    const labels=['L','M','M','J','V','S','D'];
+    const h=Math.max(4,Math.round(v/maxBar*56));
+    return `<div class="flex flex-col items-center gap-1">
+      <div class="chart-bar" style="height:${h}px;width:24px;${v===0?'background:#252525':''}"></div>
+      <span class="text-xs" style="color:#6b7280">${labels[i]}</span>
+    </div>`;
+  }).join('');
+
+  const histHtml=workouts.length
+    ? [...workouts].reverse().slice(0,10).map(w=>{
+        const z=ZONE_META[w.zone];
+        return `<div class="flex items-center gap-3 py-2.5" style="border-bottom:1px solid #1a1a1a">
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${z?z.e:'⚡'}</div>
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-semibold">${z?z.label:w.zone}</div>
+            <div class="text-xs" style="color:#9ca3af">${formatDate(w.date)} · ${w.duration} min</div>
+          </div>
+          <div class="text-right">
+            <div class="text-xs font-bold text-fire">+${w.xp} XP</div>
+            <div class="text-xs" style="color:#6b7280">${w.exDone}/${w.exTotal} ✓</div>
+          </div>
+        </div>`;
+      }).join('')
+    : `<div class="text-center py-6 text-sm" style="color:#6b7280">Aucune séance enregistrée</div>`;
+
+  document.getElementById('tab-profile').innerHTML=`
+    <div class="max-w-sm mx-auto pb-4">
+      <!-- Header -->
+      <div class="flex items-center gap-4 mb-5">
+        <div class="avatar w-16 h-16 text-2xl flex-shrink-0 glow">${initials}</div>
+        <div class="flex-1">
+          <div class="font-display text-2xl font-bold">${currentUser}</div>
+          <div class="text-sm" style="color:#9ca3af">${GOAL_LBL[p.goal]} · ${p.location==='gym'?'🏋️ Salle':'🏠 Maison'}</div>
+          <div class="flex items-center gap-2 mt-1.5">
+            <span class="text-xs font-bold text-fire">Niv. ${lvl}</span>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#252525">
+              <div class="h-full rounded-full" style="width:${xpPct}%;background:linear-gradient(90deg,#DC2626,#F97316);transition:width .5s"></div>
+            </div>
+            <span class="text-xs" style="color:#6b7280">${xpInLvl}/500 XP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-4 gap-2 mb-4">
+        ${[['🔥',streak,'Streak'],['🏆',workouts.length,'Séances'],['⏱️',totalMin,'Min'],['⭐',totalXP,'XP']].map(([e,v,l])=>`
+          <div class="card rounded-xl p-2.5 text-center">
+            <div class="text-base">${e}</div>
+            <div class="font-display text-lg font-bold text-fire">${v}</div>
+            <div class="text-xs" style="color:#9ca3af">${l}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- Activity chart -->
+      <div class="card rounded-2xl p-4 mb-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-display text-sm font-bold">ACTIVITÉ 7 JOURS</h3>
+          <span class="text-xs font-bold text-fire">${last7.reduce((a,b)=>a+b,0)} séance${last7.reduce((a,b)=>a+b,0)>1?'s':''}</span>
+        </div>
+        <div class="flex items-end justify-between" style="height:72px">${chartHtml}</div>
+      </div>
+
+      ${favZone?`
+        <div class="card rounded-2xl p-4 mb-4 flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${ZONE_META[favZone[0]]?.e||'⚡'}</div>
+          <div>
+            <div class="text-xs font-semibold" style="color:#9ca3af">ZONE FAVORITE</div>
+            <div class="font-display text-lg font-bold">${ZONE_META[favZone[0]]?.label||favZone[0]}</div>
+            <div class="text-xs text-fire">${favZone[1]} séance${favZone[1]>1?'s':''}</div>
+          </div>
+        </div>
+      `:''}
+
+      <!-- Poids -->
+      <div class="card rounded-2xl p-4 mb-4">
+        <h3 class="font-display text-sm font-bold mb-3">SUIVI DU POIDS</h3>
+        <div class="max-h-32 overflow-y-auto mb-3 space-y-1.5">
+          ${(user.weight||[]).slice(-5).reverse().map(w=>`
+            <div class="flex justify-between text-sm py-1" style="border-bottom:1px solid #1a1a1a">
+              <span style="color:#9ca3af">${formatDate(w.date)}</span>
+              <span class="font-semibold">${w.kg} kg</span>
+            </div>
+          `).join('') || `<p class="text-sm" style="color:#6b7280">Aucune mesure enregistrée</p>`}
+        </div>
+        <div class="flex gap-2">
+          <input id="weight-input" type="number" step="0.1" placeholder="Ex: 72.5" class="inp flex-1" style="padding:.625rem .875rem"/>
+          <button onclick="logWeight()" class="btn-fire text-white rounded-xl px-4 py-2 text-sm font-bold">+ Ajouter</button>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div class="card rounded-2xl p-4 mb-4">
+        <h3 class="font-display text-sm font-bold mb-1">HISTORIQUE SÉANCES</h3>
+        ${histHtml}
+      </div>
+
+      <!-- Settings -->
+      <div class="card rounded-2xl p-4 space-y-0">
+        <h3 class="font-display text-sm font-bold mb-3">PARAMÈTRES</h3>
+        <button onclick="showScreen('onboarding');obData={location:null,goal:null,days:[]}" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid #1a1a1a">
+          <span>⚙️</span><span>Reconfigurer le profil</span><span class="ml-auto" style="color:#444">›</span>
+        </button>
+        <button onclick="toggleTheme()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid #1a1a1a">
+          <span>🌙</span><span>Thème sombre / clair</span><span class="ml-auto" style="color:#444">›</span>
+        </button>
+        <button onclick="logout()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="color:#EF4444">
+          <span>🚪</span><span>Se déconnecter</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function logWeight() {
+  const inp=document.getElementById('weight-input');
+  const v=parseFloat(inp.value);
+  if (!v||v<20||v>300){toast('Poids invalide','⚠️');return;}
+  const user=me();
+  user.weight=user.weight||[];
+  user.weight.push({date:todayStr(),kg:v});
+  saveMe(user);
+  inp.value='';
+  toast(`${v} kg enregistré`,'✅');
+  renderProfile();
+}
+
+// ══════════════════════════════════════════════════
+// THEME
+// ══════════════════════════════════════════════════
+let isDark=true;
+function toggleTheme() {
+  isDark=!isDark;
+  document.documentElement.classList.toggle('dark',isDark);
+  document.body.style.background=isDark?'':'#f3f4f6';
+  document.body.style.color=isDark?'':'#111827';
+}
+
+// ══════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════
+let toastTimer=null;
+function toast(msg,icon='') {
+  const el=document.getElementById('toast');
+  el.textContent=(icon?icon+' ':'')+msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+// ══════════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════════
+(function boot(){
+  const saved=localStorage.getItem('ff_current');
+  if (saved&&getUser(saved)){currentUser=saved;afterAuth();}
+
+  // Register service worker for offline/PWA
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  }
+
+  // iOS install banner — show once if not installed and not dismissed
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone === true;
+  const dismissed = localStorage.getItem('ff_install_dismissed');
+  if (isIOS && !isStandalone && !dismissed) {
+    const banner = document.createElement('div');
+    banner.id = 'install-banner';
+    banner.innerHTML = `
+      <div style="position:fixed;bottom:0;left:0;right:0;z-index:999;padding:1rem 1.25rem;padding-bottom:calc(1rem + env(safe-area-inset-bottom));background:#1a1a1a;border-top:1px solid #333;display:flex;align-items:center;gap:12px;animation:slideUp .3s ease">
+        <img src="icon-192.png" style="width:44px;height:44px;border-radius:10px;flex-shrink:0"/>
+        <div style="flex:1;min-width:0">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;color:#f9fafb">INSTALLER FITFLEX</div>
+          <div style="font-size:.75rem;color:#9ca3af;margin-top:2px">Appuie sur <strong style="color:#F97316">⎋ Partager</strong> puis <strong style="color:#F97316">"Sur l'écran d'accueil"</strong></div>
+        </div>
+        <button onclick="localStorage.setItem('ff_install_dismissed','1');document.getElementById('install-banner').remove()" style="background:#252525;border:1px solid #333;color:#9ca3af;border-radius:50%;width:28px;height:28px;font-size:14px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+      </div>
+      <style>@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}</style>
+    `;
+    document.body.appendChild(banner);
+  }
+})();
+</script>
+</body>
+</html>

@@ -63,7 +63,6 @@
     .auth-tab.active{border-bottom-color:#F97316;color:#F97316}
     @keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.1) rotate(2deg)}}
     .flame{animation:flicker 1.5s ease-in-out infinite;display:inline-block}
-    #session-overlay{position:fixed;inset:0;background:var(--bg);z-index:150;overflow-y:auto;display:none;transition:background .25s}
     #toast{position:fixed;top:1rem;left:50%;transform:translateX(-50%) translateY(-5rem);background:var(--bg-inner);border:1px solid var(--border-strong);color:var(--text);padding:.75rem 1.5rem;border-radius:99px;font-size:.875rem;font-weight:500;z-index:999;transition:transform .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
     #toast.show{transform:translateX(-50%) translateY(0)}
     .badge{font-size:.65rem;padding:2px 8px;border-radius:99px;font-weight:600;text-transform:uppercase}
@@ -189,10 +188,16 @@
   <!-- Step 1 -->
   <div id="ob-1" class="ob-step flex-1 flex flex-col">
     <h1 class="font-display text-4xl font-bold mb-1">OÙ T'ENTRAÎNES-TU ?</h1>
-    <p class="text-sm mb-6" style="color:var(--text-muted)">Ça détermine les exercices adaptés.</p>
-    <div class="grid grid-cols-2 gap-3 flex-1">
-      <div class="sel-card p-5 card flex flex-col" onclick="pickLoc('gym',this)"><div class="text-4xl mb-3">🏋️</div><div class="font-display text-xl font-bold">SALLE</div><p class="text-xs mt-1" style="color:var(--text-muted)">Machines, barres, haltères</p></div>
-      <div class="sel-card p-5 card flex flex-col" onclick="pickLoc('home',this)"><div class="text-4xl mb-3">🏠</div><div class="font-display text-xl font-bold">MAISON</div><p class="text-xs mt-1" style="color:var(--text-muted)">Poids corps, élastiques</p></div>
+    <p class="text-sm mb-5" style="color:var(--text-muted)">Ça détermine les exercices adaptés.</p>
+    <div class="flex flex-col gap-3">
+      <div class="sel-card p-4 card flex items-center gap-4" onclick="pickLoc('gym',this)">
+        <div class="text-3xl w-12 text-center flex-shrink-0">🏋️</div>
+        <div><div class="font-display text-xl font-bold">SALLE DE SPORT</div><p class="text-xs mt-0.5" style="color:var(--text-muted)">Machines, barres, haltères, câbles</p></div>
+      </div>
+      <div class="sel-card p-4 card flex items-center gap-4" onclick="pickLoc('home',this)">
+        <div class="text-3xl w-12 text-center flex-shrink-0">🏠</div>
+        <div><div class="font-display text-xl font-bold">À LA MAISON</div><p class="text-xs mt-0.5" style="color:var(--text-muted)">Poids du corps, élastiques, chaise</p></div>
+      </div>
     </div>
     <button id="ob-next-1" onclick="obStep(2)" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold mt-5" disabled>CONTINUER →</button>
   </div>
@@ -251,17 +256,55 @@
   <!-- Step 4 — Jours -->
   <div id="ob-4" class="ob-step hidden flex-1 flex flex-col">
     <h1 class="font-display text-4xl font-bold mb-1">TES JOURS DISPO</h1>
-    <p class="text-sm mb-6" style="color:var(--text-muted)">Tes jours d'entraînement habituels.</p>
-    <div class="grid grid-cols-7 gap-1.5 mb-4">
-      <div class="day-pill" onclick="toggleDay('L',this)"><div class="text-xs" style="color:var(--text-muted)">L</div><div class="text-sm font-bold">Lu</div></div>
-      <div class="day-pill" onclick="toggleDay('M',this)"><div class="text-xs" style="color:var(--text-muted)">M</div><div class="text-sm font-bold">Ma</div></div>
-      <div class="day-pill" onclick="toggleDay('Me',this)"><div class="text-xs" style="color:var(--text-muted)">M</div><div class="text-sm font-bold">Me</div></div>
-      <div class="day-pill" onclick="toggleDay('J',this)"><div class="text-xs" style="color:var(--text-muted)">J</div><div class="text-sm font-bold">Je</div></div>
-      <div class="day-pill" onclick="toggleDay('V',this)"><div class="text-xs" style="color:var(--text-muted)">V</div><div class="text-sm font-bold">Ve</div></div>
-      <div class="day-pill" onclick="toggleDay('S',this)"><div class="text-xs" style="color:var(--text-muted)">S</div><div class="text-sm font-bold">Sa</div></div>
-      <div class="day-pill" onclick="toggleDay('D',this)"><div class="text-xs" style="color:var(--text-muted)">D</div><div class="text-sm font-bold">Di</div></div>
+    <p class="text-sm mb-5" style="color:var(--text-muted)">Sélectionne les jours où tu t'entraînes habituellement.</p>
+    <!-- Jours en grandes cartes verticales -->
+    <div class="grid grid-cols-7 gap-2 mb-5">
+      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('L',this)">
+        <div class="text-xs font-semibold" style="color:var(--text-muted)">LUN</div>
+        <div class="text-lg font-display font-bold">L</div>
+      </div>
+      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('M',this)">
+        <div class="text-xs font-semibold" style="color:var(--text-muted)">MAR</div>
+        <div class="text-lg font-display font-bold">M</div>
+      </div>
+      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('Me',this)">
+        <div class="text-xs font-semibold" style="color:var(--text-muted)">MER</div>
+        <div class="text-lg font-display font-bold">M</div>
+      </div>
+      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('J',this)">
+        <div class="text-xs font-semibold" style="color:var(--text-muted)">JEU</div>
+        <div class="text-lg font-display font-bold">J</div>
+      </div>
+      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('V',this)">
+        <div class="text-xs font-semibold" style="color:var(--text-muted)">VEN</div>
+        <div class="text-lg font-display font-bold">V</div>
+      </div>
+      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('S',this)">
+        <div class="text-xs font-semibold" style="color:var(--text-muted)">SAM</div>
+        <div class="text-lg font-display font-bold">S</div>
+      </div>
+      <div class="day-pill flex flex-col items-center py-4 gap-1" onclick="toggleDay('D',this)">
+        <div class="text-xs font-semibold" style="color:var(--text-muted)">DIM</div>
+        <div class="text-lg font-display font-bold">D</div>
+      </div>
     </div>
-    <div id="days-info" class="text-center text-sm mb-4" style="color:var(--text-muted)">Sélectionne au moins 1 jour</div>
+    <!-- Suggestions de fréquence -->
+    <p class="text-xs font-semibold mb-2" style="color:var(--text-muted)">SUGGESTIONS RAPIDES</p>
+    <div class="flex flex-col gap-2 mb-5">
+      <button onclick="quickDays(['L','Me','V'])" class="card rounded-xl px-4 py-3 flex items-center gap-3 text-left">
+        <span class="text-lg">3️⃣</span>
+        <div><div class="text-sm font-semibold">3 fois/semaine</div><div class="text-xs" style="color:var(--text-muted)">Lun · Mer · Ven — idéal pour débuter</div></div>
+      </button>
+      <button onclick="quickDays(['L','M','J','V'])" class="card rounded-xl px-4 py-3 flex items-center gap-3 text-left">
+        <span class="text-lg">4️⃣</span>
+        <div><div class="text-sm font-semibold">4 fois/semaine</div><div class="text-xs" style="color:var(--text-muted)">Lun · Mar · Jeu · Ven — programme intermédiaire</div></div>
+      </button>
+      <button onclick="quickDays(['L','M','Me','J','V'])" class="card rounded-xl px-4 py-3 flex items-center gap-3 text-left">
+        <span class="text-lg">5️⃣</span>
+        <div><div class="text-sm font-semibold">5 fois/semaine</div><div class="text-xs" style="color:var(--text-muted)">Lun → Ven — pour les confirmés</div></div>
+      </button>
+    </div>
+    <div id="days-info" class="text-center text-sm font-semibold py-2 rounded-xl mb-3" style="color:var(--text-muted);background:var(--bg-inner)">Aucun jour sélectionné</div>
     <div class="flex gap-3 mt-auto">
       <button onclick="obStep(3)" class="rounded-2xl py-4 px-5 card font-display text-xl font-bold">←</button>
       <button id="ob-next-4" onclick="finishOnboarding()" class="btn-fire flex-1 rounded-2xl py-4 text-white font-display text-xl font-bold" disabled>COMMENCER 🚀</button>
@@ -341,8 +384,9 @@
   </div>
 </div>
 
+
 <!-- Session overlay -->
-<div id="session-overlay">
+<div id="session-overlay" style="position:fixed;inset:0;background:var(--bg);z-index:150;display:none">
   <div class="max-w-sm mx-auto px-5 py-6">
     <div class="flex items-center justify-between mb-5">
       <div><div class="text-xs font-semibold mb-1" style="color:var(--text-muted)">SÉANCE EN COURS</div><div id="sess-title" class="font-display text-2xl font-bold"></div></div>
@@ -745,7 +789,6 @@ const ANIM_SVG = {
 let currentUser = null;   // Firebase user object
 let userData    = null;   // Firestore data {username, profile, workouts, weight}
 let obData      = {location:null, goal:null, days:[], age:null, weight:null, level:null};
-let sessionData = {active:false, zone:null, start:null, timer:null, done:[]};
 let currentZone = null;
 let nutTab      = 'breakfast';
 let isDark      = true;
@@ -879,13 +922,31 @@ window.pickGoal = (v,el) => {
   el.classList.add('on');
   document.getElementById('ob-next-2').disabled=false;
 };
+window.quickDays = (days) => {
+  // Reset all
+  obData.days=[];
+  document.querySelectorAll('#ob-4 .day-pill').forEach(p=>p.classList.remove('on'));
+  // Apply selected
+  const keyMap={L:0,M:1,Me:2,J:3,V:4,S:5,D:6};
+  const pills=document.querySelectorAll('#ob-4 .day-pill');
+  days.forEach(d=>{obData.days.push(d);if(keyMap[d]!==undefined)pills[keyMap[d]].classList.add('on');});
+  updateDaysInfo();
+  document.getElementById('ob-next-4').disabled=false;
+};
 window.toggleDay = (v,el) => {
   if (obData.days.includes(v)){obData.days=obData.days.filter(d=>d!==v);el.classList.remove('on');}
   else{obData.days.push(v);el.classList.add('on');}
   const n=obData.days.length;
-  document.getElementById('days-info').textContent=n?`${n} jour${n>1?'s':''} sélectionné${n>1?'s':''}`:'Sélectionne au moins 1 jour';
+  updateDaysInfo();
   document.getElementById('ob-next-4').disabled=n===0;
 };
+function updateDaysInfo(){
+  const n=obData.days.length;
+  const el=document.getElementById('days-info');
+  if(!el)return;
+  el.textContent=n?`✅ ${n} jour${n>1?'s':''} sélectionné${n>1?'s':''}`:'Aucun jour sélectionné';
+  el.style.color=n?'#F97316':'var(--text-muted)';
+}
 window.obStep = (n) => {
   document.querySelectorAll('.ob-step').forEach(s=>s.classList.add('hidden'));
   document.getElementById('ob-'+n).classList.remove('hidden');
@@ -1096,6 +1157,7 @@ window.closeDemoModal=()=>{
 };
 
 // ── Session ─────────────────────────────────────────
+let sessionData = {active:false, zone:null, start:null, timer:null, done:[]};
 window.startSession = (zone) => {
   sessionData={active:true,zone,start:Date.now(),timer:null,done:[]};
   const list=EXERCISES[userData.profile.location][zone];

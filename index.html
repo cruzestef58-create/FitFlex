@@ -18,8 +18,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
   <style>
+    /* ── CSS Variables ── */
+    html.dark{
+      --bg:#0d0d0d;--bg-card:#161616;--bg-inner:#1e1e1e;--bg-faint:#252525;--bg-sub:#1a1a1a;
+      --border:#252525;--border-in:#2a2a2a;--border-strong:#333;
+      --text:#f9fafb;--text-muted:#9ca3af;--text-faint:#6b7280;
+    }
+    html:not(.dark){
+      --bg:#f3f4f6;--bg-card:#ffffff;--bg-inner:#f0f0f0;--bg-faint:#e8e8e8;--bg-sub:#ebebeb;
+      --border:#e5e7eb;--border-in:#d1d5db;--border-strong:#c5c5c5;
+      --text:#111827;--text-muted:#6b7280;--text-faint:#9ca3af;
+    }
     *{box-sizing:border-box}
-    body{font-family:'Inter',sans-serif;background:#0d0d0d;color:#f9fafb;min-height:100vh}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .25s,color .25s}
     .font-display{font-family:'Barlow Condensed',Impact,sans-serif}
     .text-fire{background:linear-gradient(135deg,#DC2626,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .btn-fire{background:linear-gradient(135deg,#DC2626,#F97316);transition:all .2s}
@@ -30,16 +41,17 @@
     .screen.active{display:flex;flex-direction:column}
     .tab-pane{display:none}
     .tab-pane.active{display:block}
-    .card{background:#161616;border:1px solid #252525;border-radius:1rem}
-    .sel-card{transition:all .2s;cursor:pointer;border:2px solid #252525;border-radius:1rem}
+    .card{background:var(--bg-card);border:1px solid var(--border);border-radius:1rem;transition:background .25s,border-color .25s}
+    .sel-card{transition:all .2s;cursor:pointer;border:2px solid var(--border);border-radius:1rem}
     .sel-card:hover{transform:translateY(-3px)}
-    .sel-card.on{border-color:#F97316;background:linear-gradient(135deg,#DC262612,#F9731612)}
-    .day-pill{transition:all .2s;cursor:pointer;border:1.5px solid #252525;border-radius:.75rem;padding:.5rem;text-align:center}
+    .sel-card.selected,.sel-card.on{border-color:#F97316;background:linear-gradient(135deg,#DC262612,#F9731612)}
+    .day-pill{transition:all .2s;cursor:pointer;border:1.5px solid var(--border);border-radius:.75rem;padding:.5rem;text-align:center;color:var(--text)}
     .day-pill.on{background:linear-gradient(135deg,#DC2626,#F97316);border-color:transparent;color:white}
-    .inp{width:100%;background:#1e1e1e;border:1.5px solid #2a2a2a;border-radius:.875rem;padding:.875rem 1rem;color:#f9fafb;font-size:.875rem;transition:border-color .2s;outline:none;-webkit-appearance:none}
+    .inp{width:100%;background:var(--bg-inner);border:1.5px solid var(--border-in);border-radius:.875rem;padding:.875rem 1rem;color:var(--text);font-size:.875rem;transition:border-color .2s,background .25s;outline:none;-webkit-appearance:none}
     .inp:focus{border-color:#F97316}
+    .inp::placeholder{color:var(--text-muted)}
     .prog-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,#DC2626,#F97316);transition:width .5s ease}
-    .ob-prog{height:3px;border-radius:99px;background:#252525;overflow:hidden}
+    .ob-prog{height:3px;border-radius:99px;background:var(--bg-faint);overflow:hidden}
     .nav-btn.active .nav-dot{background:linear-gradient(135deg,#DC2626,#F97316)!important}
     .nav-btn.active .nav-lbl{color:#F97316!important}
     .avatar{background:linear-gradient(135deg,#DC2626,#F97316);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;color:white}
@@ -47,24 +59,27 @@
     .ex-check.done{opacity:.5}
     .ex-check.done .check-circle{background:linear-gradient(135deg,#DC2626,#F97316);border-color:transparent}
     .chart-bar{background:linear-gradient(180deg,#F97316,#DC2626);border-radius:4px 4px 0 0;min-width:24px}
-    .auth-tab{cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+    .auth-tab{cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;color:var(--text-muted)}
     .auth-tab.active{border-bottom-color:#F97316;color:#F97316}
     @keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.1) rotate(2deg)}}
     .flame{animation:flicker 1.5s ease-in-out infinite;display:inline-block}
-    #session-overlay{position:fixed;inset:0;background:#0d0d0d;z-index:150;overflow-y:auto;display:none}
-    #toast{position:fixed;top:1rem;left:50%;transform:translateX(-50%) translateY(-5rem);background:#1e1e1e;border:1px solid #333;color:#f9fafb;padding:.75rem 1.5rem;border-radius:99px;font-size:.875rem;font-weight:500;z-index:999;transition:transform .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
+    #session-overlay{position:fixed;inset:0;background:var(--bg);z-index:150;overflow-y:auto;display:none;transition:background .25s}
+    #toast{position:fixed;top:1rem;left:50%;transform:translateX(-50%) translateY(-5rem);background:var(--bg-inner);border:1px solid var(--border-strong);color:var(--text);padding:.75rem 1.5rem;border-radius:99px;font-size:.875rem;font-weight:500;z-index:999;transition:transform .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
     #toast.show{transform:translateX(-50%) translateY(0)}
     .badge{font-size:.65rem;padding:2px 8px;border-radius:99px;font-weight:600;text-transform:uppercase}
     ::-webkit-scrollbar{width:3px}
-    ::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+    ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:2px}
     body{padding-top:env(safe-area-inset-top)}
-    nav{padding-bottom:env(safe-area-inset-bottom)}
+    nav{padding-bottom:env(safe-area-inset-bottom);background:var(--bg)!important;border-top-color:var(--border)!important;transition:background .25s}
+    .sticky-header{background:var(--bg)!important;border-bottom-color:var(--border)!important;transition:background .25s}
     button{-webkit-tap-highlight-color:transparent}
     .glow{box-shadow:0 0 30px rgba(220,38,38,.15)}
-    /* Loading overlay */
-    #loading{position:fixed;inset:0;background:#0d0d0d;z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem}
-    #loading .spin{width:40px;height:40px;border:3px solid #252525;border-top-color:#F97316;border-radius:50%;animation:spin .8s linear infinite}
+    #loading{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;transition:background .25s}
+    #loading .spin{width:40px;height:40px;border:3px solid var(--bg-faint);border-top-color:#F97316;border-radius:50%;animation:spin .8s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
+    /* Nav dots dark/light */
+    .nav-dot{background:var(--bg-inner)!important;transition:background .25s}
+    .nav-btn.active .nav-dot{background:linear-gradient(135deg,#DC2626,#F97316)!important}
   </style>
 </head>
 <body>
@@ -73,7 +88,30 @@
 
 <!-- Loading -->
 <div id="loading">
-  <div class="font-display text-3xl font-bold"><span class="text-fire">FIT</span>FLEX</div>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 44" height="36" aria-label="FitFlex">
+    <defs>
+      <linearGradient id="lg-a" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#DC2626"/>
+        <stop offset="100%" stop-color="#F97316"/>
+      </linearGradient>
+    </defs>
+    <!-- F icon -->
+    <g transform="translate(2,2)">
+      <!-- vertical bar -->
+      <rect x="0" y="4" width="8" height="32" rx="4" fill="url(#lg-a)"/>
+      <!-- top bar -->
+      <rect x="0" y="4" width="26" height="8" rx="4" fill="url(#lg-a)"/>
+      <!-- mid bar -->
+      <rect x="0" y="18" width="18" height="7" rx="3.5" fill="url(#lg-a)"/>
+      <!-- knot loop -->
+      <circle cx="28" cy="5" r="5" fill="none" stroke="url(#lg-a)" stroke-width="3.5"/>
+      <rect x="23" y="2" width="4" height="4" rx="1" fill="#0d0d0d"/>
+    </g>
+    <!-- FITFLEX text -->
+    <text x="46" y="30" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="26" fill="url(#lg-a)" letter-spacing="1">FITFLEX</text>
+    <!-- subtitle -->
+    <text x="47" y="41" font-family="'Inter',sans-serif" font-weight="500" font-size="8" fill="#9ca3af" letter-spacing="2">POWER &amp; NUTRITION</text>
+  </svg>
   <div class="spin"></div>
 </div>
 
@@ -81,56 +119,87 @@
 <div id="screen-auth" class="screen min-h-screen px-5 py-8 flex-col justify-between max-w-sm mx-auto w-full">
   <div>
     <div class="text-center mb-10 mt-4">
-      <div class="font-display text-5xl font-bold mb-2"><span class="text-fire">FIT</span>FLEX</div>
-      <p class="text-sm" style="color:#9ca3af">Ton compagnon fitness personnalisé</p>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" height="56" aria-label="FitFlex" style="margin:0 auto;display:block">
+        <defs>
+          <linearGradient id="lg-b" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#DC2626"/>
+            <stop offset="100%" stop-color="#F97316"/>
+          </linearGradient>
+        </defs>
+        <g transform="translate(2,2)">
+          <rect x="0" y="5" width="10" height="40" rx="5" fill="url(#lg-b)"/>
+          <rect x="0" y="5" width="32" height="10" rx="5" fill="url(#lg-b)"/>
+          <rect x="0" y="23" width="22" height="9" rx="4.5" fill="url(#lg-b)"/>
+          <circle cx="34" cy="6" r="7" fill="none" stroke="url(#lg-b)" stroke-width="4.5"/>
+          <rect x="28" y="2" width="5" height="5" rx="1.5" fill="#0d0d0d"/>
+        </g>
+        <text x="54" y="37" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="34" fill="url(#lg-b)" letter-spacing="1.5">FITFLEX</text>
+        <text x="55" y="50" font-family="'Inter',sans-serif" font-weight="500" font-size="10" fill="#9ca3af" letter-spacing="3">POWER &amp; NUTRITION</text>
+      </svg>
+      <p class="text-sm" style="color:var(--text-muted)">Ton compagnon fitness personnalisé</p>
     </div>
     <div class="flex gap-6 mb-6 border-b" style="border-color:#252525">
       <button class="auth-tab active pb-3 font-semibold text-sm" id="tab-login-btn" onclick="switchAuthTab('login')">Connexion</button>
-      <button class="auth-tab pb-3 font-semibold text-sm" id="tab-reg-btn" style="color:#9ca3af" onclick="switchAuthTab('register')">Inscription</button>
+      <button class="auth-tab pb-3 font-semibold text-sm" id="tab-reg-btn" style="color:var(--text-muted)" onclick="switchAuthTab('register')">Inscription</button>
     </div>
     <!-- Login -->
     <div id="auth-login" class="tab-pane active space-y-3">
-      <div><label class="text-xs font-medium mb-1 block" style="color:#9ca3af">Pseudo</label>
+      <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted)">Pseudo</label>
         <input id="login-user" class="inp" type="text" placeholder="Ton pseudo" autocapitalize="none"/></div>
-      <div><label class="text-xs font-medium mb-1 block" style="color:#9ca3af">Mot de passe</label>
+      <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted)">Mot de passe</label>
         <input id="login-pass" class="inp" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
       <button id="login-btn" onclick="doLogin()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold mt-2">SE CONNECTER</button>
     </div>
     <!-- Register -->
     <div id="auth-register" class="tab-pane space-y-3">
-      <div><label class="text-xs font-medium mb-1 block" style="color:#9ca3af">Pseudo</label>
+      <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted)">Pseudo</label>
         <input id="reg-user" class="inp" type="text" placeholder="Choisis un pseudo" autocapitalize="none"/></div>
-      <div><label class="text-xs font-medium mb-1 block" style="color:#9ca3af">Mot de passe</label>
+      <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted)">Mot de passe</label>
         <input id="reg-pass" class="inp" type="password" placeholder="Min. 6 caractères"/></div>
-      <div><label class="text-xs font-medium mb-1 block" style="color:#9ca3af">Confirmer</label>
+      <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted)">Confirmer</label>
         <input id="reg-pass2" class="inp" type="password" placeholder="Répète le mot de passe" onkeydown="if(event.key==='Enter')doRegister()"/></div>
       <button id="reg-btn" onclick="doRegister()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold mt-2">CRÉER MON COMPTE</button>
     </div>
   </div>
-  <p class="text-center text-xs mt-8" style="color:#6b7280">Compte synchronisé sur tous tes appareils 🌐</p>
+  <p class="text-center text-xs mt-8" style="color:var(--text-faint)">Compte synchronisé sur tous tes appareils 🌐</p>
 </div>
 
 <!-- ═══ ONBOARDING ══════════════════════════════════ -->
 <div id="screen-onboarding" class="screen min-h-screen flex-col px-5 py-6 max-w-sm mx-auto w-full">
   <div class="flex items-center justify-between mb-3">
-    <div class="font-display text-2xl font-bold"><span class="text-fire">FIT</span>FLEX</div>
-    <span id="ob-step-lbl" class="text-xs font-medium" style="color:#9ca3af">Étape 1/3</span>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 38" height="30" aria-label="FitFlex">
+      <defs>
+        <linearGradient id="lg-c" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#DC2626"/>
+          <stop offset="100%" stop-color="#F97316"/>
+        </linearGradient>
+      </defs>
+      <g transform="translate(2,2)">
+        <rect x="0" y="3" width="7" height="28" rx="3.5" fill="url(#lg-c)"/>
+        <rect x="0" y="3" width="22" height="7" rx="3.5" fill="url(#lg-c)"/>
+        <rect x="0" y="16" width="15" height="6" rx="3" fill="url(#lg-c)"/>
+        <circle cx="24" cy="4" r="4.5" fill="none" stroke="url(#lg-c)" stroke-width="3"/>
+        <rect x="20" y="1.5" width="3.5" height="3.5" rx="1" fill="#0d0d0d"/>
+      </g>
+      <text x="40" y="25" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="22" fill="url(#lg-c)" letter-spacing="1">FITFLEX</text>
+    </svg>
+    <span id="ob-step-lbl" class="text-xs font-medium" style="color:var(--text-muted)">Étape 1/4</span>
   </div>
-  <div class="ob-prog mb-6"><div id="ob-fill" class="prog-bar" style="width:33%"></div></div>
+  <div class="ob-prog mb-6"><div id="ob-fill" class="prog-bar" style="width:25%"></div></div>
   <!-- Step 1 -->
   <div id="ob-1" class="ob-step flex-1 flex flex-col">
     <h1 class="font-display text-4xl font-bold mb-1">OÙ T'ENTRAÎNES-TU ?</h1>
-    <p class="text-sm mb-6" style="color:#9ca3af">Ça détermine les exercices adaptés.</p>
+    <p class="text-sm mb-6" style="color:var(--text-muted)">Ça détermine les exercices adaptés.</p>
     <div class="grid grid-cols-2 gap-3 flex-1">
-      <div class="sel-card p-5 card flex flex-col" onclick="pickLoc('gym',this)"><div class="text-4xl mb-3">🏋️</div><div class="font-display text-xl font-bold">SALLE</div><p class="text-xs mt-1" style="color:#9ca3af">Machines, barres, haltères</p></div>
-      <div class="sel-card p-5 card flex flex-col" onclick="pickLoc('home',this)"><div class="text-4xl mb-3">🏠</div><div class="font-display text-xl font-bold">MAISON</div><p class="text-xs mt-1" style="color:#9ca3af">Poids corps, élastiques</p></div>
+      <div class="sel-card p-5 card flex flex-col" onclick="pickLoc('gym',this)"><div class="text-4xl mb-3">🏋️</div><div class="font-display text-xl font-bold">SALLE</div><p class="text-xs mt-1" style="color:var(--text-muted)">Machines, barres, haltères</p></div>
+      <div class="sel-card p-5 card flex flex-col" onclick="pickLoc('home',this)"><div class="text-4xl mb-3">🏠</div><div class="font-display text-xl font-bold">MAISON</div><p class="text-xs mt-1" style="color:var(--text-muted)">Poids corps, élastiques</p></div>
     </div>
     <button id="ob-next-1" onclick="obStep(2)" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold mt-5" disabled>CONTINUER →</button>
   </div>
   <!-- Step 2 -->
   <div id="ob-2" class="ob-step hidden flex-1 flex flex-col">
     <h1 class="font-display text-4xl font-bold mb-1">TON OBJECTIF ?</h1>
-    <p class="text-sm mb-6" style="color:#9ca3af">Le programme s'adapte.</p>
+    <p class="text-sm mb-6" style="color:var(--text-muted)">Le programme s'adapte.</p>
     <div class="grid grid-cols-2 gap-3">
       <div class="sel-card p-4 card" onclick="pickGoal('shape',this)"><div class="text-3xl mb-2">🔥</div><div class="font-display text-base font-bold">REMISE EN FORME</div></div>
       <div class="sel-card p-4 card" onclick="pickGoal('strength',this)"><div class="text-3xl mb-2">💪</div><div class="font-display text-base font-bold">GAIN DE FORCE</div></div>
@@ -142,78 +211,129 @@
       <button id="ob-next-2" onclick="obStep(3)" class="btn-fire flex-1 rounded-2xl py-4 text-white font-display text-xl font-bold" disabled>CONTINUER →</button>
     </div>
   </div>
-  <!-- Step 3 -->
+  <!-- Step 3 — Stats & niveau -->
   <div id="ob-3" class="ob-step hidden flex-1 flex flex-col">
-    <h1 class="font-display text-4xl font-bold mb-1">TES JOURS DISPO</h1>
-    <p class="text-sm mb-6" style="color:#9ca3af">Tes jours d'entraînement habituels.</p>
-    <div class="grid grid-cols-7 gap-1.5 mb-4">
-      <div class="day-pill" onclick="toggleDay('L',this)"><div class="text-xs" style="color:#9ca3af">L</div><div class="text-sm font-bold">Lu</div></div>
-      <div class="day-pill" onclick="toggleDay('M',this)"><div class="text-xs" style="color:#9ca3af">M</div><div class="text-sm font-bold">Ma</div></div>
-      <div class="day-pill" onclick="toggleDay('Me',this)"><div class="text-xs" style="color:#9ca3af">M</div><div class="text-sm font-bold">Me</div></div>
-      <div class="day-pill" onclick="toggleDay('J',this)"><div class="text-xs" style="color:#9ca3af">J</div><div class="text-sm font-bold">Je</div></div>
-      <div class="day-pill" onclick="toggleDay('V',this)"><div class="text-xs" style="color:#9ca3af">V</div><div class="text-sm font-bold">Ve</div></div>
-      <div class="day-pill" onclick="toggleDay('S',this)"><div class="text-xs" style="color:#9ca3af">S</div><div class="text-sm font-bold">Sa</div></div>
-      <div class="day-pill" onclick="toggleDay('D',this)"><div class="text-xs" style="color:#9ca3af">D</div><div class="text-sm font-bold">Di</div></div>
+    <h1 class="font-display text-4xl font-bold mb-1">TON PROFIL</h1>
+    <p class="text-sm mb-5" style="color:var(--text-muted)">Pour adapter le programme à toi.</p>
+    <div class="flex gap-3 mb-4">
+      <div class="flex-1">
+        <label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">ÂGE</label>
+        <input id="ob-age" class="inp" type="number" min="10" max="99" placeholder="Ex: 22" oninput="checkObStats()"/>
+      </div>
+      <div class="flex-1">
+        <label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">POIDS (kg)</label>
+        <input id="ob-weight" class="inp" type="number" step="0.5" min="30" max="250" placeholder="Ex: 75" oninput="checkObStats()"/>
+      </div>
     </div>
-    <div id="days-info" class="text-center text-sm mb-4" style="color:#9ca3af">Sélectionne au moins 1 jour</div>
+    <label class="text-xs font-semibold mb-3 block" style="color:var(--text-muted)">NIVEAU</label>
+    <div class="grid grid-cols-3 gap-2 mb-5">
+      <div class="sel-card p-3 card flex flex-col items-center text-center" onclick="pickLevel('beginner',this)">
+        <div class="text-2xl mb-1">🌱</div>
+        <div class="font-display text-sm font-bold">DÉBUTANT</div>
+        <div class="text-xs mt-1" style="color:var(--text-muted)">Moins de 6 mois</div>
+      </div>
+      <div class="sel-card p-3 card flex flex-col items-center text-center" onclick="pickLevel('intermediate',this)">
+        <div class="text-2xl mb-1">⚡</div>
+        <div class="font-display text-sm font-bold">INTER</div>
+        <div class="text-xs mt-1" style="color:var(--text-muted)">6 mois – 2 ans</div>
+      </div>
+      <div class="sel-card p-3 card flex flex-col items-center text-center" onclick="pickLevel('advanced',this)">
+        <div class="text-2xl mb-1">🔥</div>
+        <div class="font-display text-sm font-bold">AVANCÉ</div>
+        <div class="text-xs mt-1" style="color:var(--text-muted)">2+ ans</div>
+      </div>
+    </div>
     <div class="flex gap-3 mt-auto">
       <button onclick="obStep(2)" class="rounded-2xl py-4 px-5 card font-display text-xl font-bold">←</button>
-      <button id="ob-next-3" onclick="finishOnboarding()" class="btn-fire flex-1 rounded-2xl py-4 text-white font-display text-xl font-bold" disabled>COMMENCER 🚀</button>
+      <button id="ob-next-3" onclick="obStep(4)" class="btn-fire flex-1 rounded-2xl py-4 text-white font-display text-xl font-bold" disabled>CONTINUER →</button>
+    </div>
+  </div>
+  <!-- Step 4 — Jours -->
+  <div id="ob-4" class="ob-step hidden flex-1 flex flex-col">
+    <h1 class="font-display text-4xl font-bold mb-1">TES JOURS DISPO</h1>
+    <p class="text-sm mb-6" style="color:var(--text-muted)">Tes jours d'entraînement habituels.</p>
+    <div class="grid grid-cols-7 gap-1.5 mb-4">
+      <div class="day-pill" onclick="toggleDay('L',this)"><div class="text-xs" style="color:var(--text-muted)">L</div><div class="text-sm font-bold">Lu</div></div>
+      <div class="day-pill" onclick="toggleDay('M',this)"><div class="text-xs" style="color:var(--text-muted)">M</div><div class="text-sm font-bold">Ma</div></div>
+      <div class="day-pill" onclick="toggleDay('Me',this)"><div class="text-xs" style="color:var(--text-muted)">M</div><div class="text-sm font-bold">Me</div></div>
+      <div class="day-pill" onclick="toggleDay('J',this)"><div class="text-xs" style="color:var(--text-muted)">J</div><div class="text-sm font-bold">Je</div></div>
+      <div class="day-pill" onclick="toggleDay('V',this)"><div class="text-xs" style="color:var(--text-muted)">V</div><div class="text-sm font-bold">Ve</div></div>
+      <div class="day-pill" onclick="toggleDay('S',this)"><div class="text-xs" style="color:var(--text-muted)">S</div><div class="text-sm font-bold">Sa</div></div>
+      <div class="day-pill" onclick="toggleDay('D',this)"><div class="text-xs" style="color:var(--text-muted)">D</div><div class="text-sm font-bold">Di</div></div>
+    </div>
+    <div id="days-info" class="text-center text-sm mb-4" style="color:var(--text-muted)">Sélectionne au moins 1 jour</div>
+    <div class="flex gap-3 mt-auto">
+      <button onclick="obStep(3)" class="rounded-2xl py-4 px-5 card font-display text-xl font-bold">←</button>
+      <button id="ob-next-4" onclick="finishOnboarding()" class="btn-fire flex-1 rounded-2xl py-4 text-white font-display text-xl font-bold" disabled>COMMENCER 🚀</button>
     </div>
   </div>
 </div>
 
 <!-- ═══ APP ════════════════════════════════════════ -->
-<div id="screen-app" class="screen min-h-screen flex-col" style="padding-bottom:72px">
-  <div class="flex items-center justify-between px-5 py-4 sticky top-0 z-30" style="background:#0d0d0d;border-bottom:1px solid #1e1e1e">
-    <div class="font-display text-2xl font-bold"><span class="text-fire">FIT</span>FLEX</div>
+<div id="screen-app" class="screen min-h-screen flex-col" style="padding-bottom:calc(72px + env(safe-area-inset-bottom))">
+  <div class="flex items-center justify-between px-5 py-4 sticky top-0 z-30 sticky-header" style="border-bottom:1px solid var(--border)">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 38" height="30" aria-label="FitFlex">
+      <defs>
+        <linearGradient id="lg-d" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#DC2626"/>
+          <stop offset="100%" stop-color="#F97316"/>
+        </linearGradient>
+      </defs>
+      <g transform="translate(2,2)">
+        <rect x="0" y="3" width="7" height="28" rx="3.5" fill="url(#lg-d)"/>
+        <rect x="0" y="3" width="22" height="7" rx="3.5" fill="url(#lg-d)"/>
+        <rect x="0" y="16" width="15" height="6" rx="3" fill="url(#lg-d)"/>
+        <circle cx="24" cy="4" r="4.5" fill="none" stroke="url(#lg-d)" stroke-width="3"/>
+        <rect x="20" y="1.5" width="3.5" height="3.5" rx="1" fill="#0d0d0d"/>
+      </g>
+      <text x="40" y="25" font-family="'Barlow Condensed',sans-serif" font-weight="800" font-size="22" fill="url(#lg-d)" letter-spacing="1">FITFLEX</text>
+    </svg>
     <div class="flex items-center gap-2">
-      <div id="streak-badge" class="hidden items-center gap-1 px-3 py-1 rounded-full text-sm font-bold" style="background:#1e1e1e;border:1px solid #333">
+      <div id="streak-badge" class="hidden items-center gap-1 px-3 py-1 rounded-full text-sm font-bold" style="background:var(--bg-inner);border:1px solid var(--border-strong)">
         <span class="flame">🔥</span><span id="streak-num" class="text-fire"></span>
       </div>
-      <button onclick="toggleTheme()" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#1e1e1e;border:1px solid #2a2a2a">
-        <svg id="theme-icon" class="w-4 h-4" style="color:#9ca3af" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <button onclick="toggleTheme()" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:var(--bg-inner);border:1px solid var(--border-in)">
+        <svg id="theme-icon" class="w-4 h-4" style="color:var(--text-muted)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
         </svg>
       </button>
     </div>
   </div>
-  <div id="tab-home" class="tab-pane active px-5 pt-4 flex-1"></div>
-  <div id="tab-exercise" class="tab-pane px-5 pt-4"></div>
-  <div id="tab-nutrition" class="tab-pane px-5 pt-4"></div>
-  <div id="tab-profile" class="tab-pane px-5 pt-4"></div>
-  <nav class="fixed bottom-0 left-0 right-0 z-40 flex" style="background:#0d0d0d;border-top:1px solid #1e1e1e">
+  <div id="tab-home" class="tab-pane active px-5 pt-4 flex-1" style="padding-bottom:1.5rem"></div>
+  <div id="tab-exercise" class="tab-pane px-5 pt-4" style="padding-bottom:1.5rem"></div>
+  <div id="tab-nutrition" class="tab-pane px-5 pt-4" style="padding-bottom:1.5rem"></div>
+  <div id="tab-profile" class="tab-pane px-5 pt-4" style="padding-bottom:1.5rem"></div>
+  <nav class="fixed bottom-0 left-0 right-0 z-40 flex" style="background:var(--bg);border-top:1px solid #1e1e1e">
     <button class="nav-btn active flex-1 flex flex-col items-center py-2.5 gap-1" id="nav-home" onclick="showTab('home',this)">
-      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:#1e1e1e"><svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg></div>
+      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:var(--bg-inner)"><svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg></div>
       <span class="nav-lbl text-xs font-semibold" style="color:#F97316">Accueil</span>
     </button>
     <button class="nav-btn flex-1 flex flex-col items-center py-2.5 gap-1" onclick="showTab('exercise',this)">
-      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:#1e1e1e"><svg class="w-3.5 h-3.5" style="color:#9ca3af" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
-      <span class="nav-lbl text-xs font-semibold" style="color:#9ca3af">Exercices</span>
+      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:var(--bg-inner)"><svg class="w-3.5 h-3.5" style="color:var(--text-muted)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+      <span class="nav-lbl text-xs font-semibold" style="color:var(--text-muted)">Exercices</span>
     </button>
     <button class="nav-btn flex-1 flex flex-col items-center py-2.5 gap-1" onclick="showTab('nutrition',this)">
-      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:#1e1e1e"><svg class="w-3.5 h-3.5" style="color:#9ca3af" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
-      <span class="nav-lbl text-xs font-semibold" style="color:#9ca3af">Nutrition</span>
+      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:var(--bg-inner)"><svg class="w-3.5 h-3.5" style="color:var(--text-muted)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+      <span class="nav-lbl text-xs font-semibold" style="color:var(--text-muted)">Nutrition</span>
     </button>
     <button class="nav-btn flex-1 flex flex-col items-center py-2.5 gap-1" onclick="showTab('profile',this)">
-      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:#1e1e1e"><svg class="w-3.5 h-3.5" style="color:#9ca3af" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg></div>
-      <span class="nav-lbl text-xs font-semibold" style="color:#9ca3af">Profil</span>
+      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:var(--bg-inner)"><svg class="w-3.5 h-3.5" style="color:var(--text-muted)" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg></div>
+      <span class="nav-lbl text-xs font-semibold" style="color:var(--text-muted)">Profil</span>
     </button>
   </nav>
 </div>
 
 <!-- Demo modal -->
 <div id="demo-modal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center" onclick="if(event.target===this)closeDemoModal()">
-  <div style="background:#161616;border:1px solid #2a2a2a;border-radius:1.5rem 1.5rem 0 0;width:100%;max-width:480px;padding:1.5rem;padding-bottom:calc(1.5rem + env(safe-area-inset-bottom))">
+  <div style="background:var(--bg-card);border:1px solid var(--border-in);border-radius:1.5rem 1.5rem 0 0;width:100%;max-width:480px;padding:1.5rem;padding-bottom:calc(1.5rem + env(safe-area-inset-bottom))">
     <div class="flex items-center justify-between mb-4">
       <div>
         <div id="demo-name" class="font-display text-xl font-bold"></div>
-        <div id="demo-muscles" class="text-xs mt-0.5" style="color:#9ca3af"></div>
+        <div id="demo-muscles" class="text-xs mt-0.5" style="color:var(--text-muted)"></div>
       </div>
-      <button onclick="closeDemoModal()" style="background:#252525;border:1px solid #333;color:#9ca3af;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;flex-shrink:0">✕</button>
+      <button onclick="closeDemoModal()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;flex-shrink:0">✕</button>
     </div>
-    <div id="demo-anim" class="flex justify-center py-4 rounded-2xl mb-4" style="background:#0d0d0d;min-height:160px;align-items:center"></div>
-    <div id="demo-desc" class="text-sm mb-4 rounded-xl p-3" style="background:#1e1e1e;color:#d1d5db"></div>
+    <div id="demo-desc" class="text-sm mb-4 rounded-xl p-3" style="background:var(--bg-inner);color:#d1d5db"></div>
     <a id="demo-yt" href="#" target="_blank" rel="noopener" class="btn-fire flex items-center justify-center gap-2 w-full rounded-2xl py-3.5 text-white font-display text-lg font-bold no-underline">
       <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
       Voir la vidéo sur YouTube
@@ -225,13 +345,13 @@
 <div id="session-overlay">
   <div class="max-w-sm mx-auto px-5 py-6">
     <div class="flex items-center justify-between mb-5">
-      <div><div class="text-xs font-semibold mb-1" style="color:#9ca3af">SÉANCE EN COURS</div><div id="sess-title" class="font-display text-2xl font-bold"></div></div>
+      <div><div class="text-xs font-semibold mb-1" style="color:var(--text-muted)">SÉANCE EN COURS</div><div id="sess-title" class="font-display text-2xl font-bold"></div></div>
       <div id="sess-timer" class="font-display text-2xl font-bold text-fire">00:00</div>
     </div>
     <div class="ob-prog mb-5" style="height:4px"><div id="sess-prog" class="prog-bar" style="width:0%"></div></div>
     <div id="sess-exercises" class="space-y-3 mb-6"></div>
     <button onclick="finishSession()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold">TERMINER LA SÉANCE ✓</button>
-    <button onclick="cancelSession()" class="w-full rounded-2xl py-3 mt-2 text-sm font-medium" style="color:#9ca3af">Annuler</button>
+    <button onclick="cancelSession()" class="w-full rounded-2xl py-3 mt-2 text-sm font-medium" style="color:var(--text-muted)">Annuler</button>
   </div>
 </div>
 
@@ -265,7 +385,7 @@ const EXERCISES = {
       {n:"Rowing barre",s:"4×10",r:"75s",e:"🔗",m:"Dos · Biceps · Trapèzes",d:"Penché à 45°, tirer vers le nombril en serrant les omoplates.",tip:"Dos plat, ne pas arrondir.",a:"pull_h"},
       {n:"Développé militaire",s:"3×10-12",r:"75s",e:"⬆️",m:"Épaules · Triceps",d:"Barre de la clavicule jusqu'à l'extension complète.",tip:"Évite de cambrer le bas du dos.",a:"press"},
       {n:"Curl barre EZ",s:"3×12",r:"60s",e:"💪",m:"Biceps · Avant-bras",d:"Fléchir jusqu'à hauteur des épaules, descendre lentement.",tip:"Coudes collés, sans balancement.",a:"curl"},
-      {n:"Dips aux barres",s:"3×10-12",r:"60s",e:"↘️",m:"Triceps · Pectoraux inf.",d:"Descendre à 90° aux coudes, pousser.",tip:"Légèrement penché pour cibler les pec.",a:"push"},
+      {n:"Dips aux barres",s:"3×10-12",r:"60s",e:"↘️",m:"Triceps · Pectoraux inf.",d:"Descendre à 90° aux coudes, pousser.",tip:"Légèrement penché pour cibler les pec.",a:"press"},
     ],
     lower:[
       {n:"Squat barre",s:"4×6-8",r:"120s",e:"🦵",m:"Quadriceps · Fessiers · Ischio",d:"Pieds largeur épaules, descendre cuisses parallèles.",tip:"Genoux dans l'axe des pieds.",a:"squat"},
@@ -277,9 +397,9 @@ const EXERCISES = {
     core:[
       {n:"Crunch câble",s:"4×15",r:"45s",e:"📎",m:"Abdominaux",d:"À genoux face à la poulie, fléchir le buste vers le sol.",tip:"Mouvement part des abdos.",a:"core"},
       {n:"Planche",s:"3×45-60s",r:"30s",e:"📏",m:"Core · Abdos",d:"Avant-bras et orteils, corps droit, maintenir.",tip:"Contracter fessiers et ventre.",a:"plank"},
-      {n:"Leg raise suspendu",s:"3×12-15",r:"45s",e:"⬆️",m:"Abdos inf.",d:"Suspendu à la barre, monter les jambes à l'horizontale.",tip:"Contrôler la descente.",a:"core"},
+      {n:"Leg raise suspendu",s:"3×12-15",r:"45s",e:"⬆️",m:"Abdos inf.",d:"Suspendu à la barre, monter les jambes à l'horizontale.",tip:"Contrôler la descente.",a:"pull_v"},
       {n:"Vélo HIIT",s:"8×(20s/40s)",r:"—",e:"🚴",m:"Cardio · Full body",d:"20s effort max, 40s récup. 8 rounds.",tip:"À fond sur les efforts.",a:"cardio"},
-      {n:"Battle ropes",s:"5×30s",r:"30s",e:"🌊",m:"Épaules · Cardio · Core",d:"Vagues continues aussi fort que possible.",tip:"Position semi-fléchie.",a:"cardio"},
+      {n:"Battle ropes",s:"5×30s",r:"30s",e:"🌊",m:"Épaules · Cardio · Core",d:"Vagues continues aussi fort que possible.",tip:"Position semi-fléchie.",a:"pull_h"},
     ],
     fullbody:[
       {n:"Deadlift",s:"4×5",r:"120s",e:"🏋️",m:"Dos · Fessiers · Ischio",d:"Barre au sol, pousser dans le sol en redressant le buste.",tip:"Dos plat absolu.",a:"hinge"},
@@ -293,8 +413,8 @@ const EXERCISES = {
     upper:[
       {n:"Pompes classiques",s:"4×12-15",r:"60s",e:"💪",m:"Pectoraux · Triceps · Épaules",d:"Corps aligné, descendre au sol, remonter.",tip:"Coudes à 45°.",a:"push"},
       {n:"Pompes diamant",s:"3×10-12",r:"60s",e:"💎",m:"Triceps · Pec internes",d:"Paumes en triangle sous la poitrine.",tip:"Plus difficile que les pompes classiques.",a:"push"},
-      {n:"Pompes déclinées",s:"3×10",r:"60s",e:"🔼",m:"Pec sup. · Épaules",d:"Pieds surélevés sur une chaise.",tip:"Plus les pieds sont hauts, plus les épaules travaillent.",a:"push"},
-      {n:"Dips sur chaise",s:"3×12-15",r:"60s",e:"🪑",m:"Triceps · Pec inf.",d:"Mains sur le bord, jambes tendues, descendre.",tip:"Descendre jusqu'à 90°.",a:"push"},
+      {n:"Pompes déclinées",s:"3×10",r:"60s",e:"🔼",m:"Pec sup. · Épaules",d:"Pieds surélevés sur une chaise.",tip:"Plus les pieds sont hauts, plus les épaules travaillent.",a:"press"},
+      {n:"Dips sur chaise",s:"3×12-15",r:"60s",e:"🪑",m:"Triceps · Pec inf.",d:"Mains sur le bord, jambes tendues, descendre.",tip:"Descendre jusqu'à 90°.",a:"press"},
       {n:"Pike push-up",s:"3×10",r:"60s",e:"🔻",m:"Épaules · Triceps",d:"En V inversé, descendre la tête vers le sol.",tip:"Hanches hautes = plus efficace.",a:"press"},
     ],
     lower:[
@@ -307,12 +427,12 @@ const EXERCISES = {
     core:[
       {n:"Crunch",s:"4×20",r:"30s",e:"🌀",m:"Abdominaux",d:"Lever les épaules du sol en contractant les abdos.",tip:"Sans tirer sur le cou.",a:"core"},
       {n:"Planche",s:"3×45-60s",r:"30s",e:"📏",m:"Core · Épaules",d:"Avant-bras et orteils, corps droit.",tip:"Contracter fessiers et ventre.",a:"plank"},
-      {n:"Mountain climbers",s:"4×30s",r:"20s",e:"⛰️",m:"Abdos · Core · Cardio",d:"En position pompe, genoux alternativement.",tip:"Plus vite = plus cardio.",a:"cardio"},
-      {n:"Burpees",s:"4×10",r:"30s",e:"🔄",m:"Full body · Cardio",d:"Debout→squat→pompe→saut.",tip:"L'exercice le plus complet.",a:"cardio"},
-      {n:"Bicycle crunch",s:"3×20",r:"30s",e:"🚵",m:"Obliques · Abdos",d:"Coude gauche vers genou droit et inversement.",tip:"Vraie rotation du buste.",a:"core"},
+      {n:"Mountain climbers",s:"4×30s",r:"20s",e:"⛰️",m:"Abdos · Core · Cardio",d:"En position pompe, genoux alternativement.",tip:"Plus vite = plus cardio.",a:"plank"},
+      {n:"Burpees",s:"4×10",r:"30s",e:"🔄",m:"Full body · Cardio",d:"Debout→squat→pompe→saut.",tip:"L'exercice le plus complet.",a:"squat"},
+      {n:"Bicycle crunch",s:"3×20",r:"30s",e:"🚵",m:"Obliques · Abdos",d:"Coude gauche vers genou droit et inversement.",tip:"Vraie rotation du buste.",a:"plank"},
     ],
     fullbody:[
-      {n:"Burpees",s:"5×10",r:"45s",e:"🔄",m:"Full body · Cardio",d:"Debout→squat→pompe→saut explosif.",tip:"L'exercice le plus complet.",a:"cardio"},
+      {n:"Burpees",s:"5×10",r:"45s",e:"🔄",m:"Full body · Cardio",d:"Debout→squat→pompe→saut explosif.",tip:"L'exercice le plus complet.",a:"squat"},
       {n:"AMRAP 10 min",s:"10 min",r:"—",e:"⏱️",m:"Full body",d:"Max rounds : 10 pompes→15 squats→20 mountain climbers.",tip:"As Many Rounds As Possible.",a:"cardio"},
       {n:"Pompes explosives",s:"4×8",r:"60s",e:"💥",m:"Pectoraux · Core",d:"Pousser explosif pour décoller les mains.",tip:"Gainage actif.",a:"push"},
       {n:"Squat jump + pompe",s:"4×8",r:"60s",e:"🔁",m:"Full body",d:"1 squat jump + 1 pompe = 1 rep.",tip:"Fluide avec la pratique.",a:"squat"},
@@ -624,7 +744,7 @@ const ANIM_SVG = {
 // ── State ──────────────────────────────────────────
 let currentUser = null;   // Firebase user object
 let userData    = null;   // Firestore data {username, profile, workouts, weight}
-let obData      = {location:null, goal:null, days:[]};
+let obData      = {location:null, goal:null, days:[], age:null, weight:null, level:null};
 let sessionData = {active:false, zone:null, start:null, timer:null, done:[]};
 let currentZone = null;
 let nutTab      = 'breakfast';
@@ -741,6 +861,7 @@ function showScreen(n) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-'+n).classList.add('active');
 }
+window.showScreen = showScreen;
 function hideLoading() {
   document.getElementById('loading').style.display='none';
 }
@@ -763,21 +884,57 @@ window.toggleDay = (v,el) => {
   else{obData.days.push(v);el.classList.add('on');}
   const n=obData.days.length;
   document.getElementById('days-info').textContent=n?`${n} jour${n>1?'s':''} sélectionné${n>1?'s':''}`:'Sélectionne au moins 1 jour';
-  document.getElementById('ob-next-3').disabled=n===0;
+  document.getElementById('ob-next-4').disabled=n===0;
 };
 window.obStep = (n) => {
   document.querySelectorAll('.ob-step').forEach(s=>s.classList.add('hidden'));
   document.getElementById('ob-'+n).classList.remove('hidden');
-  document.getElementById('ob-step-lbl').textContent=`Étape ${n}/3`;
-  document.getElementById('ob-fill').style.width=(n/3*100)+'%';
+  document.getElementById('ob-step-lbl').textContent=`Étape ${n}/4`;
+  document.getElementById('ob-fill').style.width=(n/4*100)+'%';
+};
+window.pickLevel = (v,el) => {
+  obData.level=v;
+  document.querySelectorAll('#ob-3 .sel-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  checkObStats();
+};
+window.checkObStats = () => {
+  const age=parseInt(document.getElementById('ob-age').value);
+  const w=parseFloat(document.getElementById('ob-weight').value);
+  if(age>=10&&age<=99) obData.age=age; else obData.age=null;
+  if(w>=30&&w<=250) obData.weight=w; else obData.weight=null;
+  document.getElementById('ob-next-3').disabled=!(obData.age&&obData.weight&&obData.level);
 };
 window.finishOnboarding = async () => {
-  const profile={location:obData.location,goal:obData.goal,days:obData.days};
-  await saveUserData({profile});
+  const profile={
+    location:obData.location,
+    goal:obData.goal,
+    days:obData.days,
+    age:obData.age,
+    weight_start:obData.weight,
+    level:obData.level||'intermediate'
+  };
+  const weight=[{date:todayStr(),kg:obData.weight}];
+  await saveUserData({profile,weight});
   showScreen('app');
   initApp();
   toast('Profil configuré 🎉','✅');
 };
+
+// ── Difficulty adaptation ──────────────────────────
+const LEVEL_LBL = {beginner:'🌱 Débutant', intermediate:'⚡ Intermédiaire', advanced:'🔥 Avancé'};
+function adaptEx(ex, level) {
+  if (!level || level === 'intermediate') return ex;
+  let {s, r} = ex;
+  if (level === 'beginner') {
+    s = s.replace(/5×/g,'3×').replace(/4×/g,'3×').replace(/3×/g,'2×');
+    r = r.replace(/120s/g,'150s').replace(/90s/g,'120s').replace(/75s/g,'90s').replace(/60s/g,'75s').replace(/45s/g,'60s').replace(/30s/g,'45s');
+  } else if (level === 'advanced') {
+    s = s.replace(/2×/g,'3×').replace(/3×/g,'4×').replace(/4×/g,'5×');
+    r = r.replace(/150s/g,'120s').replace(/120s/g,'90s').replace(/90s/g,'75s').replace(/75s/g,'60s').replace(/60s/g,'45s').replace(/45s/g,'30s');
+  }
+  return {...ex, s, r};
+}
 
 // ── App init ───────────────────────────────────────
 function initApp() {
@@ -837,23 +994,23 @@ function renderHome() {
     const isToday=d===todayKey;
     const done=wk.some(w=>w.date===todayStr()&&dayKeys[new Date(w.date+'T12:00:00').getDay()]===d);
     return `<div class="flex flex-col items-center gap-1">
-      <div class="text-xs" style="color:#6b7280">${['L','M','M','J','V','S','D'][i]}</div>
+      <div class="text-xs" style="color:var(--text-faint)">${['L','M','M','J','V','S','D'][i]}</div>
       <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold${isToday?' ring-2 ring-orange-500':''}"
-        style="${done?'background:linear-gradient(135deg,#DC2626,#F97316);color:white':active?'background:#2a2a2a;color:#9ca3af':'background:#1a1a1a;color:#333'}">
+        style="${done?'background:linear-gradient(135deg,#DC2626,#F97316);color:white':active?'background:#2a2a2a;color:var(--text-muted)':'background:var(--bg-sub);color:#333'}">
         ${done?'✓':active?'●':''}
       </div>
     </div>`;
   }).join('');
 
   const recentHtml=wk.length
-    ?[...wk].reverse().slice(0,3).map(w=>{const z=ZONE_META[w.zone];return`<div class="flex items-center gap-3 py-2.5" style="border-bottom:1px solid #1a1a1a">
+    ?[...wk].reverse().slice(0,3).map(w=>{const z=ZONE_META[w.zone];return`<div class="flex items-center gap-3 py-2.5" style="border-bottom:1px solid var(--border)">
       <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${z?z.e:'⚡'}</div>
-      <div class="flex-1"><div class="text-sm font-semibold">${z?z.label:w.zone}</div><div class="text-xs" style="color:#9ca3af">${fmtDate(w.date)} · ${w.duration} min · ${w.exDone}/${w.exTotal}</div></div>
+      <div class="flex-1"><div class="text-sm font-semibold">${z?z.label:w.zone}</div><div class="text-xs" style="color:var(--text-muted)">${fmtDate(w.date)} · ${w.duration} min · ${w.exDone}/${w.exTotal}</div></div>
       <div class="text-xs font-bold text-fire">+${w.xp} XP</div></div>`;}).join('')
-    :`<div class="text-center py-4 text-sm" style="color:#6b7280">Aucune séance encore 🚀</div>`;
+    :`<div class="text-center py-4 text-sm" style="color:var(--text-faint)">Aucune séance encore 🚀</div>`;
 
   document.getElementById('tab-home').innerHTML=`<div class="max-w-sm mx-auto">
-    <div class="mb-5"><p class="text-sm" style="color:#9ca3af">${isTraining?'💪 Jour d\'entraînement !':'😴 Récupération'}</p>
+    <div class="mb-5"><p class="text-sm" style="color:var(--text-muted)">${isTraining?'💪 Jour d\'entraînement !':'😴 Récupération'}</p>
       <h1 class="font-display text-4xl font-bold mt-0.5">BONJOUR, <span class="text-fire">${u.toUpperCase()} !</span></h1></div>
     <div class="rounded-2xl p-5 mb-4 relative overflow-hidden glow" style="background:linear-gradient(135deg,#DC2626,#F97316)">
       <div class="absolute top-0 right-0 w-32 h-32 rounded-full opacity-20" style="background:white;transform:translate(30%,-30%)"></div>
@@ -866,11 +1023,11 @@ function renderHome() {
     </div>
     <div class="grid grid-cols-3 gap-2 mb-4">
       ${[['🔥',streak,'Streak'],['🏆',wk.length,'Séances'],['⭐',totalXP,'XP']].map(([e,v,l])=>`
-        <div class="card p-3 text-center rounded-2xl"><div class="font-display text-2xl font-bold text-fire">${v}</div><div class="text-xs mt-0.5" style="color:#9ca3af">${e} ${l}</div></div>`).join('')}
+        <div class="card p-3 text-center rounded-2xl"><div class="font-display text-2xl font-bold text-fire">${v}</div><div class="text-xs mt-0.5" style="color:var(--text-muted)">${e} ${l}</div></div>`).join('')}
     </div>
     <div class="card rounded-2xl p-4 mb-4">
       <div class="flex items-center justify-between mb-3"><h2 class="font-display text-sm font-bold">SEMAINE</h2>
-        <span class="text-xs" style="color:#9ca3af">${p.days.length} j/sem · ${p.location==='gym'?'🏋️':'🏠'}</span></div>
+        <span class="text-xs" style="color:var(--text-muted)">${p.days.length} j/sem · ${p.location==='gym'?'🏋️':'🏠'}</span></div>
       <div class="grid grid-cols-7 gap-1">${weekBars}</div>
     </div>
     <div class="card rounded-2xl p-4 mb-4"><h2 class="font-display text-sm font-bold mb-1">DERNIÈRES SÉANCES</h2>${recentHtml}</div>
@@ -885,7 +1042,7 @@ window.renderExercise = (zone) => {
     <div onclick="renderExercise('${k}')" class="sel-card p-4 card ${currentZone===k?'on':''}">
       <div class="text-3xl mb-2">${v.e}</div>
       <div class="font-display text-sm font-bold">${v.label}</div>
-      <div class="text-xs mt-1" style="color:#9ca3af">${v.desc}</div>
+      <div class="text-xs mt-1" style="color:var(--text-muted)">${v.desc}</div>
     </div>`).join('');
 
   const listHtml=currentZone?`
@@ -895,32 +1052,32 @@ window.renderExercise = (zone) => {
         <button onclick="startSession('${currentZone}')" class="btn-fire text-white rounded-xl px-4 py-2 text-sm font-bold">▶ Démarrer</button>
       </div>
       <div class="space-y-2.5">
-        ${EXERCISES[p.location][currentZone].map(ex=>`
+        ${EXERCISES[p.location][currentZone].map(ex=>{const ae=adaptEx(ex,p.level);return`
           <div class="card rounded-xl p-3.5 cursor-pointer" onclick="this.querySelector('.ex-d').classList.toggle('hidden')">
             <div class="flex items-start gap-3">
-              <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${ex.e}</div>
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${ae.e}</div>
               <div class="flex-1">
-                <div class="flex items-center justify-between"><div class="font-semibold text-sm">${ex.n}</div>
-                  <svg class="w-4 h-4" style="color:#6b7280" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div>
-                <div class="flex gap-2 mt-0.5"><span class="text-xs font-bold text-fire">${ex.s}</span><span class="text-xs" style="color:#6b7280">· ${ex.r}</span></div>
-                <div class="text-xs mt-0.5" style="color:#9ca3af">${ex.m}</div>
+                <div class="flex items-center justify-between"><div class="font-semibold text-sm">${ae.n}</div>
+                  <svg class="w-4 h-4" style="color:var(--text-faint)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div>
+                <div class="flex gap-2 mt-0.5"><span class="text-xs font-bold text-fire">${ae.s}</span><span class="text-xs" style="color:var(--text-faint)">· ${ae.r}</span></div>
+                <div class="text-xs mt-0.5" style="color:var(--text-muted)">${ae.m}</div>
               </div>
             </div>
-            <div class="ex-d hidden mt-3 pt-3" style="border-top:1px solid #252525">
-              <p class="text-sm mb-3">${ex.d}</p>
-              <div class="flex gap-2 mb-3"><span>💡</span><p class="text-sm italic" style="color:#9ca3af">${ex.tip}</p></div>
-              <button onclick="event.stopPropagation();showDemo(${JSON.stringify(ex).replace(/"/g,'&quot;')})" class="btn-fire w-full rounded-xl py-2.5 text-white text-sm font-bold flex items-center justify-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Voir la démo animée
+            <div class="ex-d hidden mt-3 pt-3" style="border-top:1px solid var(--border)">
+              <p class="text-sm mb-3">${ae.d}</p>
+              <div class="flex gap-2 mb-3"><span>💡</span><p class="text-sm italic" style="color:var(--text-muted)">${ae.tip}</p></div>
+              <button onclick="event.stopPropagation();showDemo(${JSON.stringify(ae).replace(/"/g,'&quot;')})" class="btn-fire w-full rounded-xl py-2.5 text-white text-sm font-bold flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                Voir sur YouTube
               </button>
             </div>
-          </div>`).join('')}
+          </div>`}).join('')}
       </div>
     </div>`
-  :`<div class="text-center py-12"><div class="text-4xl mb-2">👆</div><p class="text-sm" style="color:#6b7280">Choisis une zone</p></div>`;
+  :`<div class="text-center py-12"><div class="text-4xl mb-2">👆</div><p class="text-sm" style="color:var(--text-faint)">Choisis une zone</p></div>`;
 
   document.getElementById('tab-exercise').innerHTML=`<div class="max-w-sm mx-auto">
-    <div class="mb-5"><p class="text-sm" style="color:#9ca3af">Sélectionne une zone</p><h1 class="font-display text-4xl font-bold mt-0.5">PROGRAMME</h1></div>
+    <div class="mb-5"><p class="text-sm" style="color:var(--text-muted)">Sélectionne une zone</p><h1 class="font-display text-4xl font-bold mt-0.5">PROGRAMME</h1></div>
     <div class="grid grid-cols-2 gap-2.5">${zoneCards}</div>${listHtml}</div>`;
 };
 
@@ -928,7 +1085,6 @@ window.renderExercise = (zone) => {
 window.showDemo=(ex)=>{
   document.getElementById('demo-name').textContent=ex.e+' '+ex.n;
   document.getElementById('demo-muscles').textContent=ex.m;
-  document.getElementById('demo-anim').innerHTML=ANIM_SVG[ex.a]||ANIM_SVG.cardio;
   document.getElementById('demo-desc').textContent=ex.d+' 💡 '+ex.tip;
   document.getElementById('demo-yt').href=`https://www.youtube.com/results?search_query=${encodeURIComponent(ex.n+' exercice technique correct')}`;
   const modal=document.getElementById('demo-modal');
@@ -947,7 +1103,7 @@ window.startSession = (zone) => {
   document.getElementById('sess-title').textContent=ZONE_META[zone].label;
   document.getElementById('sess-exercises').innerHTML=list.map((ex,i)=>`
     <div id="sc-${i}" class="ex-check card rounded-xl p-3 flex items-center gap-3" onclick="toggleExDone(${i})">
-      <div class="check-circle w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center border-2 text-white text-sm" style="border-color:#333">✓</div>
+      <div class="check-circle w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center border-2 text-white text-sm" style="border-color:var(--border-strong)">✓</div>
       <div class="flex-1"><div class="font-semibold text-sm">${ex.e} ${ex.n}</div><div class="text-xs mt-0.5 text-fire">${ex.s} · ${ex.r}</div></div>
     </div>`).join('');
   updateSessProg();
@@ -988,7 +1144,7 @@ function closeSession(){
 window.renderNutrition=(tab)=>{
   if(tab) nutTab=tab;
   const tabs=[{k:'breakfast',l:'Petit-déj',e:'🌅'},{k:'lunch',l:'Déjeuner',e:'☀️'},{k:'dinner',l:'Dîner',e:'🌙'},{k:'snacks',l:'Collation',e:'⚡'}];
-  const tabsHtml=tabs.map(t=>`<button onclick="renderNutrition('${t.k}')" class="flex-1 py-2 text-xs font-semibold rounded-xl" style="${nutTab===t.k?'background:linear-gradient(135deg,#DC2626,#F97316);color:white':'color:#9ca3af'}">${t.e} ${t.l}</button>`).join('');
+  const tabsHtml=tabs.map(t=>`<button onclick="renderNutrition('${t.k}')" class="flex-1 py-2 text-xs font-semibold rounded-xl" style="${nutTab===t.k?'background:linear-gradient(135deg,#DC2626,#F97316);color:white':'color:var(--text-muted)'}">${t.e} ${t.l}</button>`).join('');
   const mealsHtml=MEALS[nutTab].map(m=>{
     const tot=m.mac.p+m.mac.g+m.mac.l;
     return`<div class="card rounded-xl p-3.5 cursor-pointer" onclick="this.querySelector('.meal-d').classList.toggle('hidden')">
@@ -996,28 +1152,28 @@ window.renderNutrition=(tab)=>{
         <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${m.e}</div>
         <div class="flex-1">
           <div class="flex items-center justify-between"><div class="font-semibold text-sm">${m.n}</div>
-            <div><span class="font-display font-bold text-fire">${m.cal}</span><span class="text-xs" style="color:#6b7280"> kcal</span></div></div>
-          <div class="flex gap-1.5 mt-1">${m.tags.map(t=>`<span class="badge" style="background:#1e1e1e;color:#9ca3af">${t}</span>`).join('')}<span class="badge" style="background:#1e1e1e;color:#9ca3af">⏱ ${m.t}</span></div>
+            <div><span class="font-display font-bold text-fire">${m.cal}</span><span class="text-xs" style="color:var(--text-faint)"> kcal</span></div></div>
+          <div class="flex gap-1.5 mt-1">${m.tags.map(t=>`<span class="badge" style="background:var(--bg-inner);color:var(--text-muted)">${t}</span>`).join('')}<span class="badge" style="background:var(--bg-inner);color:var(--text-muted)">⏱ ${m.t}</span></div>
         </div>
       </div>
-      <div class="meal-d hidden mt-3 pt-3" style="border-top:1px solid #252525">
+      <div class="meal-d hidden mt-3 pt-3" style="border-top:1px solid var(--border)">
         <p class="text-sm mb-3">${m.d}</p>
         ${[['Protéines',m.mac.p,'#DC2626'],['Glucides',m.mac.g,'#F97316'],['Lipides',m.mac.l,'#FBBF24']].map(([l,v,c])=>`
-          <div class="flex items-center gap-2 mb-1.5"><span class="text-xs w-16" style="color:#9ca3af">${l}</span>
-            <div class="flex-1 h-1.5 rounded-full" style="background:#252525"><div class="h-full rounded-full" style="width:${Math.round(v/tot*100)}%;background:${c}"></div></div>
+          <div class="flex items-center gap-2 mb-1.5"><span class="text-xs w-16" style="color:var(--text-muted)">${l}</span>
+            <div class="flex-1 h-1.5 rounded-full" style="background:var(--bg-faint)"><div class="h-full rounded-full" style="width:${Math.round(v/tot*100)}%;background:${c}"></div></div>
             <span class="text-xs font-semibold w-7 text-right">${v}g</span></div>`).join('')}
       </div>
     </div>`;
   }).join('');
 
   document.getElementById('tab-nutrition').innerHTML=`<div class="max-w-sm mx-auto">
-    <div class="mb-5"><p class="text-sm" style="color:#9ca3af">Alimentation adaptée</p><h1 class="font-display text-4xl font-bold mt-0.5">NUTRITION</h1></div>
+    <div class="mb-5"><p class="text-sm" style="color:var(--text-muted)">Alimentation adaptée</p><h1 class="font-display text-4xl font-bold mt-0.5">NUTRITION</h1></div>
     <div class="flex gap-1 p-1 rounded-2xl card mb-4">${tabsHtml}</div>
     <div class="space-y-2.5 mb-5">${mealsHtml}</div>
     <div class="card rounded-2xl p-4">
       <h3 class="font-display text-sm font-bold mb-3">FOCUS NUTRITIONNEL</h3>
       ${[['💧','Hydratation','2L min/jour, 3L les jours d\'effort'],['🥩','Protéines','1.6-2g/kg de poids'],['🍚','Glucides','Complexes avant l\'effort'],['🥑','Lipides','Avocat, noix, huile d\'olive']].map(([e,t,d])=>`
-        <div class="flex gap-3 mb-3"><span class="text-lg">${e}</span><div><div class="font-semibold text-sm">${t}</div><div class="text-xs" style="color:#9ca3af">${d}</div></div></div>`).join('')}
+        <div class="flex gap-3 mb-3"><span class="text-lg">${e}</span><div><div class="font-semibold text-sm">${t}</div><div class="text-xs" style="color:var(--text-muted)">${d}</div></div></div>`).join('')}
     </div>
   </div>`;
 };
@@ -1041,31 +1197,32 @@ window.renderProfile=()=>{
   const maxBar=Math.max(...last7,1);
   const chartHtml=last7.map((v,i)=>{
     const h=Math.max(4,Math.round(v/maxBar*56));
-    return`<div class="flex flex-col items-center gap-1"><div style="height:${h}px;width:24px;border-radius:4px 4px 0 0;${v?'background:linear-gradient(180deg,#F97316,#DC2626)':'background:#252525'}"></div><span class="text-xs" style="color:#6b7280">${['L','M','M','J','V','S','D'][i]}</span></div>`;
+    return`<div class="flex flex-col items-center gap-1"><div style="height:${h}px;width:24px;border-radius:4px 4px 0 0;${v?'background:linear-gradient(180deg,#F97316,#DC2626)':'background:var(--bg-faint)'}"></div><span class="text-xs" style="color:var(--text-faint)">${['L','M','M','J','V','S','D'][i]}</span></div>`;
   }).join('');
 
-  const histHtml=wk.length?[...wk].reverse().slice(0,10).map(w=>{const z=ZONE_META[w.zone];return`<div class="flex items-center gap-3 py-2.5" style="border-bottom:1px solid #1a1a1a">
+  const histHtml=wk.length?[...wk].reverse().slice(0,10).map(w=>{const z=ZONE_META[w.zone];return`<div class="flex items-center gap-3 py-2.5" style="border-bottom:1px solid var(--border)">
     <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${z?z.e:'⚡'}</div>
-    <div class="flex-1"><div class="text-sm font-semibold">${z?z.label:w.zone}</div><div class="text-xs" style="color:#9ca3af">${fmtDate(w.date)} · ${w.duration} min</div></div>
-    <div class="text-right"><div class="text-xs font-bold text-fire">+${w.xp} XP</div><div class="text-xs" style="color:#6b7280">${w.exDone}/${w.exTotal}</div></div></div>`;}).join('')
-  :`<div class="text-center py-6 text-sm" style="color:#6b7280">Aucune séance enregistrée</div>`;
+    <div class="flex-1"><div class="text-sm font-semibold">${z?z.label:w.zone}</div><div class="text-xs" style="color:var(--text-muted)">${fmtDate(w.date)} · ${w.duration} min</div></div>
+    <div class="text-right"><div class="text-xs font-bold text-fire">+${w.xp} XP</div><div class="text-xs" style="color:var(--text-faint)">${w.exDone}/${w.exTotal}</div></div></div>`;}).join('')
+  :`<div class="text-center py-6 text-sm" style="color:var(--text-faint)">Aucune séance enregistrée</div>`;
 
   document.getElementById('tab-profile').innerHTML=`<div class="max-w-sm mx-auto pb-4">
     <div class="flex items-center gap-4 mb-5">
       <div class="avatar w-16 h-16 text-2xl flex-shrink-0 glow">${initials}</div>
       <div class="flex-1">
         <div class="font-display text-2xl font-bold">${u}</div>
-        <div class="text-sm" style="color:#9ca3af">${GOAL_LBL[p.goal]} · ${p.location==='gym'?'🏋️ Salle':'🏠 Maison'}</div>
+        <div class="text-sm" style="color:var(--text-muted)">${GOAL_LBL[p.goal]} · ${p.location==='gym'?'🏋️ Salle':'🏠 Maison'}</div>
+        ${p.level?`<div class="mt-1"><span class="badge text-xs font-semibold px-2 py-0.5 rounded-full" style="background:linear-gradient(90deg,#DC262622,#F9731622);color:#F97316;border:1px solid #F9731644">${LEVEL_LBL[p.level]||p.level}</span></div>`:''}
         <div class="flex items-center gap-2 mt-1.5">
           <span class="text-xs font-bold text-fire">Niv. ${lvl}</span>
-          <div class="flex-1 h-1.5 rounded-full" style="background:#252525"><div class="h-full rounded-full" style="width:${Math.round(xpInLvl/500*100)}%;background:linear-gradient(90deg,#DC2626,#F97316)"></div></div>
-          <span class="text-xs" style="color:#6b7280">${xpInLvl}/500</span>
+          <div class="flex-1 h-1.5 rounded-full" style="background:var(--bg-faint)"><div class="h-full rounded-full" style="width:${Math.round(xpInLvl/500*100)}%;background:linear-gradient(90deg,#DC2626,#F97316)"></div></div>
+          <span class="text-xs" style="color:var(--text-faint)">${xpInLvl}/500</span>
         </div>
       </div>
     </div>
     <div class="grid grid-cols-4 gap-2 mb-4">
       ${[['🔥',streak,'Streak'],['🏆',wk.length,'Séances'],['⏱️',totalMin,'Min'],['⭐',totalXP,'XP']].map(([e,v,l])=>`
-        <div class="card rounded-xl p-2.5 text-center"><div class="text-base">${e}</div><div class="font-display text-lg font-bold text-fire">${v}</div><div class="text-xs" style="color:#9ca3af">${l}</div></div>`).join('')}
+        <div class="card rounded-xl p-2.5 text-center"><div class="text-base">${e}</div><div class="font-display text-lg font-bold text-fire">${v}</div><div class="text-xs" style="color:var(--text-muted)">${l}</div></div>`).join('')}
     </div>
     <div class="card rounded-2xl p-4 mb-4">
       <div class="flex items-center justify-between mb-3"><h3 class="font-display text-sm font-bold">ACTIVITÉ 7 JOURS</h3>
@@ -1074,13 +1231,38 @@ window.renderProfile=()=>{
     </div>
     ${favZone?`<div class="card rounded-2xl p-4 mb-4 flex items-center gap-3">
       <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${ZONE_META[favZone[0]]?.e||'⚡'}</div>
-      <div><div class="text-xs font-semibold" style="color:#9ca3af">ZONE FAVORITE</div>
+      <div><div class="text-xs font-semibold" style="color:var(--text-muted)">ZONE FAVORITE</div>
         <div class="font-display text-lg font-bold">${ZONE_META[favZone[0]]?.label||favZone[0]}</div>
         <div class="text-xs text-fire">${favZone[1]} séance${favZone[1]>1?'s':''}</div></div></div>`:''}
     <div class="card rounded-2xl p-4 mb-4">
+      <h3 class="font-display text-sm font-bold mb-3">MON PROFIL PHYSIQUE</h3>
+      <div class="grid grid-cols-3 gap-2 mb-3">
+        <div class="rounded-xl p-2.5 text-center" style="background:var(--bg-inner)">
+          <div class="text-base">🎂</div>
+          <div class="font-display text-lg font-bold text-fire">${p.age||'—'}</div>
+          <div class="text-xs" style="color:var(--text-muted)">Ans</div>
+        </div>
+        <div class="rounded-xl p-2.5 text-center" style="background:var(--bg-inner)">
+          <div class="text-base">⚖️</div>
+          <div class="font-display text-lg font-bold text-fire">${(userData.weight&&userData.weight.length)?userData.weight[userData.weight.length-1].kg:p.weight_start||'—'}</div>
+          <div class="text-xs" style="color:var(--text-muted)">kg actuel</div>
+        </div>
+        <div class="rounded-xl p-2.5 text-center" style="background:var(--bg-inner)">
+          <div class="text-base">${p.level==='beginner'?'🌱':p.level==='advanced'?'🔥':'⚡'}</div>
+          <div class="font-display text-base font-bold text-fire">${p.level==='beginner'?'Déb.':p.level==='advanced'?'Avancé':'Inter.'}</div>
+          <div class="text-xs" style="color:var(--text-muted)">Niveau</div>
+        </div>
+      </div>
+      ${p.age&&p.weight_start?`<div class="text-xs rounded-xl p-2.5" style="background:var(--bg-sub);color:var(--text-muted)">
+        💡 Apport conseillé&nbsp;: <span class="font-semibold text-fire">${Math.round(p.weight_start*({'shape':30,'strength':35,'endurance':33,'loss':25}[p.goal]||30))} kcal/jour</span>
+        · Protéines&nbsp;: <span class="font-semibold text-fire">${Math.round(p.weight_start*1.8)}g</span>
+      </div>`:''}
+      <button onclick="showEditStats()" class="w-full mt-3 rounded-xl py-2 text-sm font-semibold" style="background:var(--bg-inner);color:var(--text-muted)">✏️ Modifier âge / poids / niveau</button>
+    </div>
+    <div class="card rounded-2xl p-4 mb-4">
       <h3 class="font-display text-sm font-bold mb-3">SUIVI DU POIDS</h3>
       <div class="max-h-32 overflow-y-auto mb-3 space-y-1">
-        ${(userData.weight||[]).slice(-5).reverse().map(w=>`<div class="flex justify-between text-sm py-1" style="border-bottom:1px solid #1a1a1a"><span style="color:#9ca3af">${fmtDate(w.date)}</span><span class="font-semibold">${w.kg} kg</span></div>`).join('')||`<p class="text-sm" style="color:#6b7280">Aucune mesure</p>`}
+        ${(userData.weight||[]).slice(-5).reverse().map(w=>`<div class="flex justify-between text-sm py-1" style="border-bottom:1px solid var(--border)"><span style="color:var(--text-muted)">${fmtDate(w.date)}</span><span class="font-semibold">${w.kg} kg</span></div>`).join('')||`<p class="text-sm" style="color:var(--text-faint)">Aucune mesure</p>`}
       </div>
       <div class="flex gap-2">
         <input id="weight-input" type="number" step="0.1" placeholder="Ex: 72.5" class="inp flex-1" style="padding:.625rem .875rem"/>
@@ -1090,9 +1272,9 @@ window.renderProfile=()=>{
     <div class="card rounded-2xl p-4 mb-4"><h3 class="font-display text-sm font-bold mb-1">HISTORIQUE</h3>${histHtml}</div>
     <div class="card rounded-2xl p-4">
       <h3 class="font-display text-sm font-bold mb-3">PARAMÈTRES</h3>
-      <button onclick="showScreen('onboarding');obData={location:null,goal:null,days:[]}" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid #1a1a1a">
+      <button onclick="showScreen('onboarding');obData={location:null,goal:null,days:[],age:null,weight:null,level:null}" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
         <span>⚙️</span><span>Reconfigurer le profil</span><span class="ml-auto" style="color:#444">›</span></button>
-      <button onclick="toggleTheme()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid #1a1a1a">
+      <button onclick="toggleTheme()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
         <span>🌙</span><span>Thème sombre / clair</span><span class="ml-auto" style="color:#444">›</span></button>
       <button onclick="logout()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="color:#EF4444">
         <span>🚪</span><span>Se déconnecter</span></button>
@@ -1100,6 +1282,50 @@ window.renderProfile=()=>{
   </div>`;
 };
 
+window.showEditStats=()=>{
+  const p=userData.profile;
+  const lvls=[['beginner','🌱 Débutant'],['intermediate','⚡ Intermédiaire'],['advanced','🔥 Avancé']];
+  const html=`<div id="edit-stats-modal" style="position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center" onclick="if(event.target===this)closeEditStats()">
+    <div style="background:var(--bg-card);border:1px solid var(--border-in);border-radius:1.5rem 1.5rem 0 0;width:100%;max-width:480px;padding:1.5rem;padding-bottom:calc(1.5rem + env(safe-area-inset-bottom))">
+      <div class="flex items-center justify-between mb-4">
+        <div class="font-display text-xl font-bold">MON PROFIL</div>
+        <button onclick="closeEditStats()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer">✕</button>
+      </div>
+      <div class="flex gap-3 mb-4">
+        <div class="flex-1"><label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">ÂGE</label>
+          <input id="es-age" class="inp" type="number" min="10" max="99" value="${p.age||''}" placeholder="Ex: 22"/></div>
+        <div class="flex-1"><label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">POIDS (kg)</label>
+          <input id="es-weight" class="inp" type="number" step="0.5" min="30" max="250" value="${p.weight_start||''}" placeholder="Ex: 75"/></div>
+      </div>
+      <label class="text-xs font-semibold mb-2 block" style="color:var(--text-muted)">NIVEAU</label>
+      <div class="flex gap-2 mb-5">
+        ${lvls.map(([k,l])=>`<button onclick="esPickLevel('${k}',this)" class="flex-1 rounded-xl py-2.5 text-xs font-bold transition" style="${p.level===k?'background:linear-gradient(90deg,#DC2626,#F97316);color:white':'background:var(--bg-inner);color:var(--text-muted)'}">${l}</button>`).join('')}
+      </div>
+      <button onclick="saveEditStats()" class="btn-fire w-full rounded-2xl py-3.5 text-white font-display text-lg font-bold">ENREGISTRER</button>
+    </div>
+  </div>`;
+  document.body.insertAdjacentHTML('beforeend',html);
+};
+window.esPickLevel=(v,el)=>{
+  document.querySelectorAll('#edit-stats-modal button[onclick^="esPickLevel"]').forEach(b=>{b.style.background='#1e1e1e';b.style.color='#9ca3af';});
+  el.style.background='linear-gradient(90deg,#DC2626,#F97316)';el.style.color='white';
+  el.dataset.level=v;
+  window._esLevel=v;
+};
+window.closeEditStats=()=>{const m=document.getElementById('edit-stats-modal');if(m)m.remove();};
+window.saveEditStats=async()=>{
+  const age=parseInt(document.getElementById('es-age').value);
+  const w=parseFloat(document.getElementById('es-weight').value);
+  const level=window._esLevel||userData.profile.level;
+  if(!age||age<10||age>99){toast('Âge invalide','⚠️');return;}
+  if(!w||w<30||w>250){toast('Poids invalide','⚠️');return;}
+  const profile={...userData.profile,age,weight_start:w,level};
+  await saveUserData({profile});
+  closeEditStats();
+  delete window._esLevel;
+  toast('Profil mis à jour ✅');
+  renderProfile();
+};
 window.logWeight=async()=>{
   const inp=document.getElementById('weight-input');
   const v=parseFloat(inp.value);
@@ -1115,7 +1341,15 @@ window.logWeight=async()=>{
 window.toggleTheme=()=>{
   isDark=!isDark;
   document.documentElement.classList.toggle('dark',isDark);
-  document.body.style.background=isDark?'':'#f3f4f6';
+  // Re-render le tab actif pour appliquer les nouvelles couleurs aux éléments inline
+  const activeTab=document.querySelector('.tab-pane.active');
+  if(activeTab){
+    const id=activeTab.id;
+    if(id==='tab-exercise')renderExercise();
+    else if(id==='tab-nutrition')renderNutrition();
+    else if(id==='tab-profile')renderProfile();
+    else if(id==='tab-home')renderHome();
+  }
 };
 
 // ── Toast ───────────────────────────────────────────
@@ -1133,11 +1367,11 @@ const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
 if(isIOS&&!navigator.standalone&&!localStorage.getItem('ff_install_dismissed')){
   setTimeout(()=>{
     const b=document.createElement('div');
-    b.innerHTML=`<div style="position:fixed;bottom:0;left:0;right:0;z-index:999;padding:1rem 1.25rem;padding-bottom:calc(1rem + env(safe-area-inset-bottom));background:#1a1a1a;border-top:1px solid #333;display:flex;align-items:center;gap:12px">
+    b.innerHTML=`<div style="position:fixed;bottom:0;left:0;right:0;z-index:999;padding:1rem 1.25rem;padding-bottom:calc(1rem + env(safe-area-inset-bottom));background:var(--bg-sub);border-top:1px solid #333;display:flex;align-items:center;gap:12px">
       <img src="apple-touch-icon.png" style="width:44px;height:44px;border-radius:10px;flex-shrink:0"/>
       <div style="flex:1"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:#f9fafb">INSTALLER FITFLEX</div>
-        <div style="font-size:.75rem;color:#9ca3af;margin-top:2px">Appuie sur <b style="color:#F97316">⎋ Partager</b> → <b style="color:#F97316">"Sur l'écran d'accueil"</b></div></div>
-      <button onclick="localStorage.setItem('ff_install_dismissed','1');this.closest('div').parentNode.remove()" style="background:#252525;border:1px solid #333;color:#9ca3af;border-radius:50%;width:28px;height:28px;font-size:14px;cursor:pointer">✕</button>
+        <div style="font-size:.75rem;color:var(--text-muted);margin-top:2px">Appuie sur <b style="color:#F97316">⎋ Partager</b> → <b style="color:#F97316">"Sur l'écran d'accueil"</b></div></div>
+      <button onclick="localStorage.setItem('ff_install_dismissed','1');this.closest('div').parentNode.remove()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:28px;height:28px;font-size:14px;cursor:pointer">✕</button>
     </div>`;
     document.body.appendChild(b);
   }, 3000);

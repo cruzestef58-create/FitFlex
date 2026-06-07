@@ -146,17 +146,26 @@
       <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted)">Pseudo</label>
         <input id="login-user" class="inp" type="text" placeholder="Ton pseudo" autocapitalize="none"/></div>
       <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted)">Mot de passe</label>
-        <input id="login-pass" class="inp" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        <div class="relative"><input id="login-pass" class="inp" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" style="padding-right:2.75rem"/>
+          <button type="button" onclick="togglePwd('login-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-lg" style="background:none;border:none;cursor:pointer;color:var(--text-faint);line-height:1" aria-label="Voir mot de passe">👁</button>
+        </div></div>
       <button id="login-btn" onclick="doLogin()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold mt-2">SE CONNECTER</button>
+      <button type="button" onclick="doForgotPassword()" class="w-full text-center text-xs py-1" style="background:none;border:none;cursor:pointer;color:var(--text-faint)">Mot de passe oublié ? Recevoir un lien par mail</button>
     </div>
     <!-- Register -->
     <div id="auth-register" class="tab-pane space-y-3">
       <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted)">Pseudo</label>
         <input id="reg-user" class="inp" type="text" placeholder="Choisis un pseudo" autocapitalize="none"/></div>
+      <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted)">Email</label>
+        <input id="reg-email" class="inp" type="email" placeholder="ton@email.com" autocapitalize="none" inputmode="email"/></div>
       <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted)">Mot de passe</label>
-        <input id="reg-pass" class="inp" type="password" placeholder="Min. 6 caractères"/></div>
+        <div class="relative"><input id="reg-pass" class="inp" type="password" placeholder="Min. 6 caractères" style="padding-right:2.75rem"/>
+          <button type="button" onclick="togglePwd('reg-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-lg" style="background:none;border:none;cursor:pointer;color:var(--text-faint);line-height:1" aria-label="Voir mot de passe">👁</button>
+        </div></div>
       <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted)">Confirmer</label>
-        <input id="reg-pass2" class="inp" type="password" placeholder="Répète le mot de passe" onkeydown="if(event.key==='Enter')doRegister()"/></div>
+        <div class="relative"><input id="reg-pass2" class="inp" type="password" placeholder="Répète le mot de passe" onkeydown="if(event.key==='Enter')doRegister()" style="padding-right:2.75rem"/>
+          <button type="button" onclick="togglePwd('reg-pass2',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-lg" style="background:none;border:none;cursor:pointer;color:var(--text-faint);line-height:1" aria-label="Voir mot de passe">👁</button>
+        </div></div>
       <button id="reg-btn" onclick="doRegister()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold mt-2">CRÉER MON COMPTE</button>
     </div>
   </div>
@@ -203,15 +212,32 @@
   </div>
   <!-- Step 2 -->
   <div id="ob-2" class="ob-step hidden flex-1 flex flex-col">
-    <h1 class="font-display text-4xl font-bold mb-1">TON OBJECTIF ?</h1>
-    <p class="text-sm mb-6" style="color:var(--text-muted)">Le programme s'adapte.</p>
+    <h1 class="font-display text-4xl font-bold mb-1">TES OBJECTIFS ?</h1>
+    <p class="text-sm mb-4" style="color:var(--text-muted)">Sélectionne un ou plusieurs — tout s'adapte.</p>
     <div class="grid grid-cols-2 gap-3">
-      <div class="sel-card p-4 card" onclick="pickGoal('shape',this)"><div class="text-3xl mb-2">🔥</div><div class="font-display text-base font-bold">REMISE EN FORME</div></div>
-      <div class="sel-card p-4 card" onclick="pickGoal('strength',this)"><div class="text-3xl mb-2">💪</div><div class="font-display text-base font-bold">GAIN DE FORCE</div></div>
-      <div class="sel-card p-4 card" onclick="pickGoal('endurance',this)"><div class="text-3xl mb-2">🏃</div><div class="font-display text-base font-bold">ENDURANCE</div></div>
-      <div class="sel-card p-4 card" onclick="pickGoal('loss',this)"><div class="text-3xl mb-2">⚡</div><div class="font-display text-base font-bold">PERTE DE POIDS</div></div>
+      <div class="sel-card p-4 card" onclick="pickGoal('shape',this)">
+        <div class="text-3xl mb-2">🔥</div>
+        <div class="font-display text-base font-bold">REMISE EN FORME</div>
+        <div class="text-xs mt-1" style="color:var(--text-muted)">Cardio + tonicité</div>
+      </div>
+      <div class="sel-card p-4 card" onclick="pickGoal('strength',this)">
+        <div class="text-3xl mb-2">💪</div>
+        <div class="font-display text-base font-bold">GAIN DE FORCE</div>
+        <div class="text-xs mt-1" style="color:var(--text-muted)">Charges lourdes + masse</div>
+      </div>
+      <div class="sel-card p-4 card" onclick="pickGoal('endurance',this)">
+        <div class="text-3xl mb-2">🏃</div>
+        <div class="font-display text-base font-bold">ENDURANCE</div>
+        <div class="text-xs mt-1" style="color:var(--text-muted)">Répétitions + cardio</div>
+      </div>
+      <div class="sel-card p-4 card" onclick="pickGoal('loss',this)">
+        <div class="text-3xl mb-2">⚡</div>
+        <div class="font-display text-base font-bold">PERTE DE POIDS</div>
+        <div class="text-xs mt-1" style="color:var(--text-muted)">Déficit + HIIT</div>
+      </div>
     </div>
-    <div class="flex gap-3 mt-5">
+    <div id="ob-goals-hint" class="text-xs mt-3 text-center" style="color:var(--text-faint)">Aucun objectif sélectionné</div>
+    <div class="flex gap-3 mt-auto">
       <button onclick="obStep(1)" class="rounded-2xl py-4 px-5 card font-display text-xl font-bold">←</button>
       <button id="ob-next-2" onclick="obStep(3)" class="btn-fire flex-1 rounded-2xl py-4 text-white font-display text-xl font-bold" disabled>CONTINUER →</button>
     </div>
@@ -420,6 +446,7 @@
 import { initializeApp }                          from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword,
          signInWithEmailAndPassword, signOut,
+         sendPasswordResetEmail,
          onAuthStateChanged }                     from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc,
          updateDoc, serverTimestamp }             from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
@@ -536,6 +563,35 @@ const MEALS = {
 };
 
 const GOAL_LBL = {shape:"Remise en forme",strength:"Gain de force",endurance:"Endurance",loss:"Perte de poids"};
+const GOAL_E   = {shape:"🔥",strength:"💪",endurance:"🏃",loss:"⚡"};
+
+// Adapt exercise based on selected goals (applied after level adaptation)
+function adaptExGoals(ex, goals=[]) {
+  if(!goals.length) return ex;
+  let {s,r} = ex;
+  // HIIT / perte de poids : repos plus courts
+  if(goals.includes('loss')&&!goals.includes('strength')) {
+    r=r.replace(/150s/g,'75s').replace(/120s/g,'60s').replace(/90s/g,'45s').replace(/75s/g,'40s').replace(/60s/g,'35s').replace(/45s/g,'30s');
+  }
+  // Endurance : +1 série, repos courts
+  if(goals.includes('endurance')&&!goals.includes('strength')) {
+    s=s.replace(/(\d+)×/g,(_,n)=>`${Math.min(parseInt(n)+1,6)}×`);
+    r=r.replace(/120s/g,'75s').replace(/90s/g,'60s').replace(/75s/g,'50s').replace(/60s/g,'40s').replace(/45s/g,'30s');
+  }
+  // Force : +1 série
+  if(goals.includes('strength')) {
+    s=s.replace(/(\d+)×/g,(_,n)=>`${Math.min(parseInt(n)+1,6)}×`);
+  }
+  return {...ex,s,r};
+}
+
+// Goals focus: nutrition tips per goal
+const GOAL_NUT_TIPS = {
+  shape:[['🔥','Déficit modéré','–200 à –300 kcal/j, cardio 3×/sem'],['🥗','Légèreté','Favorise légumes, protéines maigres, peu de sucres rapides']],
+  strength:[['💪','Surplus calorique','+200 à +400 kcal/j pour la masse'],['🥩','Protéines','2g/kg de poids corporel minimum'],['🍚','Glucides','Riz, pâtes, patate douce autour des séances']],
+  endurance:[['🏃','Carbo-loading','Féculents 60% des calories les jours de cardio'],['⚡','Récupération','Glucides + protéines dans les 30 min post-effort'],['💧','Hydratation','3L/jour min les jours d\'entraînement']],
+  loss:[['⚡','Déficit','–300 à –500 kcal/j, cardio HIIT 3–4×/sem'],['🥦','Volume alimentaire','Légumes à volonté, fibres = satiété'],['⏱','Jeûne intermittent','16/8 possible si pas de vertige']],
+};
 
 // ── Exercise animations (SVG SMIL, 2-position fade) ─
 const A1 = 'values="1;1;0;0;1" keyTimes="0;0.38;0.52;0.9;1" dur="3s" repeatCount="indefinite"';
@@ -804,7 +860,7 @@ const ANIM_SVG = {
 // ── State ──────────────────────────────────────────
 let currentUser = null;   // Firebase user object
 let userData    = null;   // Firestore data {username, profile, workouts, weight}
-let obData      = {location:null, goal:null, days:[], age:null, weight:null, weight_goal:null, level:null, diet:null};
+let obData      = {location:null, goals:[], days:[], age:null, weight:null, weight_goal:null, level:null, diet:null};
 let currentZone = null;
 let nutTab      = 'breakfast';
 let isDark      = true;
@@ -827,6 +883,13 @@ async function saveUserData(partial) {
 }
 
 // ── Auth functions ─────────────────────────────────
+window.togglePwd = (id, btn) => {
+  const inp = document.getElementById(id);
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.textContent = show ? '🙈' : '👁';
+  btn.style.color = show ? 'var(--text-muted)' : 'var(--text-faint)';
+};
 window.switchAuthTab = (tab) => {
   ['login','register'].forEach(t => {
     document.getElementById('auth-'+t).classList.toggle('active', t===tab);
@@ -857,11 +920,13 @@ window.doLogin = async () => {
 
 window.doRegister = async () => {
   const u = document.getElementById('reg-user').value.trim().toLowerCase();
+  const realEmail = document.getElementById('reg-email').value.trim().toLowerCase();
   const p = document.getElementById('reg-pass').value;
   const p2 = document.getElementById('reg-pass2').value;
-  if (!u||!p||!p2) { toast('Remplis tous les champs','⚠️'); return; }
+  if (!u||!realEmail||!p||!p2) { toast('Remplis tous les champs','⚠️'); return; }
   if (u.length<2) { toast('Pseudo trop court (min 2)','⚠️'); return; }
   if (!/^[a-z0-9_]+$/.test(u)) { toast('Pseudo : lettres, chiffres, _ seulement','⚠️'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(realEmail)) { toast('Email invalide','⚠️'); return; }
   if (p.length<6) { toast('Mot de passe trop court (min 6)','⚠️'); return; }
   if (p!==p2) { toast('Mots de passe différents','⚠️'); return; }
   const btn = document.getElementById('reg-btn');
@@ -870,15 +935,15 @@ window.doRegister = async () => {
     // Check username availability
     const uSnap = await getDoc(usernameRef(u));
     if (uSnap.exists()) { toast('Pseudo déjà pris','❌'); return; }
-    // Create Firebase auth user with pseudo-email
-    const email = `${u}@fitflex-app.io`;
-    const cred = await createUserWithEmailAndPassword(auth, email, p);
+    // Create Firebase auth user with real email
+    const cred = await createUserWithEmailAndPassword(auth, realEmail, p);
     const uid = cred.user.uid;
-    // Save username mapping
-    await setDoc(usernameRef(u), {uid, email});
+    // Save username mapping (email = real email now)
+    await setDoc(usernameRef(u), {uid, email: realEmail});
     // Save user document
     await setDoc(doc(db,'users',uid), {
       username: u,
+      email: realEmail,
       profile: null,
       workouts: [],
       weight: [],
@@ -890,6 +955,21 @@ window.doRegister = async () => {
     const msg = e.code==='auth/email-already-in-use' ? 'Pseudo déjà pris' : ('Erreur: '+e.message);
     toast(msg,'❌');
   } finally { btn.disabled=false; btn.textContent='CRÉER MON COMPTE'; }
+};
+
+window.doForgotPassword = async () => {
+  const u = document.getElementById('login-user').value.trim().toLowerCase();
+  if (!u) { toast('Entre ton pseudo d\'abord','⚠️'); return; }
+  try {
+    const uSnap = await getDoc(usernameRef(u));
+    if (!uSnap.exists()) { toast('Pseudo introuvable','❌'); return; }
+    const email = uSnap.data().email;
+    if (!email || email.endsWith('@fitflex-app.io')) {
+      toast('Aucun email associé à ce compte','❌'); return;
+    }
+    await sendPasswordResetEmail(auth, email);
+    toast('Email envoyé ! Vérifie ta boîte 📬','✅');
+  } catch(e) { toast('Erreur : '+e.message,'❌'); }
 };
 
 window.logout = async () => {
@@ -933,10 +1013,13 @@ window.pickLoc = (v,el) => {
   document.getElementById('ob-next-1').disabled=false;
 };
 window.pickGoal = (v,el) => {
-  obData.goal=v;
-  document.querySelectorAll('#ob-2 .sel-card').forEach(c=>c.classList.remove('on'));
-  el.classList.add('on');
-  document.getElementById('ob-next-2').disabled=false;
+  const idx=obData.goals.indexOf(v);
+  if(idx===-1){obData.goals.push(v);el.classList.add('on');}
+  else{obData.goals.splice(idx,1);el.classList.remove('on');}
+  const n=obData.goals.length;
+  const GLBL={shape:'🔥 Remise en forme',strength:'💪 Gain de force',endurance:'🏃 Endurance',loss:'⚡ Perte de poids'};
+  document.getElementById('ob-goals-hint').textContent=n?obData.goals.map(g=>GLBL[g]).join(' + '):'Aucun objectif sélectionné';
+  document.getElementById('ob-next-2').disabled=n===0;
 };
 window.quickDays = (days) => {
   // Reset all
@@ -994,7 +1077,8 @@ window.checkObStats = () => {
 window.finishOnboarding = async () => {
   const profile={
     location:obData.location,
-    goal:obData.goal,
+    goals:obData.goals,
+    goal:obData.goals[0]||'shape', // compat legacy
     days:obData.days,
     age:obData.age,
     weight_start:obData.weight,
@@ -1126,6 +1210,7 @@ function renderHome() {
 window.renderExercise = (zone) => {
   if(zone) currentZone=zone;
   const p=userData.profile;
+  const goals=p.goals||( p.goal?[p.goal]:[] );
   const zoneCards=Object.entries(ZONE_META).map(([k,v])=>`
     <div onclick="renderExercise('${k}')" class="sel-card p-4 card ${currentZone===k?'on':''}">
       <div class="text-3xl mb-2">${v.e}</div>
@@ -1133,14 +1218,23 @@ window.renderExercise = (zone) => {
       <div class="text-xs mt-1" style="color:var(--text-muted)">${v.desc}</div>
     </div>`).join('');
 
+  // goals banner
+  const goalBanner=goals.length?`
+    <div class="card rounded-xl p-3 mb-4 flex flex-wrap gap-2 items-center">
+      <span class="text-xs font-semibold" style="color:var(--text-muted)">Objectifs :</span>
+      ${goals.map(g=>`<span class="badge font-semibold" style="background:linear-gradient(90deg,#DC262622,#F9731622);color:#F97316">${GOAL_E[g]} ${GOAL_LBL[g]}</span>`).join('')}
+      ${goals.includes('endurance')||goals.includes('loss')?`<span class="text-xs ml-auto" style="color:var(--text-faint)">⏱ repos réduits</span>`:''}
+      ${goals.includes('strength')?`<span class="text-xs ml-auto" style="color:var(--text-faint)">💪 +1 série</span>`:''}
+    </div>`:'';
+
   const listHtml=currentZone?`
-    <div class="mt-5">
+    <div class="mt-4">
       <div class="flex items-center justify-between mb-3">
         <h2 class="font-display text-xl font-bold">${ZONE_META[currentZone].label}</h2>
         <button onclick="startSession('${currentZone}')" class="btn-fire text-white rounded-xl px-4 py-2 text-sm font-bold">▶ Démarrer</button>
       </div>
       <div class="space-y-2.5">
-        ${EXERCISES[p.location][currentZone].map(ex=>{const ae=adaptEx(ex,p.level);return`
+        ${EXERCISES[p.location][currentZone].map(ex=>{const ae=adaptExGoals(adaptEx(ex,p.level),goals);return`
           <div class="card rounded-xl p-3.5 cursor-pointer" onclick="this.querySelector('.ex-d').classList.toggle('hidden')">
             <div class="flex items-start gap-3">
               <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${ae.e}</div>
@@ -1165,7 +1259,8 @@ window.renderExercise = (zone) => {
   :`<div class="text-center py-12"><div class="text-4xl mb-2">👆</div><p class="text-sm" style="color:var(--text-faint)">Choisis une zone</p></div>`;
 
   document.getElementById('tab-exercise').innerHTML=`<div class="max-w-sm mx-auto">
-    <div class="mb-5"><p class="text-sm" style="color:var(--text-muted)">Sélectionne une zone</p><h1 class="font-display text-4xl font-bold mt-0.5">PROGRAMME</h1></div>
+    <div class="mb-4"><p class="text-sm" style="color:var(--text-muted)">Sélectionne une zone</p><h1 class="font-display text-4xl font-bold mt-0.5">PROGRAMME</h1></div>
+    ${goalBanner}
     <div class="grid grid-cols-2 gap-2.5">${zoneCards}</div>${listHtml}</div>`;
 };
 
@@ -1284,8 +1379,15 @@ window.renderNutrition=(tab)=>{
     <div class="space-y-2.5 mb-5">${mealsHtml}</div>
     <div class="card rounded-2xl p-4">
       <h3 class="font-display text-sm font-bold mb-3">FOCUS NUTRITIONNEL</h3>
-      ${[['💧','Hydratation','2L min/jour, 3L les jours d\'effort'],[isVeg?'🌿':'🥩','Protéines',isVeg?'Légumineuses, tofu, tempeh, œufs':'1.6-2g/kg de poids corporel'],['🍚','Glucides','Complexes avant l\'effort'],['🥑','Lipides','Avocat, noix, huile d\'olive']].map(([e,t,d])=>`
-        <div class="flex gap-3 mb-3"><span class="text-lg">${e}</span><div><div class="font-semibold text-sm">${t}</div><div class="text-xs" style="color:var(--text-muted)">${d}</div></div></div>`).join('')}
+      ${(()=>{
+        const goals=p.goals||(p.goal?[p.goal]:[]);
+        // base tips always shown
+        const base=[['💧','Hydratation','2L min/jour, 3L les jours d\'effort'],[isVeg?'🌿':'🥩','Protéines',isVeg?'Légumineuses, tofu, tempeh, œufs':'1.6–2g/kg de poids corporel']];
+        // goal-specific tips (deduplicated by title)
+        const seen=new Set(base.map(b=>b[1]));
+        const extra=goals.flatMap(g=>(GOAL_NUT_TIPS[g]||[]).filter(([,t])=>!seen.has(t)&&seen.add(t)));
+        return [...base,...extra].map(([e,t,d])=>`<div class="flex gap-3 mb-3"><span class="text-lg">${e}</span><div><div class="font-semibold text-sm">${t}</div><div class="text-xs" style="color:var(--text-muted)">${d}</div></div></div>`).join('');
+      })()}
     </div>
   </div>`;
 };
@@ -1323,7 +1425,7 @@ window.renderProfile=()=>{
       <div class="avatar w-16 h-16 text-2xl flex-shrink-0 glow">${initials}</div>
       <div class="flex-1">
         <div class="font-display text-2xl font-bold">${u}</div>
-        <div class="text-sm" style="color:var(--text-muted)">${GOAL_LBL[p.goal]} · ${p.location==='gym'?'🏋️ Salle':'🏠 Maison'}</div>
+        <div class="flex flex-wrap gap-1 mt-1">${(p.goals||[p.goal]).filter(Boolean).map(g=>`<span class="badge" style="background:linear-gradient(90deg,#DC262618,#F9731618);color:#F97316">${GOAL_E[g]} ${GOAL_LBL[g]}</span>`).join('')}<span class="badge" style="background:var(--bg-inner);color:var(--text-muted)">${p.location==='gym'?'🏋️ Salle':'🏠 Maison'}</span></div>
         ${p.level?`<div class="mt-1"><span class="badge text-xs font-semibold px-2 py-0.5 rounded-full" style="background:linear-gradient(90deg,#DC262622,#F9731622);color:#F97316;border:1px solid #F9731644">${LEVEL_LBL[p.level]||p.level}</span></div>`:''}
         <div class="flex items-center gap-2 mt-1.5">
           <span class="text-xs font-bold text-fire">Niv. ${lvl}</span>
@@ -1390,7 +1492,7 @@ window.renderProfile=()=>{
     <div class="card rounded-2xl p-4 mb-4"><h3 class="font-display text-sm font-bold mb-1">HISTORIQUE</h3>${histHtml}</div>
     <div class="card rounded-2xl p-4">
       <h3 class="font-display text-sm font-bold mb-3">PARAMÈTRES</h3>
-      <button onclick="showScreen('onboarding');obData={location:null,goal:null,days:[],age:null,weight:null,weight_goal:null,level:null,diet:null};obStep(1)" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
+      <button onclick="showScreen('onboarding');obData={location:null,goals:[],days:[],age:null,weight:null,weight_goal:null,level:null,diet:null};obStep(1)" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
         <span>⚙️</span><span>Reconfigurer le profil</span><span class="ml-auto" style="color:#444">›</span></button>
       <button onclick="toggleTheme()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
         <span>🌙</span><span>Thème sombre / clair</span><span class="ml-auto" style="color:#444">›</span></button>

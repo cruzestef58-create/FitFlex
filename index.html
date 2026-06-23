@@ -150,7 +150,14 @@
           <button type="button" onclick="togglePwd('login-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-lg" style="background:none;border:none;cursor:pointer;color:var(--text-faint);line-height:1" aria-label="Voir mot de passe">👁</button>
         </div></div>
       <button id="login-btn" onclick="doLogin()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold mt-2">SE CONNECTER</button>
-      <button type="button" onclick="doForgotPassword()" class="w-full text-center text-xs py-1" style="background:none;border:none;cursor:pointer;color:var(--text-faint)">Mot de passe oublié ? Recevoir un lien par mail</button>
+      <button type="button" onclick="toggleForgot()" class="w-full text-center text-xs py-1" style="background:none;border:none;cursor:pointer;color:var(--text-faint)">Mot de passe oublié ?</button>
+      <!-- Forgot password panel -->
+      <div id="forgot-panel" class="hidden rounded-2xl p-3 space-y-2" style="background:var(--bg-inner);border:1px solid var(--border-in)">
+        <p class="text-xs font-semibold" style="color:var(--text-muted)">Ton pseudo :</p>
+        <input id="forgot-pseudo" class="inp" type="text" placeholder="Ton pseudo" autocapitalize="none"/>
+        <button onclick="doForgotPassword()" class="w-full rounded-xl py-2.5 text-sm font-bold text-white" style="background:linear-gradient(90deg,#DC2626,#F97316)">Envoyer le lien 📬</button>
+        <div id="forgot-msg" class="hidden text-xs rounded-xl p-2.5" style="background:var(--bg-faint);color:var(--text-muted)"></div>
+      </div>
     </div>
     <!-- Register -->
     <div id="auth-register" class="tab-pane space-y-3">
@@ -467,73 +474,145 @@ const db    = getFirestore(fbApp);
 // ── Exercise data ──────────────────────────────────
 const EXERCISES = {
   gym:{
-    upper:[
-      {n:"Développé couché",s:"4×8-10",r:"90s",e:"🏋️",m:"Pectoraux · Triceps · Épaules",d:"Barre à largeur d'épaules, descendre jusqu'à effleurer la poitrine, pousser explosif.",tip:"Omoplates rétractées, pieds à plat.",a:"push"},
-      {n:"Rowing barre",s:"4×10",r:"75s",e:"🔗",m:"Dos · Biceps · Trapèzes",d:"Penché à 45°, tirer vers le nombril en serrant les omoplates.",tip:"Dos plat, ne pas arrondir.",a:"pull_h"},
-      {n:"Développé militaire",s:"3×10-12",r:"75s",e:"⬆️",m:"Épaules · Triceps",d:"Barre de la clavicule jusqu'à l'extension complète.",tip:"Évite de cambrer le bas du dos.",a:"press"},
-      {n:"Curl barre EZ",s:"3×12",r:"60s",e:"💪",m:"Biceps · Avant-bras",d:"Fléchir jusqu'à hauteur des épaules, descendre lentement.",tip:"Coudes collés, sans balancement.",a:"curl"},
-      {n:"Dips aux barres",s:"3×10-12",r:"60s",e:"↘️",m:"Triceps · Pectoraux inf.",d:"Descendre à 90° aux coudes, pousser.",tip:"Légèrement penché pour cibler les pec.",a:"press"},
+    chest:[
+      {n:'Développé couché barre',s:'4×8-10',r:'90s',e:'🏋️',m:'Pectoraux · Triceps · Épaules',d:'Barre à largeur d'épaules, descendre jusqu'à effleurer la poitrine, pousser explosif.',tip:'Omoplates rétractées, pieds à plat.',a:'push'},
+      {n:'Développé incliné haltères',s:'4×10',r:'75s',e:'📐',m:'Pectoraux sup. · Épaules',d:'Banc incliné 30-45°, haltères en haut puis descendre en contrôle.',tip:'Coudes légèrement fléchis en bas.',a:'push'},
+      {n:'Écarté haltères',s:'3×12-15',r:'60s',e:'🦋',m:'Pectoraux · Étirement',d:'Allongé, haltères au-dessus, ouvrir en arc jusqu'à hauteur des épaules.',tip:'Légère flexion des coudes, pas trop bas.',a:'push'},
+      {n:'Dips lestés',s:'3×10-12',r:'60s',e:'↘️',m:'Triceps · Pectoraux inf.',d:'Descendre à 90° aux coudes, légèrement penché en avant.',tip:'Plus penché = plus pec, plus droit = plus triceps.',a:'press'},
+      {n:'Poulie haute croisée',s:'3×15',r:'45s',e:'✂️',m:'Pectoraux internes',d:'Câbles hauts, croiser les mains devant soi en arc descendant.',tip:'Expirer sur la contraction, maintenir 1s.',a:'push'},
     ],
-    lower:[
-      {n:"Squat barre",s:"4×6-8",r:"120s",e:"🦵",m:"Quadriceps · Fessiers · Ischio",d:"Pieds largeur épaules, descendre cuisses parallèles.",tip:"Genoux dans l'axe des pieds.",a:"squat"},
-      {n:"Leg press",s:"4×12",r:"90s",e:"⬆️",m:"Quadriceps · Fessiers",d:"Pieds mi-hauteur, pousser en extension.",tip:"Ne jamais verrouiller les genoux.",a:"squat"},
-      {n:"Fentes marchées",s:"3×12/jambe",r:"75s",e:"🚶",m:"Quadriceps · Fessiers",d:"Grand pas en avant, genou arrière vers le sol.",tip:"Buste droit, regard devant.",a:"lunge"},
-      {n:"Romanian Deadlift",s:"3×10",r:"90s",e:"🔻",m:"Ischio · Fessiers · Dos",d:"Jambes quasi-tendues, pousser les hanches en arrière.",tip:"Barre glisse le long des jambes.",a:"hinge"},
-      {n:"Presse mollets",s:"4×15-20",r:"45s",e:"🦶",m:"Mollets",d:"Extension maximale de la cheville, descendre lentement.",tip:"Amplitude maximale.",a:"calf"},
+    back:[
+      {n:'Tractions pronation',s:'4×6-8',r:'90s',e:'⬆️',m:'Grand dorsal · Biceps · Trapèzes',d:'Mains en pronation, descendre complet, tirer jusqu'au menton.',tip:'Initier le mouvement par les coudes, pas les mains.',a:'pull_v'},
+      {n:'Rowing barre',s:'4×10',r:'75s',e:'🔗',m:'Dos · Biceps · Trapèzes moy.',d:'Penché à 45°, tirer vers le nombril en serrant les omoplates.',tip:'Dos plat absolu, ne pas arrondir.',a:'pull_h'},
+      {n:'Tirage poitrine câble',s:'3×12',r:'60s',e:'📎',m:'Grand dorsal · Biceps',d:'Assis, tirer la barre vers le haut du sternum, garder le buste droit.',tip:'Coudes pointent vers le bas en bas du mouvement.',a:'pull_v'},
+      {n:'Row haltère 1 bras',s:'3×12/côté',r:'60s',e:'💪',m:'Dos · Biceps · Rhomboïdes',d:'Genou et main sur le banc, tirer l'haltère vers la hanche.',tip:'Rotation légère du buste en haut.',a:'pull_h'},
+      {n:'Curl barre EZ',s:'3×12',r:'45s',e:'〽️',m:'Biceps · Avant-bras',d:'Fléchir jusqu'à hauteur des épaules, descendre lentement.',tip:'Coudes collés, sans balancement.',a:'curl'},
+    ],
+    legs:[
+      {n:'Squat barre',s:'4×6-8',r:'120s',e:'🦵',m:'Quadriceps · Fessiers · Ischio',d:'Pieds largeur épaules, descendre cuisses parallèles, buste droit.',tip:'Genoux dans l'axe des pieds.',a:'squat'},
+      {n:'Romanian Deadlift',s:'4×10',r:'90s',e:'🔻',m:'Ischio-jambiers · Fessiers · Bas du dos',d:'Jambes quasi-tendues, pousser les hanches en arrière, barre glisse le long des jambes.',tip:'Fléchir légèrement les genoux, ne pas arrondir.',a:'hinge'},
+      {n:'Leg press',s:'4×12',r:'90s',e:'⬆️',m:'Quadriceps · Fessiers',d:'Pieds mi-hauteur, pousser en extension sans verrouiller les genoux.',tip:'Pieds écartés = plus fessiers.',a:'squat'},
+      {n:'Fentes marchées',s:'3×12/jambe',r:'60s',e:'🚶',m:'Quadriceps · Fessiers',d:'Grand pas en avant, genou arrière vers le sol.',tip:'Buste droit, regard devant.',a:'lunge'},
+      {n:'Presse mollets',s:'4×15-20',r:'45s',e:'🦶',m:'Mollets · Soléaires',d:'Extension maximale de la cheville, descendre lentement en étirement.',tip:'Amplitude maximale pour une meilleure hypertrophie.',a:'calf'},
+    ],
+    shoulders:[
+      {n:'Développé militaire barre',s:'4×8-10',r:'90s',e:'⬆️',m:'Deltoïdes · Triceps',d:'Barre de la clavicule, pousser jusqu'à l'extension, revenir en contrôle.',tip:'Évite de cambrer le bas du dos.',a:'press'},
+      {n:'Élévations latérales',s:'4×12-15',r:'45s',e:'🦅',m:'Deltoïde latéral',d:'Haltères sur les côtés, lever à l'horizontale, descendre lentement.',tip:'Légère inclinaison en avant, pouces vers le bas.',a:'press'},
+      {n:'Oiseau haltères',s:'3×12-15',r:'45s',e:'🐦',m:'Deltoïde post. · Rhomboïdes',d:'Penché à 90°, lever les haltères sur les côtés.',tip:'Bras presque tendus, mouvement des épaules.',a:'pull_h'},
+      {n:'Arnold press',s:'3×10',r:'75s',e:'🔄',m:'Deltoïdes 3 faisceaux',d:'Haltères face à toi, tourner les paumes et pousser simultanément.',tip:'Rotation fluide tout au long du mouvement.',a:'press'},
+      {n:'Shrugs barre',s:'4×15',r:'45s',e:'🏔️',m:'Trapèzes sup.',d:'Hausser les épaules au maximum, maintenir 1s.',tip:'Mouvement pur vertical, pas de rotation.',a:'press'},
+    ],
+    arms:[
+      {n:'Curl barre EZ',s:'4×10-12',r:'45s',e:'〽️',m:'Biceps · Avant-bras',d:'Fléchir jusqu'à hauteur des épaules, descendre lentement.',tip:'Coudes collés, sans balancement.',a:'curl'},
+      {n:'Curl haltères alterné',s:'3×12/bras',r:'45s',e:'💪',m:'Biceps · Brachial',d:'Alterner les bras, supination en montant.',tip:'Supiner = tourner la paume vers le haut en montant.',a:'curl'},
+      {n:'Skull crushers',s:'4×10-12',r:'60s',e:'💀',m:'Triceps long · Médial',d:'Allongé, barre EZ vers le front, fléchir les coudes uniquement.',tip:'Coudes pointés vers le plafond, immobiles.',a:'press'},
+      {n:'Pushdown câble',s:'4×12-15',r:'45s',e:'⬇️',m:'Triceps latéral · Médial',d:'Coudes collés, pousser vers le bas jusqu'à extension.',tip:'Maintenir 1s en bas pour maximiser la contraction.',a:'press'},
+      {n:'Curl marteau',s:'3×12',r:'45s',e:'🔨',m:'Brachial · Avant-bras',d:'Paumes face à face, fléchir sans rotation.',tip:'Très efficace pour l'épaisseur des bras.',a:'curl'},
+    ],
+    glutes:[
+      {n:'Hip thrust barre',s:'4×12',r:'75s',e:'🍑',m:'Fessiers · Ischio',d:'Épaules sur banc, barre sur les hanches, pousser vers le haut.',tip:'Serrer fort les fessiers en haut, maintenir 2s.',a:'hinge'},
+      {n:'Romanian Deadlift',s:'4×10',r:'90s',e:'🔻',m:'Ischio-jambiers · Fessiers',d:'Jambes quasi-tendues, pousser les hanches en arrière.',tip:'Barre glisse le long des jambes.',a:'hinge'},
+      {n:'Abducteur machine',s:'3×15-20',r:'45s',e:'↔️',m:'Fessiers moy. · TFL',d:'Pousser les genoux vers l'extérieur contre la résistance.',tip:'Contrôler le retour pour plus d'activation.',a:'lunge'},
+      {n:'Leg curl couché',s:'4×12',r:'60s',e:'🔁',m:'Ischio-jambiers',d:'Face vers le bas, fléchir les jambes vers les fessiers.',tip:'Sortir les orteils vers l'extérieur = plus ischio.',a:'hinge'},
+      {n:'Kick-back câble',s:'3×15/jambe',r:'45s',e:'🦵',m:'Fessiers',d:'Debout à la poulie, pousser la jambe vers l'arrière.',tip:'Garder le buste droit, ne pas se pencher.',a:'lunge'},
     ],
     core:[
-      {n:"Crunch câble",s:"4×15",r:"45s",e:"📎",m:"Abdominaux",d:"À genoux face à la poulie, fléchir le buste vers le sol.",tip:"Mouvement part des abdos.",a:"core"},
-      {n:"Planche",s:"3×45-60s",r:"30s",e:"📏",m:"Core · Abdos",d:"Avant-bras et orteils, corps droit, maintenir.",tip:"Contracter fessiers et ventre.",a:"plank"},
-      {n:"Leg raise suspendu",s:"3×12-15",r:"45s",e:"⬆️",m:"Abdos inf.",d:"Suspendu à la barre, monter les jambes à l'horizontale.",tip:"Contrôler la descente.",a:"pull_v"},
-      {n:"Vélo HIIT",s:"8×(20s/40s)",r:"—",e:"🚴",m:"Cardio · Full body",d:"20s effort max, 40s récup. 8 rounds.",tip:"À fond sur les efforts.",a:"cardio"},
-      {n:"Battle ropes",s:"5×30s",r:"30s",e:"🌊",m:"Épaules · Cardio · Core",d:"Vagues continues aussi fort que possible.",tip:"Position semi-fléchie.",a:"pull_h"},
+      {n:'Crunch câble',s:'4×15',r:'45s',e:'📎',m:'Abdominaux',d:'À genoux face à la poulie, fléchir le buste vers le sol.',tip:'Mouvement part des abdos.',a:'core'},
+      {n:'Planche',s:'3×45-60s',r:'30s',e:'📏',m:'Core · Abdos · Épaules',d:'Avant-bras et orteils, corps droit, maintenir.',tip:'Contracter fessiers et ventre.',a:'plank'},
+      {n:'Leg raise suspendu',s:'3×12-15',r:'45s',e:'⬆️',m:'Abdos inf. · Hip flexors',d:'Suspendu à la barre, monter les jambes à l'horizontale.',tip:'Contrôler la descente, ne pas se balancer.',a:'pull_v'},
+      {n:'Vélo HIIT',s:'8×(20s/40s)',r:'—',e:'🚴',m:'Cardio · Full body',d:'20s effort max, 40s récup. 8 rounds.',tip:'À fond sur les efforts.',a:'cardio'},
+      {n:'Battle ropes',s:'5×30s',r:'30s',e:'🌊',m:'Épaules · Cardio · Core',d:'Vagues continues aussi fort que possible.',tip:'Position semi-fléchie.',a:'pull_h'},
     ],
     fullbody:[
-      {n:"Deadlift",s:"4×5",r:"120s",e:"🏋️",m:"Dos · Fessiers · Ischio",d:"Barre au sol, pousser dans le sol en redressant le buste.",tip:"Dos plat absolu.",a:"hinge"},
-      {n:"Tractions",s:"4×max",r:"90s",e:"⬆️",m:"Dos · Biceps · Core",d:"Menton au-dessus de la barre, descendre complet.",tip:"Initier par les coudes.",a:"pull_v"},
-      {n:"Squat gobelet",s:"3×15",r:"60s",e:"🏆",m:"Quadriceps · Fessiers · Core",d:"Haltère contre la poitrine, squatter profond.",tip:"Bon pour la mobilité.",a:"squat"},
-      {n:"Thruster haltères",s:"4×10",r:"75s",e:"🚀",m:"Full body",d:"Squat + pousser haltères au-dessus en un mouvement.",tip:"Mouvement fluide.",a:"press"},
-      {n:"Kettlebell swing",s:"4×15",r:"60s",e:"⚙️",m:"Fessiers · Ischio · Core",d:"Balancer le KB, propulser les hanches.",tip:"Mouvement des hanches.",a:"hinge"},
+      {n:'Deadlift',s:'4×5',r:'120s',e:'🏋️',m:'Dos · Fessiers · Ischio',d:'Barre au sol, pousser dans le sol en redressant le buste.',tip:'Dos plat absolu.',a:'hinge'},
+      {n:'Tractions',s:'4×max',r:'90s',e:'⬆️',m:'Dos · Biceps · Core',d:'Menton au-dessus de la barre, descendre complet.',tip:'Initier par les coudes.',a:'pull_v'},
+      {n:'Squat gobelet',s:'3×15',r:'60s',e:'🏆',m:'Quadriceps · Fessiers · Core',d:'Haltère contre la poitrine, squatter profond.',tip:'Bon pour la mobilité.',a:'squat'},
+      {n:'Thruster haltères',s:'4×10',r:'75s',e:'🚀',m:'Full body',d:'Squat + pousser haltères au-dessus en un mouvement.',tip:'Mouvement fluide.',a:'press'},
+      {n:'Kettlebell swing',s:'4×15',r:'60s',e:'⚙️',m:'Fessiers · Ischio · Core',d:'Balancer le KB, propulser les hanches.',tip:'Mouvement des hanches, pas des bras.',a:'hinge'},
     ],
   },
   home:{
-    upper:[
-      {n:"Pompes classiques",s:"4×12-15",r:"60s",e:"💪",m:"Pectoraux · Triceps · Épaules",d:"Corps aligné, descendre au sol, remonter.",tip:"Coudes à 45°.",a:"push"},
-      {n:"Pompes diamant",s:"3×10-12",r:"60s",e:"💎",m:"Triceps · Pec internes",d:"Paumes en triangle sous la poitrine.",tip:"Plus difficile que les pompes classiques.",a:"push"},
-      {n:"Pompes déclinées",s:"3×10",r:"60s",e:"🔼",m:"Pec sup. · Épaules",d:"Pieds surélevés sur une chaise.",tip:"Plus les pieds sont hauts, plus les épaules travaillent.",a:"press"},
-      {n:"Dips sur chaise",s:"3×12-15",r:"60s",e:"🪑",m:"Triceps · Pec inf.",d:"Mains sur le bord, jambes tendues, descendre.",tip:"Descendre jusqu'à 90°.",a:"press"},
-      {n:"Pike push-up",s:"3×10",r:"60s",e:"🔻",m:"Épaules · Triceps",d:"En V inversé, descendre la tête vers le sol.",tip:"Hanches hautes = plus efficace.",a:"press"},
+    chest:[
+      {n:'Pompes classiques',s:'4×15-20',r:'45s',e:'💪',m:'Pectoraux · Triceps · Épaules',d:'Corps aligné, descendre au sol, remonter explosif.',tip:'Coudes à 45°, pas à 90°.',a:'push'},
+      {n:'Pompes diamant',s:'3×10-12',r:'60s',e:'💎',m:'Triceps · Pectoraux internes',d:'Index et pouces se touchent en triangle sous la poitrine.',tip:'Plus difficile — réduis les reps si besoin.',a:'push'},
+      {n:'Pompes déclinées',s:'3×12',r:'60s',e:'🔼',m:'Pectoraux sup. · Épaules',d:'Pieds surélevés sur une chaise, pompes normales.',tip:'Plus les pieds sont hauts, plus les épaules travaillent.',a:'press'},
+      {n:'Dips sur chaise',s:'3×12-15',r:'45s',e:'🪑',m:'Triceps · Pectoraux inf.',d:'Mains sur le bord d'une chaise, jambes tendues, descendre.',tip:'Descendre jusqu'à 90°, coudes vers l'arrière.',a:'press'},
+      {n:'Pompes explosives',s:'3×8',r:'60s',e:'💥',m:'Pectoraux · Puissance',d:'Pousser explosif pour décoller les mains du sol.',tip:'Gainage actif, atterrir en douceur.',a:'push'},
     ],
-    lower:[
-      {n:"Squat poids corps",s:"4×20",r:"45s",e:"🦵",m:"Quadriceps · Fessiers",d:"Pieds largeur épaules, cuisses parallèles.",tip:"Genoux vers l'extérieur.",a:"squat"},
-      {n:"Jump squat",s:"4×12",r:"45s",e:"🦘",m:"Quadriceps · Fessiers · Cardio",d:"Squat puis explosion vers le haut.",tip:"Atterrir doucement.",a:"squat"},
-      {n:"Fentes",s:"3×12/jambe",r:"45s",e:"🚶",m:"Quadriceps · Fessiers",d:"Jambe avant à 90°, genou arrière vers le sol.",tip:"Buste droit.",a:"lunge"},
-      {n:"Hip thrust",s:"4×15",r:"45s",e:"🍑",m:"Fessiers · Ischio",d:"Allongé, pousser les hanches vers le haut.",tip:"Serrer fort les fessiers.",a:"hinge"},
-      {n:"Mollets debout",s:"3×25",r:"30s",e:"🦶",m:"Mollets",d:"Sur les orteils, monter au max.",tip:"Amplitude maximale.",a:"calf"},
+    back:[
+      {n:'Superman',s:'4×15',r:'30s',e:'🦸',m:'Bas du dos · Fessiers · Ischio',d:'Allongé face au sol, lever bras et jambes simultanément.',tip:'Contrôler la descente.',a:'hinge'},
+      {n:'Birddog',s:'3×12/côté',r:'30s',e:'🐕',m:'Lombaires · Core · Équilibre',d:'À 4 pattes, étendre bras et jambe opposés en même temps.',tip:'Buste stable, ne pas tourner le bassin.',a:'plank'},
+      {n:'Rowing élastique',s:'4×15',r:'45s',e:'🔗',m:'Dos · Biceps',d:'Élastique fixé devant soi, tirer vers les hanches.',tip:'Serrer les omoplates à chaque répétition.',a:'pull_h'},
+      {n:'Tirage nuque élastique',s:'3×12',r:'45s',e:'📎',m:'Grand dorsal · Biceps',d:'Élastique au-dessus, tirer vers la nuque.',tip:'Coudes pointent vers le bas.',a:'pull_v'},
+      {n:'Curl élastique',s:'3×15',r:'45s',e:'〽️',m:'Biceps · Avant-bras',d:'Élastique sous les pieds, fléchir vers les épaules.',tip:'Coudes collés, supiner en montant.',a:'curl'},
+    ],
+    legs:[
+      {n:'Squat bulgare',s:'4×10/jambe',r:'60s',e:'🎿',m:'Quadriceps · Fessiers · Équilibre',d:'Pied arrière surélevé sur une chaise, descendre en fente.',tip:'L'exercice le plus dur du bas du corps au poids corps.',a:'lunge'},
+      {n:'Jump squat',s:'4×12',r:'45s',e:'🦘',m:'Quadriceps · Fessiers · Cardio',d:'Squat puis explosion vers le haut, atterrir en douceur.',tip:'Bras propulsent en avant pour aider le décollage.',a:'squat'},
+      {n:'Fentes marchées',s:'3×12/jambe',r:'45s',e:'🚶',m:'Quadriceps · Fessiers',d:'Grand pas en avant, jambe arrière vers le sol.',tip:'Buste droit, regard devant.',a:'lunge'},
+      {n:'Pont fessier chaise',s:'4×15',r:'45s',e:'🌉',m:'Fessiers · Ischio · Lombaires',d:'Épaules sur chaise, pousser les hanches vers le haut.',tip:'Serrer les fessiers en haut, maintenir 2s.',a:'hinge'},
+      {n:'Mollets sur marche',s:'3×25',r:'30s',e:'🦶',m:'Mollets · Soléaires',d:'Orteils sur une marche, monter au max, descendre sous la marche.',tip:'Amplitude maximale dans les deux sens.',a:'calf'},
+    ],
+    shoulders:[
+      {n:'Pike push-up',s:'4×10-12',r:'60s',e:'🔻',m:'Deltoïdes · Triceps',d:'En V inversé, descendre la tête vers le sol entre les mains.',tip:'Hanches hautes = plus d'épaules.',a:'press'},
+      {n:'Handstand push-up mur',s:'3×6-8',r:'75s',e:'🤸',m:'Deltoïdes · Triceps · Core',d:'Contre un mur, à l'envers, descendre la tête vers le sol.',tip:'Commence par des négatifs si trop dur.',a:'press'},
+      {n:'Élévations latérales bouteilles',s:'4×15',r:'30s',e:'🦅',m:'Deltoïde latéral',d:'Bouteilles d'eau sur les côtés, lever à l'horizontale.',tip:'Légère inclinaison en avant, contrôle la descente.',a:'press'},
+      {n:'Élévations frontales',s:'3×15',r:'30s',e:'⬆️',m:'Deltoïde antérieur',d:'Bouteilles devant, lever à l'horizontale alternativement.',tip:'Pas de balancement.',a:'press'},
+      {n:'Pompes poussées larges',s:'3×12',r:'45s',e:'✋',m:'Deltoïdes · Pec · Triceps',d:'Mains très écartées, pompes lentes et contrôlées.',tip:'Plus les mains sont larges, plus les épaules travaillent.',a:'push'},
+    ],
+    arms:[
+      {n:'Dips sur chaise',s:'4×12-15',r:'45s',e:'🪑',m:'Triceps · Pec inf.',d:'Mains sur bord de chaise, jambes tendues, descendre.',tip:'Descendre jusqu'à 90° pour maximiser.',a:'press'},
+      {n:'Pompes diamant',s:'4×10-12',r:'60s',e:'💎',m:'Triceps · Pec internes',d:'Index et pouces en triangle sous la poitrine.',tip:'Lent à la descente, explosif en montée.',a:'push'},
+      {n:'Curl élastique',s:'4×15',r:'45s',e:'〽️',m:'Biceps · Avant-bras',d:'Élastique sous les pieds, fléchir vers les épaules.',tip:'Supiner en montant pour maximer la contraction.',a:'curl'},
+      {n:'Triceps derrière tête',s:'3×12',r:'45s',e:'💆',m:'Triceps long',d:'Bouteille ou élastique, fléchir les coudes derrière la tête.',tip:'Coudes pointés vers le haut, immobiles.',a:'press'},
+      {n:'Chin-up prise neutre',s:'3×max',r:'75s',e:'⬆️',m:'Biceps · Dos',d:'Si barre disponible, prise paumes vers soi.',tip:'Plus facile que les tractions, parfait pour les biceps.',a:'pull_v'},
+    ],
+    glutes:[
+      {n:'Hip thrust chaise',s:'4×20',r:'45s',e:'🍑',m:'Fessiers · Ischio',d:'Épaules sur chaise, hanches au sol, pousser vers le haut.',tip:'Serrer fort les fessiers en haut, maintenir 2s.',a:'hinge'},
+      {n:'Kick-back au sol',s:'3×20/jambe',r:'30s',e:'🦵',m:'Fessiers sup.',d:'À 4 pattes, pousser la jambe vers l'arrière et le haut.',tip:'Contracter les fessiers en haut.',a:'lunge'},
+      {n:'Squat sumo',s:'4×15',r:'45s',e:'🏋️',m:'Fessiers · Ischio · Adducteurs',d:'Pieds très écartés, orteils vers l'extérieur, descendre bas.',tip:'Genoux dans l'axe des orteils.',a:'squat'},
+      {n:'Abducteur allongé',s:'3×15/jambe',r:'30s',e:'↔️',m:'Fessiers moy. · TFL',d:'Allongé sur le côté, lever la jambe vers le haut.',tip:'Pied en dorsiflexion pour plus d'activation.',a:'lunge'},
+      {n:'Good morning',s:'3×15',r:'45s',e:'🌅',m:'Ischio-jambiers · Bas du dos',d:'Mains derrière la tête, incliner le buste en avant, hanches en arrière.',tip:'Garder le dos plat tout au long.',a:'hinge'},
     ],
     core:[
-      {n:"Crunch",s:"4×20",r:"30s",e:"🌀",m:"Abdominaux",d:"Lever les épaules du sol en contractant les abdos.",tip:"Sans tirer sur le cou.",a:"core"},
-      {n:"Planche",s:"3×45-60s",r:"30s",e:"📏",m:"Core · Épaules",d:"Avant-bras et orteils, corps droit.",tip:"Contracter fessiers et ventre.",a:"plank"},
-      {n:"Mountain climbers",s:"4×30s",r:"20s",e:"⛰️",m:"Abdos · Core · Cardio",d:"En position pompe, genoux alternativement.",tip:"Plus vite = plus cardio.",a:"plank"},
-      {n:"Burpees",s:"4×10",r:"30s",e:"🔄",m:"Full body · Cardio",d:"Debout→squat→pompe→saut.",tip:"L'exercice le plus complet.",a:"squat"},
-      {n:"Bicycle crunch",s:"3×20",r:"30s",e:"🚵",m:"Obliques · Abdos",d:"Coude gauche vers genou droit et inversement.",tip:"Vraie rotation du buste.",a:"plank"},
+      {n:'Crunch',s:'4×20',r:'30s',e:'🌀',m:'Abdominaux',d:'Lever les épaules du sol en contractant les abdos.',tip:'Sans tirer sur le cou.',a:'core'},
+      {n:'Planche',s:'3×45-60s',r:'30s',e:'📏',m:'Core · Épaules · Abdos',d:'Avant-bras et orteils, corps droit.',tip:'Contracter fessiers et ventre.',a:'plank'},
+      {n:'Mountain climbers',s:'4×30s',r:'20s',e:'⛰️',m:'Abdos · Core · Cardio',d:'En position pompe, genoux alternativement.',tip:'Plus vite = plus cardio.',a:'plank'},
+      {n:'Burpees',s:'4×10',r:'30s',e:'🔄',m:'Full body · Cardio',d:'Debout→squat→pompe→saut.',tip:'L'exercice le plus complet.',a:'squat'},
+      {n:'Bicycle crunch',s:'3×20',r:'30s',e:'🚵',m:'Obliques · Abdos',d:'Coude gauche vers genou droit et inversement.',tip:'Vraie rotation du buste.',a:'plank'},
     ],
     fullbody:[
-      {n:"Burpees",s:"5×10",r:"45s",e:"🔄",m:"Full body · Cardio",d:"Debout→squat→pompe→saut explosif.",tip:"L'exercice le plus complet.",a:"squat"},
-      {n:"AMRAP 10 min",s:"10 min",r:"—",e:"⏱️",m:"Full body",d:"Max rounds : 10 pompes→15 squats→20 mountain climbers.",tip:"As Many Rounds As Possible.",a:"cardio"},
-      {n:"Pompes explosives",s:"4×8",r:"60s",e:"💥",m:"Pectoraux · Core",d:"Pousser explosif pour décoller les mains.",tip:"Gainage actif.",a:"push"},
-      {n:"Squat jump + pompe",s:"4×8",r:"60s",e:"🔁",m:"Full body",d:"1 squat jump + 1 pompe = 1 rep.",tip:"Fluide avec la pratique.",a:"squat"},
-      {n:"Tabata 20/10",s:"8×(20s/10s)",r:"—",e:"🔥",m:"Full body · Cardio",d:"20s effort max, 10s récup. 8 rounds.",tip:"4 min très intenses.",a:"cardio"},
+      {n:'Burpees',s:'5×10',r:'45s',e:'🔄',m:'Full body · Cardio',d:'Debout→squat→pompe→saut explosif.',tip:'L'exercice le plus complet.',a:'squat'},
+      {n:'AMRAP 10 min',s:'10 min',r:'—',e:'⏱️',m:'Full body',d:'Max rounds : 10 pompes→15 squats→20 mountain climbers.',tip:'As Many Rounds As Possible.',a:'cardio'},
+      {n:'Pompes explosives',s:'4×8',r:'60s',e:'💥',m:'Pectoraux · Core',d:'Pousser explosif pour décoller les mains.',tip:'Gainage actif.',a:'push'},
+      {n:'Squat jump + pompe',s:'4×8',r:'60s',e:'🔁',m:'Full body',d:'1 squat jump + 1 pompe = 1 rep.',tip:'Fluide avec la pratique.',a:'squat'},
+      {n:'Tabata 20/10',s:'8×(20s/10s)',r:'—',e:'🔥',m:'Full body · Cardio',d:'20s effort max, 10s récup. 8 rounds.',tip:'4 min très intenses.',a:'cardio'},
     ],
   }
 };
 
 const ZONE_META = {
-  upper:{label:"HAUT DU CORPS",e:"💪",desc:"Pectoraux · Dos · Épaules · Bras"},
-  lower:{label:"BAS DU CORPS",e:"🦵",desc:"Quadriceps · Fessiers · Mollets"},
-  core:{label:"ABDOS & CARDIO",e:"🔥",desc:"Abdominaux · Core · Cardio"},
-  fullbody:{label:"FULL BODY",e:"⚡",desc:"Corps complet · Multi-articulaire"},
+  chest:    {label:'PECTORAUX & TRICEPS',  e:'🏋️', desc:'Pec · Triceps · Force poussée'},
+  back:     {label:'DOS & BICEPS',         e:'🔗', desc:'Dos · Biceps · Force tirée'},
+  legs:     {label:'JAMBES',               e:'🦵', desc:'Quadriceps · Ischio · Mollets'},
+  shoulders:{label:'ÉPAULES',              e:'🎯', desc:'Deltoïdes · Trapèzes'},
+  arms:     {label:'BRAS',                 e:'💪', desc:'Biceps · Triceps · Avant-bras'},
+  glutes:   {label:'FESSIERS & ISCHIO',    e:'🍑', desc:'Fessiers · Ischio-jambiers'},
+  core:     {label:'ABDOS & CARDIO',       e:'🔥', desc:'Abdominaux · Core · Cardio'},
+  fullbody: {label:'FULL BODY',            e:'⚡', desc:'Corps complet · Multi-articulaire'},
 };
+
+// Split hebdomadaire selon le nombre de jours d'entraînement
+const WEEKLY_SPLITS = {
+  1: ['fullbody'],
+  2: ['fullbody','fullbody'],
+  3: ['chest','legs','back'],
+  4: ['chest','back','legs','shoulders'],
+  5: ['chest','back','legs','shoulders','arms'],
+  6: ['chest','back','legs','shoulders','arms','glutes'],
+  7: ['chest','back','legs','shoulders','arms','glutes','core'],
+};
+
 
 const MEALS = {
   breakfast:[
@@ -957,19 +1036,38 @@ window.doRegister = async () => {
   } finally { btn.disabled=false; btn.textContent='CRÉER MON COMPTE'; }
 };
 
+window.toggleForgot = () => {
+  const panel = document.getElementById('forgot-panel');
+  panel.classList.toggle('hidden');
+  if (!panel.classList.contains('hidden')) {
+    // pré-remplir avec le pseudo déjà saisi
+    const u = document.getElementById('login-user').value.trim().toLowerCase();
+    if (u) document.getElementById('forgot-pseudo').value = u;
+    document.getElementById('forgot-pseudo').focus();
+  }
+};
 window.doForgotPassword = async () => {
-  const u = document.getElementById('login-user').value.trim().toLowerCase();
-  if (!u) { toast('Entre ton pseudo d\'abord','⚠️'); return; }
+  const u = document.getElementById('forgot-pseudo').value.trim().toLowerCase();
+  const msgEl = document.getElementById('forgot-msg');
+  msgEl.classList.add('hidden');
+  if (!u) { toast('Entre ton pseudo','⚠️'); return; }
   try {
     const uSnap = await getDoc(usernameRef(u));
     if (!uSnap.exists()) { toast('Pseudo introuvable','❌'); return; }
-    const email = uSnap.data().email;
+    const email = uSnap.data().email || '';
     if (!email || email.endsWith('@fitflex-app.io')) {
-      toast('Aucun email associé à ce compte','❌'); return;
+      // Vieux compte sans vrai email — afficher message explicatif
+      msgEl.innerHTML = '⚠️ Ce compte a été créé sans email réel.<br>Crée un nouveau compte avec ton email pour pouvoir récupérer ton mot de passe.';
+      msgEl.classList.remove('hidden');
+      return;
     }
     await sendPasswordResetEmail(auth, email);
-    toast('Email envoyé ! Vérifie ta boîte 📬','✅');
-  } catch(e) { toast('Erreur : '+e.message,'❌'); }
+    toast('Lien envoyé sur ' + email.replace(/(.{2}).+(@.+)/, '$1…$2') + ' 📬','✅');
+    document.getElementById('forgot-panel').classList.add('hidden');
+    document.getElementById('forgot-pseudo').value = '';
+  } catch(e) {
+    toast('Erreur : ' + e.message, '❌');
+  }
 };
 
 window.logout = async () => {
@@ -1207,61 +1305,109 @@ function renderHome() {
 }
 
 // ── Exercise ────────────────────────────────────────
+// Returns the exercise zone for a given training day index from the user's weekly split
+function getZoneForDay(days, dayIndex) {
+  const split = WEEKLY_SPLITS[days.length] || WEEKLY_SPLITS[Math.min(days.length, 7)];
+  return split[dayIndex % split.length];
+}
+// Returns today's training zone (null if rest day)
+function todayZone() {
+  const p = userData?.profile; if(!p) return null;
+  const days = p.days||[];
+  const DAY_KEYS = ['D','L','M','Me','J','V','S'];
+  const todayKey = DAY_KEYS[new Date().getDay()];
+  const idx = days.indexOf(todayKey);
+  if(idx===-1) return null;
+  return getZoneForDay(days, idx);
+}
+
+function exListHtml(zone, p, goals) {
+  const exes = (EXERCISES[p.location]||EXERCISES.home)[zone];
+  if(!exes) return '';
+  return `<div class="space-y-2.5">
+    ${exes.map(ex=>{const ae=adaptExGoals(adaptEx(ex,p.level),goals);return`
+      <div class="card rounded-xl p-3.5 cursor-pointer" onclick="this.querySelector('.ex-d').classList.toggle('hidden')">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${ae.e}</div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between"><div class="font-semibold text-sm">${ae.n}</div>
+              <svg class="w-4 h-4" style="color:var(--text-faint)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div>
+            <div class="flex gap-2 mt-0.5"><span class="text-xs font-bold text-fire">${ae.s}</span><span class="text-xs" style="color:var(--text-faint)">· ${ae.r}</span></div>
+            <div class="text-xs mt-0.5" style="color:var(--text-muted)">${ae.m}</div>
+          </div>
+        </div>
+        <div class="ex-d hidden mt-3 pt-3" style="border-top:1px solid var(--border)">
+          <p class="text-sm mb-3">${ae.d}</p>
+          <div class="flex gap-2 mb-3"><span>💡</span><p class="text-sm italic" style="color:var(--text-muted)">${ae.tip}</p></div>
+          <button onclick="event.stopPropagation();showDemo(${JSON.stringify(ae).replace(/"/g,'&quot;')})" class="btn-fire w-full rounded-xl py-2.5 text-white text-sm font-bold flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            Voir sur YouTube
+          </button>
+        </div>
+      </div>`}).join('')}
+  </div>`;
+}
+
 window.renderExercise = (zone) => {
   if(zone) currentZone=zone;
   const p=userData.profile;
-  const goals=p.goals||( p.goal?[p.goal]:[] );
-  const zoneCards=Object.entries(ZONE_META).map(([k,v])=>`
-    <div onclick="renderExercise('${k}')" class="sel-card p-4 card ${currentZone===k?'on':''}">
-      <div class="text-3xl mb-2">${v.e}</div>
-      <div class="font-display text-sm font-bold">${v.label}</div>
-      <div class="text-xs mt-1" style="color:var(--text-muted)">${v.desc}</div>
-    </div>`).join('');
+  const goals=p.goals||(p.goal?[p.goal]:[]);
+  const days=p.days||[];
+  const split=WEEKLY_SPLITS[days.length]||WEEKLY_SPLITS[Math.min(days.length,7)]||['fullbody'];
+  const DAY_LABELS={L:'LUN',M:'MAR',Me:'MER',J:'JEU',V:'VEN',S:'SAM',D:'DIM'};
+  const DAY_KEYS=['D','L','M','Me','J','V','S'];
+  const todayKey=DAY_KEYS[new Date().getDay()];
 
-  // goals banner
-  const goalBanner=goals.length?`
-    <div class="card rounded-xl p-3 mb-4 flex flex-wrap gap-2 items-center">
-      <span class="text-xs font-semibold" style="color:var(--text-muted)">Objectifs :</span>
-      ${goals.map(g=>`<span class="badge font-semibold" style="background:linear-gradient(90deg,#DC262622,#F9731622);color:#F97316">${GOAL_E[g]} ${GOAL_LBL[g]}</span>`).join('')}
-      ${goals.includes('endurance')||goals.includes('loss')?`<span class="text-xs ml-auto" style="color:var(--text-faint)">⏱ repos réduits</span>`:''}
-      ${goals.includes('strength')?`<span class="text-xs ml-auto" style="color:var(--text-faint)">💪 +1 série</span>`:''}
+  // Weekly split schedule
+  const splitRows=days.map((d,i)=>{
+    const z=getZoneForDay(days,i);
+    const zm=ZONE_META[z];
+    const isToday=d===todayKey;
+    return`<div onclick="renderExercise('${z}')" class="card rounded-xl p-3 flex items-center gap-3 cursor-pointer${z===currentZone?' sel-card on':''}" style="${isToday?'border:1.5px solid #F97316':''}" >
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0" style="${isToday?'background:linear-gradient(135deg,#DC2626,#F97316);color:white':'background:var(--bg-inner);color:var(--text-muted)'}">${DAY_LABELS[d]||d}</div>
+      <div class="text-lg">${zm?.e||'⚡'}</div>
+      <div class="flex-1"><div class="font-semibold text-sm">${zm?.label||z}</div><div class="text-xs" style="color:var(--text-muted)">${zm?.desc||''}</div></div>
+      ${isToday?'<span class="text-xs font-bold" style="color:#F97316">Aujourd\'hui</span>':''}
+    </div>`;
+  }).join('');
+
+  const activeZone=currentZone||(days.includes(todayKey)?getZoneForDay(days,days.indexOf(todayKey)):null);
+  const activeZoneMeta=activeZone?ZONE_META[activeZone]:null;
+
+  const listSection=activeZone?`
+    <div class="mt-5">
+      <div class="flex items-center justify-between mb-3">
+        <div><h2 class="font-display text-xl font-bold">${activeZoneMeta?.label||activeZone}</h2>
+          <div class="text-xs" style="color:var(--text-muted)">${activeZoneMeta?.desc||''}</div></div>
+        <button onclick="startSession('${activeZone}')" class="btn-fire text-white rounded-xl px-4 py-2 text-sm font-bold">▶ Démarrer</button>
+      </div>
+      ${exListHtml(activeZone,p,goals)}
     </div>`:'';
 
-  const listHtml=currentZone?`
-    <div class="mt-4">
-      <div class="flex items-center justify-between mb-3">
-        <h2 class="font-display text-xl font-bold">${ZONE_META[currentZone].label}</h2>
-        <button onclick="startSession('${currentZone}')" class="btn-fire text-white rounded-xl px-4 py-2 text-sm font-bold">▶ Démarrer</button>
-      </div>
-      <div class="space-y-2.5">
-        ${EXERCISES[p.location][currentZone].map(ex=>{const ae=adaptExGoals(adaptEx(ex,p.level),goals);return`
-          <div class="card rounded-xl p-3.5 cursor-pointer" onclick="this.querySelector('.ex-d').classList.toggle('hidden')">
-            <div class="flex items-start gap-3">
-              <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${ae.e}</div>
-              <div class="flex-1">
-                <div class="flex items-center justify-between"><div class="font-semibold text-sm">${ae.n}</div>
-                  <svg class="w-4 h-4" style="color:var(--text-faint)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div>
-                <div class="flex gap-2 mt-0.5"><span class="text-xs font-bold text-fire">${ae.s}</span><span class="text-xs" style="color:var(--text-faint)">· ${ae.r}</span></div>
-                <div class="text-xs mt-0.5" style="color:var(--text-muted)">${ae.m}</div>
-              </div>
-            </div>
-            <div class="ex-d hidden mt-3 pt-3" style="border-top:1px solid var(--border)">
-              <p class="text-sm mb-3">${ae.d}</p>
-              <div class="flex gap-2 mb-3"><span>💡</span><p class="text-sm italic" style="color:var(--text-muted)">${ae.tip}</p></div>
-              <button onclick="event.stopPropagation();showDemo(${JSON.stringify(ae).replace(/"/g,'&quot;')})" class="btn-fire w-full rounded-xl py-2.5 text-white text-sm font-bold flex items-center justify-center gap-2">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                Voir sur YouTube
-              </button>
-            </div>
-          </div>`}).join('')}
-      </div>
-    </div>`
-  :`<div class="text-center py-12"><div class="text-4xl mb-2">👆</div><p class="text-sm" style="color:var(--text-faint)">Choisis une zone</p></div>`;
+  // Goals adaptation hint
+  const adaptHints=[
+    ...(goals.includes('strength')?['💪 +1 série']:[]),
+    ...(goals.includes('endurance')||goals.includes('loss')?['⏱ repos réduits']:[]),
+  ];
 
   document.getElementById('tab-exercise').innerHTML=`<div class="max-w-sm mx-auto">
-    <div class="mb-4"><p class="text-sm" style="color:var(--text-muted)">Sélectionne une zone</p><h1 class="font-display text-4xl font-bold mt-0.5">PROGRAMME</h1></div>
-    ${goalBanner}
-    <div class="grid grid-cols-2 gap-2.5">${zoneCards}</div>${listHtml}</div>`;
+    <div class="mb-4">
+      <p class="text-sm" style="color:var(--text-muted)">Ton programme • ${p.location==='gym'?'🏋️ Salle':'🏠 Maison'}</p>
+      <h1 class="font-display text-4xl font-bold mt-0.5">PROGRAMME</h1>
+    </div>
+    ${adaptHints.length?`<div class="flex gap-2 mb-3">${adaptHints.map(h=>`<span class="badge" style="background:linear-gradient(90deg,#DC262618,#F9731618);color:#F97316">${h}</span>`).join('')}</div>`:''}
+    <div class="space-y-2 mb-2">${splitRows}</div>
+    <button onclick="showAllZones()" class="w-full text-center text-xs py-2 mb-1" style="background:none;border:none;cursor:pointer;color:var(--text-faint)">Voir toutes les zones musculaires ›</button>
+    <div id="all-zones" class="hidden grid grid-cols-2 gap-2 mb-4">
+      ${Object.entries(ZONE_META).map(([k,v])=>`<div onclick="renderExercise('${k}')" class="sel-card p-3 card flex items-center gap-2 cursor-pointer${k===currentZone?' on':''}"><span class="text-xl">${v.e}</span><div><div class="font-display text-xs font-bold">${v.label}</div></div></div>`).join('')}
+    </div>
+    ${listSection}
+  </div>`;
+};
+window.showAllZones=()=>{
+  const el=document.getElementById('all-zones');
+  el.classList.toggle('hidden');
+  el.classList.toggle('grid');
 };
 
 // ── Demo modal ──────────────────────────────────────

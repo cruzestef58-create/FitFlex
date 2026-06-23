@@ -437,11 +437,18 @@
 <!-- Session overlay -->
 <div id="session-overlay" style="position:fixed;inset:0;background:var(--bg);z-index:150;display:none">
   <div class="max-w-sm mx-auto px-5 py-6">
-    <div class="flex items-center justify-between mb-5">
+    <div class="flex items-center justify-between mb-4">
       <div><div class="text-xs font-semibold mb-1" style="color:var(--text-muted)">SÉANCE EN COURS</div><div id="sess-title" class="font-display text-2xl font-bold"></div></div>
       <div id="sess-timer" class="font-display text-2xl font-bold text-fire">00:00</div>
     </div>
-    <div class="ob-prog mb-5" style="height:4px"><div id="sess-prog" class="prog-bar" style="width:0%"></div></div>
+    <div class="ob-prog mb-4" style="height:4px"><div id="sess-prog" class="prog-bar" style="width:0%"></div></div>
+    <!-- Rest timer -->
+    <div id="rest-timer-bar" class="hidden mb-4 card rounded-2xl p-3 text-center">
+      <div class="text-xs font-semibold mb-1" style="color:var(--text-muted)">TEMPS DE REPOS</div>
+      <div id="rest-timer-val" class="font-display text-4xl font-bold text-fire">90</div>
+      <div class="mt-2 rounded-full" style="height:4px;background:var(--bg-faint)"><div id="rest-timer-prog" class="h-full rounded-full" style="background:linear-gradient(90deg,#DC2626,#F97316);width:100%;transition:width 1s linear"></div></div>
+      <button onclick="skipRest()" class="mt-2 text-xs" style="background:none;border:none;cursor:pointer;color:var(--text-faint)">Passer le repos ›</button>
+    </div>
     <div id="sess-exercises" class="space-y-3 mb-6"></div>
     <button onclick="finishSession()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold">TERMINER LA SÉANCE ✓</button>
     <button onclick="cancelSession()" class="w-full rounded-2xl py-3 mt-2 text-sm font-medium" style="color:var(--text-muted)">Annuler</button>
@@ -1445,10 +1452,64 @@ window.startSession = (zone) => {
     document.getElementById('sess-timer').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;
   },1000);
 };
+// ── Rest timer ──────────────────────────────────────
+let restTimer = null;
+function startRestTimer(seconds) {
+  if(restTimer) clearInterval(restTimer);
+  let rem = seconds;
+  const bar = document.getElementById('rest-timer-bar');
+  const val = document.getElementById('rest-timer-val');
+  const prog = document.getElementById('rest-timer-prog');
+  bar.classList.remove('hidden');
+  val.textContent = rem;
+  prog.style.transition = 'none';
+  prog.style.width = '100%';
+  requestAnimationFrame(() => {
+    prog.style.transition = 'width 1s linear';
+    prog.style.width = Math.round(rem/seconds*100)+'%';
+  });
+  restTimer = setInterval(() => {
+    rem--;
+    val.textContent = rem;
+    prog.style.width = Math.round(rem/seconds*100)+'%';
+    if(rem <= 0) {
+      clearInterval(restTimer); restTimer = null;
+      bar.classList.add('hidden');
+      // Vibration + son de fin
+      if(navigator.vibrate) navigator.vibrate([200,100,200]);
+      toast('Repos terminé — à toi ! 💪','⚡');
+    }
+  }, 1000);
+}
+window.skipRest = () => {
+  if(restTimer){ clearInterval(restTimer); restTimer = null; }
+  document.getElementById('rest-timer-bar').classList.add('hidden');
+};
+
+// Parse rest time from exercise string like "90s", "2×45s", "120s"
+function parseRestSeconds(rStr) {
+  const m = rStr.match(/(\d+)s/);
+  return m ? parseInt(m[1]) : 60;
+}
+
 window.toggleExDone=(i)=>{
   const card=document.getElementById('sc-'+i);
-  if(sessionData.done.includes(i)){sessionData.done=sessionData.done.filter(x=>x!==i);card.classList.remove('done');}
-  else{sessionData.done.push(i);card.classList.add('done');}
+  const list=EXERCISES[userData.profile.location][sessionData.zone];
+  if(sessionData.done.includes(i)){
+    sessionData.done=sessionData.done.filter(x=>x!==i);
+    card.classList.remove('done');
+    if(restTimer){ clearInterval(restTimer); restTimer=null; }
+    document.getElementById('rest-timer-bar').classList.add('hidden');
+  } else {
+    sessionData.done.push(i);
+    card.classList.add('done');
+    // Start rest timer based on this exercise's rest time
+    const ex = list[i];
+    const p = userData.profile;
+    const goals = p.goals||(p.goal?[p.goal]:[]);
+    const ae = adaptExGoals(adaptEx(ex, p.level), goals);
+    if(ae.r && ae.r !== '—') startRestTimer(parseRestSeconds(ae.r));
+  }
   updateSessProg();
 };
 function updateSessProg(){
@@ -1458,6 +1519,7 @@ function updateSessProg(){
 window.finishSession=async()=>{
   const duration=Math.max(1,Math.round((Date.now()-sessionData.start)/60000));
   clearInterval(sessionData.timer);
+  if(restTimer){ clearInterval(restTimer); restTimer=null; }
   const list=EXERCISES[userData.profile.location][sessionData.zone];
   const xp=sessionData.done.length*10+duration*2;
   const workouts=[...(userData.workouts||[]),{date:todayStr(),zone:sessionData.zone,duration,exDone:sessionData.done.length,exTotal:list.length,xp}];
@@ -1467,10 +1529,15 @@ window.finishSession=async()=>{
   toast(`+${xp} XP 🔥 Séance terminée !`,'🎉');
   renderHome();
 };
-window.cancelSession=()=>{clearInterval(sessionData.timer);closeSession();};
+window.cancelSession=()=>{
+  clearInterval(sessionData.timer);
+  if(restTimer){ clearInterval(restTimer); restTimer=null; }
+  closeSession();
+};
 function closeSession(){
   sessionData={active:false,zone:null,start:null,timer:null,done:[]};
   document.getElementById('session-overlay').style.display='none';
+  document.getElementById('rest-timer-bar').classList.add('hidden');
 }
 
 // ── Nutrition ───────────────────────────────────────
@@ -1628,15 +1695,83 @@ window.renderProfile=()=>{
       </div>`:''}
       <button onclick="showEditStats()" class="w-full mt-3 rounded-xl py-2 text-sm font-semibold" style="background:var(--bg-inner);color:var(--text-muted)">✏️ Modifier profil</button>
     </div>
+    <!-- Calculateur macros -->
+    ${(()=>{
+      const w=p.weight_start||70, a=p.age||25, wg=p.weight_goal||w;
+      const isMale=true; // TODO: add gender to profile
+      // Mifflin-St Jeor BMR
+      const bmr=Math.round(10*w + 6.25*170 - 5*a + (isMale?5:-161));
+      const actFactor={1:1.2,2:1.375,3:1.375,4:1.55,5:1.55,6:1.725,7:1.9}[p.days?.length||3]||1.375;
+      const tdee=Math.round(bmr*actFactor);
+      const diff=wg-w;
+      const target=diff<-0.5?tdee-400:diff>0.5?tdee+250:tdee;
+      const protG=Math.round(w*2);
+      const lipG=Math.round(target*0.28/9);
+      const carbG=Math.round((target-protG*4-lipG*9)/4);
+      const pPct=Math.round(protG*4/target*100);
+      const lPct=Math.round(lipG*9/target*100);
+      const cPct=100-pPct-lPct;
+      return`<div class="card rounded-2xl p-4 mb-4">
+        <h3 class="font-display text-sm font-bold mb-1">CALCULATEUR MACROS</h3>
+        <p class="text-xs mb-3" style="color:var(--text-muted)">Basé sur ton poids, ton activité et ton objectif.</p>
+        <div class="rounded-xl p-3 mb-3 text-center" style="background:linear-gradient(135deg,#DC262618,#F9731618)">
+          <div class="text-xs font-semibold mb-0.5" style="color:var(--text-muted)">CALORIES JOURNALIÈRES</div>
+          <div class="font-display text-4xl font-bold text-fire">${target}</div>
+          <div class="text-xs" style="color:var(--text-faint)">TDEE ${tdee} kcal · ${diff<-0.5?'déficit -400':''}${diff>0.5?'surplus +250':'maintien'}</div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mb-3">
+          ${[['Protéines','#DC2626',protG,'g',pPct+'%'],['Glucides','#F97316',carbG,'g',cPct+'%'],['Lipides','#FBBF24',lipG,'g',lPct+'%']].map(([l,c,v,u,pct])=>`
+          <div class="rounded-xl p-2.5 text-center" style="background:var(--bg-inner)">
+            <div class="text-xs mb-1" style="color:var(--text-muted)">${l}</div>
+            <div class="font-display text-xl font-bold" style="color:${c}">${v}<span class="text-xs">${u}</span></div>
+            <div class="text-xs" style="color:var(--text-faint)">${pct}</div>
+          </div>`).join('')}
+        </div>
+        <div class="flex h-2 rounded-full overflow-hidden mb-1">
+          <div style="width:${pPct}%;background:#DC2626"></div>
+          <div style="width:${cPct}%;background:#F97316"></div>
+          <div style="width:${lPct}%;background:#FBBF24"></div>
+        </div>
+        <div class="flex justify-between text-xs" style="color:var(--text-faint)">
+          <span>🔴 Protéines</span><span>🟠 Glucides</span><span>🟡 Lipides</span>
+        </div>
+      </div>`;
+    })()}
+    <!-- Suivi du poids -->
     <div class="card rounded-2xl p-4 mb-4">
       <h3 class="font-display text-sm font-bold mb-3">SUIVI DU POIDS</h3>
       <div class="max-h-32 overflow-y-auto mb-3 space-y-1">
         ${(userData.weight||[]).slice(-5).reverse().map(w=>`<div class="flex justify-between text-sm py-1" style="border-bottom:1px solid var(--border)"><span style="color:var(--text-muted)">${fmtDate(w.date)}</span><span class="font-semibold">${w.kg} kg</span></div>`).join('')||`<p class="text-sm" style="color:var(--text-faint)">Aucune mesure</p>`}
       </div>
       <div class="flex gap-2">
-        <input id="weight-input" type="number" step="0.1" placeholder="Ex: 72.5" class="inp flex-1" style="padding:.625rem .875rem"/>
+        <input id="weight-input" type="number" step="0.1" placeholder="Ex: 72.5" class="inp flex-1" style="padding:.625rem .875rem" inputmode="decimal"/>
         <button onclick="logWeight()" class="btn-fire text-white rounded-xl px-4 py-2 text-sm font-bold">+ Ajouter</button>
       </div>
+    </div>
+    <!-- Mensurations -->
+    <div class="card rounded-2xl p-4 mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="font-display text-sm font-bold">MENSURATIONS</h3>
+        <button onclick="showMeasureModal()" class="text-xs font-semibold px-3 py-1.5 rounded-xl" style="background:var(--bg-inner);color:var(--text-muted)">+ Mesurer</button>
+      </div>
+      ${(()=>{
+        const measures=userData.measurements||[];
+        const last=measures[measures.length-1];
+        const prev=measures[measures.length-2];
+        if(!last) return '<p class="text-sm text-center py-4" style="color:var(--text-faint)">Aucune mensuration enregistrée</p>';
+        const fields=[['Taille','height','cm'],['Tour de taille','waist','cm'],['Hanches','hips','cm'],['Bras (contracté)','arm','cm'],['Cuisse','thigh','cm'],['Poitrine','chest','cm']];
+        return`<div class="text-xs mb-2" style="color:var(--text-faint)">${fmtDate(last.date)}</div>
+        <div class="grid grid-cols-2 gap-2">
+          ${fields.filter(([,k])=>last[k]).map(([l,k,u])=>{
+            const delta=prev&&prev[k]?+(last[k]-prev[k]).toFixed(1):null;
+            const arrow=delta===null?'':delta>0?` <span style="color:#16a34a">+${delta}</span>`:delta<0?` <span style="color:#DC2626">${delta}</span>`:'';
+            return`<div class="rounded-xl p-2.5" style="background:var(--bg-inner)">
+              <div class="text-xs mb-0.5" style="color:var(--text-muted)">${l}</div>
+              <div class="font-semibold text-sm">${last[k]} ${u}${arrow}</div>
+            </div>`;
+          }).join('')}
+        </div>`;
+      })()}
     </div>
     <div class="card rounded-2xl p-4 mb-4"><h3 class="font-display text-sm font-bold mb-1">HISTORIQUE</h3>${histHtml}</div>
     <div class="card rounded-2xl p-4">
@@ -1705,6 +1840,42 @@ window.saveEditStats=async()=>{
   closeEditStats();
   delete window._esLevel;delete window._esDiet;
   toast('Profil mis à jour ✅');
+  renderProfile();
+};
+window.showMeasureModal=()=>{
+  const last=(userData.measurements||[]).slice(-1)[0]||{};
+  const fields=[['Taille','height','cm'],['Poitrine','chest','cm'],['Tour de taille','waist','cm'],['Hanches','hips','cm'],['Bras (contracté)','arm','cm'],['Cuisse','thigh','cm']];
+  const html=`<div id="measure-modal" style="position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center" onclick="if(event.target===this)closeMeasureModal()">
+    <div style="background:var(--bg-card);border:1px solid var(--border-in);border-radius:1.5rem 1.5rem 0 0;width:100%;max-width:480px;padding:1.5rem;padding-bottom:calc(1.5rem + env(safe-area-inset-bottom));max-height:90vh;overflow-y:auto">
+      <div class="flex items-center justify-between mb-4">
+        <div class="font-display text-xl font-bold">MENSURATIONS</div>
+        <button onclick="closeMeasureModal()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer">✕</button>
+      </div>
+      <p class="text-xs mb-4" style="color:var(--text-muted)">Remplis seulement les champs que tu veux suivre.</p>
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        ${fields.map(([l,k,u])=>`<div>
+          <label class="text-xs font-semibold mb-1 block" style="color:var(--text-muted)">${l.toUpperCase()} (${u})</label>
+          <input id="ms-${k}" class="inp" type="number" step="0.5" placeholder="${last[k]||'—'}" value="${last[k]||''}" inputmode="decimal"/>
+        </div>`).join('')}
+      </div>
+      <button onclick="saveMeasurements()" class="btn-fire w-full rounded-2xl py-3.5 text-white font-display text-lg font-bold">ENREGISTRER</button>
+    </div>
+  </div>`;
+  document.body.insertAdjacentHTML('beforeend',html);
+};
+window.closeMeasureModal=()=>{const m=document.getElementById('measure-modal');if(m)m.remove();};
+window.saveMeasurements=async()=>{
+  const fields=[['height','cm'],['chest','cm'],['waist','cm'],['hips','cm'],['arm','cm'],['thigh','cm']];
+  const entry={date:todayStr()};
+  fields.forEach(([k])=>{
+    const v=parseFloat(document.getElementById('ms-'+k).value);
+    if(v&&v>0) entry[k]=v;
+  });
+  if(Object.keys(entry).length<=1){toast('Remplis au moins une mesure','⚠️');return;}
+  const measurements=[...(userData.measurements||[]),entry];
+  await saveUserData({measurements});
+  closeMeasureModal();
+  toast('Mensurations enregistrées ✅');
   renderProfile();
 };
 window.logWeight=async()=>{

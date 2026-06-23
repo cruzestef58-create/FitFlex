@@ -137,6 +137,11 @@
       </svg>
       <p class="text-sm" style="color:var(--text-muted)">Ton compagnon fitness personnalisé</p>
     </div>
+    <!-- Comptes enregistrés (changement rapide) -->
+    <div id="saved-accounts" class="hidden mb-6">
+      <p class="text-xs font-semibold mb-2" style="color:var(--text-muted)">CHANGER DE COMPTE</p>
+      <div id="saved-accounts-list" class="space-y-2"></div>
+    </div>
     <div class="flex gap-6 mb-6 border-b" style="border-color:#252525">
       <button class="auth-tab active pb-3 font-semibold text-sm" id="tab-login-btn" onclick="switchAuthTab('login')">Connexion</button>
       <button class="auth-tab pb-3 font-semibold text-sm" id="tab-reg-btn" style="color:var(--text-muted)" onclick="switchAuthTab('register')">Inscription</button>
@@ -1009,6 +1014,56 @@ window.switchAuthTab = (tab) => {
   });
 };
 
+// ── Comptes enregistrés (changement rapide) ────────
+const ACCOUNTS_KEY = 'fitflex_accounts';
+function getSavedAccounts(){
+  try { return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)) || []; }
+  catch(e){ return []; }
+}
+function saveAccount(acc){
+  let list = getSavedAccounts().filter(a => a.username !== acc.username);
+  list.unshift(acc); // le plus récent en premier
+  localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(list.slice(0,6)));
+}
+window.removeSavedAccount = (username, ev) => {
+  if(ev) ev.stopPropagation();
+  const list = getSavedAccounts().filter(a => a.username !== username);
+  localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(list));
+  renderSavedAccounts();
+  toast('Compte retiré de la liste','🗑️');
+};
+window.renderSavedAccounts = () => {
+  const wrap = document.getElementById('saved-accounts');
+  const listEl = document.getElementById('saved-accounts-list');
+  if(!wrap || !listEl) return;
+  const list = getSavedAccounts();
+  if(!list.length){ wrap.classList.add('hidden'); return; }
+  wrap.classList.remove('hidden');
+  listEl.innerHTML = list.map(a => `
+    <div onclick="quickSwitch('${a.username}')" class="card rounded-2xl p-3 flex items-center gap-3 cursor-pointer" style="transition:transform .1s" ontouchstart="">
+      <div class="w-10 h-10 rounded-full flex items-center justify-center font-display font-bold text-white flex-shrink-0" style="background:linear-gradient(135deg,#DC2626,#F97316)">${a.username.slice(0,2).toUpperCase()}</div>
+      <div class="flex-1 min-w-0">
+        <div class="font-semibold text-sm truncate">${a.username}</div>
+        <div class="text-xs" style="color:var(--text-faint)">Toucher pour se connecter</div>
+      </div>
+      <button onclick="removeSavedAccount('${a.username}',event)" class="text-lg flex-shrink-0" style="background:none;border:none;cursor:pointer;color:var(--text-faint)" aria-label="Retirer">✕</button>
+    </div>`).join('');
+};
+window.quickSwitch = async (username) => {
+  const acc = getSavedAccounts().find(a => a.username === username);
+  if(!acc || !acc.pass){ toast('Identifiants manquants, reconnecte-toi','⚠️'); return; }
+  toast(`Connexion à ${username}...`,'🔄');
+  try {
+    let email = acc.email;
+    if(!email){ const s = await getDoc(usernameRef(username)); email = s.exists()?s.data().email:null; }
+    if(!email){ toast('Compte introuvable','❌'); return; }
+    await signInWithEmailAndPassword(auth, email, acc.pass);
+  } catch(e){
+    toast('Échec — le mot de passe a peut-être changé','❌');
+    removeSavedAccount(username);
+  }
+};
+
 window.doLogin = async () => {
   const u = document.getElementById('login-user').value.trim().toLowerCase();
   const p = document.getElementById('login-pass').value;
@@ -1021,6 +1076,7 @@ window.doLogin = async () => {
     if (!uSnap.exists()) { toast('Pseudo introuvable','❌'); return; }
     const email = uSnap.data().email;
     await signInWithEmailAndPassword(auth, email, p);
+    saveAccount({username:u, pass:p, email}); // enregistrer pour changement rapide
     // onAuthStateChanged handles the rest
   } catch(e) {
     const msg = e.code==='auth/wrong-password'||e.code==='auth/invalid-credential' ? 'Mot de passe incorrect' : 'Erreur de connexion';
@@ -1059,6 +1115,7 @@ window.doRegister = async () => {
       weight: [],
       createdAt: new Date().toISOString()
     });
+    saveAccount({username:u, pass:p, email:realEmail}); // enregistrer pour changement rapide
     toast(`Bienvenue ${u} 🎉`,'✅');
     // onAuthStateChanged handles the rest
   } catch(e) {
@@ -1107,6 +1164,16 @@ window.logout = async () => {
   showScreen('auth');
 };
 
+// Changer de compte : déconnecte mais garde les comptes enregistrés pour bascule rapide
+window.switchAccount = async () => {
+  await signOut(auth);
+  currentUser=null; userData=null;
+  switchAuthTab('login');
+  showScreen('auth');
+  renderSavedAccounts();
+  toast('Choisis un compte ci-dessous','🔄');
+};
+
 // ── Auth state listener ────────────────────────────
 // Fallback: si Firebase ne répond pas en 6s, afficher l'écran auth
 const _loadingTimeout = setTimeout(() => { hideLoading(); showScreen('auth'); }, 6000);
@@ -1131,6 +1198,7 @@ onAuthStateChanged(auth, async (user) => {
 function showScreen(n) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-'+n).classList.add('active');
+  if(n==='auth' && window.renderSavedAccounts) renderSavedAccounts();
 }
 window.showScreen = showScreen;
 function hideLoading() {
@@ -1722,24 +1790,29 @@ window.generateDayMenu=()=>{
   };
   const bP=pool('breakfast'), lP=pool('lunch'), sP=pool('snacks'), dP=pool('dinner');
 
-  // Collect combinations within tolerance, then pick one at random for variety
+  // Génère un large échantillon de menus distincts, garde les plus proches de la cible,
+  // puis en pioche un au hasard (variété garantie à chaque clic)
   const rand=arr=>arr[Math.floor(Math.random()*arr.length)];
-  let candidates=[], best=null, bestDiff=Infinity;
-  for(let i=0;i<500;i++){
+  const sig=c=>c.breakfast.n+'|'+c.lunch.n+'|'+c.snacks.n+'|'+c.dinner.n;
+  const seen=new Set();
+  let all=[];
+  for(let i=0;i<800;i++){
     const combo={breakfast:rand(bP),lunch:rand(lP),snacks:rand(sP),dinner:rand(dP)};
+    const s=sig(combo);
+    if(seen.has(s)) continue;
+    seen.add(s);
     const tot=combo.breakfast.cal+combo.lunch.cal+combo.snacks.cal+combo.dinner.cal;
-    const diff=Math.abs(tot-target);
-    if(diff<bestDiff){bestDiff=diff;best={...combo,_tot:tot};}
-    if(diff<=200) candidates.push({...combo,_tot:tot});
+    all.push({...combo,_tot:tot,_diff:Math.abs(tot-target)});
   }
-  // Avoid repeating the exact same menu twice in a row
-  const sig=c=>c.breakfast.n+c.lunch.n+c.snacks.n+c.dinner.n;
-  if(candidates.length){
-    let pick, tries=0;
-    do { pick=candidates[Math.floor(Math.random()*candidates.length)]; tries++; }
-    while(candidates.length>1 && sig(pick)===window._lastMenuSig && tries<10);
-    best=pick;
-  }
+  // Tri par proximité de la cible
+  all.sort((a,b)=>a._diff-b._diff);
+  // Pool = la moitié des menus les plus proches (au moins 6 si possible)
+  const poolSize=Math.max(Math.min(6,all.length), Math.ceil(all.length*0.5));
+  let goodPool=all.slice(0, poolSize);
+  // Pioche aléatoire en évitant de répéter le menu précédent
+  let best, tries=0;
+  do { best=goodPool[Math.floor(Math.random()*goodPool.length)]; tries++; }
+  while(goodPool.length>1 && sig(best)===window._lastMenuSig && tries<12);
   window._lastMenuSig=sig(best);
 
   const totP=best.breakfast.mac.p+best.lunch.mac.p+best.snacks.mac.p+best.dinner.mac.p;
@@ -1963,6 +2036,8 @@ window.renderProfile=()=>{
         <span>⚙️</span><span>Reconfigurer le profil</span><span class="ml-auto" style="color:#444">›</span></button>
       <button onclick="toggleTheme()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
         <span>🌙</span><span>Thème sombre / clair</span><span class="ml-auto" style="color:#444">›</span></button>
+      <button onclick="switchAccount()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
+        <span>🔄</span><span>Changer de compte</span><span class="ml-auto" style="color:#444">›</span></button>
       <button onclick="logout()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="color:#EF4444">
         <span>🚪</span><span>Se déconnecter</span></button>
     </div>

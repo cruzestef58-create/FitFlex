@@ -1077,7 +1077,10 @@ window.logout = async () => {
 };
 
 // ── Auth state listener ────────────────────────────
+// Fallback: si Firebase ne répond pas en 6s, afficher l'écran auth
+const _loadingTimeout = setTimeout(() => { hideLoading(); showScreen('auth'); }, 6000);
 onAuthStateChanged(auth, async (user) => {
+  clearTimeout(_loadingTimeout);
   hideLoading();
   if (user) {
     currentUser = user;

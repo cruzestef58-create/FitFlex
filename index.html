@@ -623,29 +623,52 @@ const WEEKLY_SPLITS = {
 
 const MEALS = {
   breakfast:[
-    {n:"Bowl Protéiné",e:"🥣",cal:420,t:"10 min",tags:["Protéines","Fibres"],d:"Fromage blanc 0%, flocons d\'avoine, banane, miel, amandes.",mac:{p:32,g:52,l:8},veg:true},
-    {n:"Omelette Épinards",e:"🍳",cal:380,t:"12 min",tags:["Protéines","Keto"],d:"3 œufs, épinards, champignons.",mac:{p:28,g:6,l:22},veg:true},
-    {n:"Toast Avocat Œuf",e:"🥑",cal:460,t:"8 min",tags:["Équilibré"],d:"Pain complet, avocat, œuf poché.",mac:{p:20,g:38,l:24},veg:true},
-    {n:"Smoothie Vert",e:"🥤",cal:290,t:"5 min",tags:["Vegan"],d:"Épinard, pomme, gingembre, citron, eau de coco.",mac:{p:8,g:56,l:5},veg:true},
+    {n:"Porridge avoine banane",e:"🥣",cal:520,t:"10 min",g:["mass","balanced"],tags:["Énergie","Fibres"],d:"80g flocons avoine, lait, banane, miel, beurre de cacahuète, cannelle.",mac:{p:22,g:78,l:14},veg:true},
+    {n:"Pancakes protéinés",e:"🥞",cal:560,t:"15 min",g:["mass"],tags:["Protéines","Gourmand"],d:"Flocons avoine mixés, 2 œufs, 1 scoop whey, banane, sirop érable.",mac:{p:42,g:62,l:14},veg:true},
+    {n:"Bowl protéiné fromage blanc",e:"🥛",cal:420,t:"8 min",g:["balanced","cut"],tags:["Protéines","Fibres"],d:"Fromage blanc 0%, flocons avoine, fruits rouges, amandes, miel.",mac:{p:32,g:52,l:8},veg:true},
+    {n:"Omelette épinards champignons",e:"🍳",cal:340,t:"12 min",g:["cut"],tags:["Protéines","Léger"],d:"3 œufs, épinards, champignons, un peu de feta.",mac:{p:28,g:6,l:22},veg:true},
+    {n:"Toast avocat œuf poché",e:"🥑",cal:460,t:"10 min",g:["balanced"],tags:["Équilibré","Bons gras"],d:"Pain complet, avocat écrasé, œuf poché, graines.",mac:{p:20,g:38,l:24},veg:true},
+    {n:"Skyr granola fruits",e:"🫙",cal:390,t:"5 min",g:["balanced","cut"],tags:["Protéines","Rapide"],d:"Skyr nature, granola, myrtilles, framboises.",mac:{p:26,g:48,l:8},veg:true},
+    {n:"Smoothie vert détox",e:"🥤",cal:260,t:"5 min",g:["cut"],tags:["Vegan","Léger"],d:"Épinard, pomme, gingembre, citron, eau de coco.",mac:{p:8,g:50,l:5},veg:true},
+    {n:"Œufs brouillés saumon",e:"🍳",cal:430,t:"12 min",g:["cut","balanced"],tags:["Oméga-3","Protéines"],d:"3 œufs brouillés, saumon fumé, ciboulette, demi-avocat.",mac:{p:34,g:6,l:30},veg:false,vegAlt:{n:"Œufs brouillés avocat",e:"🍳",cal:380,t:"10 min",g:["cut","balanced"],tags:["Végé","Protéines"],d:"3 œufs brouillés, avocat, tomates cerises, ciboulette.",mac:{p:22,g:10,l:30}}},
   ],
   lunch:[
-    {n:"Bowl Poulet Quinoa",e:"🍚",cal:580,t:"20 min",tags:["Équilibré"],d:"Quinoa, poulet grillé, légumes rôtis, tahini.",mac:{p:45,g:62,l:14},veg:false,vegAlt:{n:"Bowl Tofu Quinoa",e:"🍚",cal:520,t:"20 min",tags:["Végé","Équilibré"],d:"Quinoa, tofu mariné grillé, légumes rôtis, tahini.",mac:{p:36,g:62,l:14}}},
-    {n:"Steak + Patate douce",e:"🥩",cal:620,t:"25 min",tags:["Force"],d:"Steak 150g, patate douce rôtie, salade.",mac:{p:50,g:48,l:18},veg:false,vegAlt:{n:"Lentilles + Patate douce",e:"🫘",cal:550,t:"20 min",tags:["Végé","Force"],d:"Lentilles beluga, patate douce rôtie, salade verte.",mac:{p:28,g:68,l:8}}},
-    {n:"Saumon + Riz complet",e:"🐟",cal:560,t:"20 min",tags:["Oméga-3"],d:"Saumon vapeur, riz complet, brocolis.",mac:{p:42,g:55,l:16},veg:false,vegAlt:{n:"Tempeh + Riz complet",e:"🌾",cal:510,t:"20 min",tags:["Végé","Protéines"],d:"Tempeh sauté sauce tamari, riz complet, brocolis.",mac:{p:34,g:55,l:16}}},
-    {n:"Wrap Thon",e:"🌯",cal:440,t:"10 min",tags:["Rapide"],d:"Tortilla, thon, avocat, tomates, roquette.",mac:{p:35,g:40,l:12},veg:false,vegAlt:{n:"Wrap Pois Chiches",e:"🌯",cal:410,t:"10 min",tags:["Végé","Rapide"],d:"Tortilla, pois chiches épicés, avocat, tomates, roquette.",mac:{p:18,g:52,l:12}}},
+    {n:"Bowl poulet quinoa",e:"🍚",cal:580,t:"20 min",g:["balanced"],tags:["Équilibré"],d:"Quinoa, poulet grillé, légumes rôtis, sauce tahini.",mac:{p:45,g:62,l:14},veg:false,vegAlt:{n:"Bowl tofu quinoa",e:"🍚",cal:520,t:"20 min",g:["balanced"],tags:["Végé","Équilibré"],d:"Quinoa, tofu mariné grillé, légumes rôtis, tahini.",mac:{p:36,g:62,l:14}}},
+    {n:"Pâtes bolognaise dinde",e:"🍝",cal:680,t:"25 min",g:["mass","strength"],tags:["Masse","Énergie"],d:"120g pâtes complètes, viande hachée de dinde, sauce tomate maison.",mac:{p:48,g:88,l:14},veg:false,vegAlt:{n:"Pâtes bolognaise soja",e:"🍝",cal:610,t:"25 min",g:["mass"],tags:["Végé","Masse"],d:"120g pâtes complètes, protéines de soja texturées, sauce tomate.",mac:{p:32,g:92,l:10}}},
+    {n:"Steak patate douce",e:"🥩",cal:620,t:"25 min",g:["mass","strength"],tags:["Force","Fer"],d:"Steak 150g, patate douce rôtie, haricots verts.",mac:{p:50,g:48,l:18},veg:false,vegAlt:{n:"Lentilles patate douce",e:"🫘",cal:550,t:"20 min",g:["mass","balanced"],tags:["Végé","Force"],d:"Lentilles beluga, patate douce rôtie, salade verte.",mac:{p:28,g:68,l:8}}},
+    {n:"Saumon riz complet",e:"🐟",cal:560,t:"20 min",g:["balanced"],tags:["Oméga-3"],d:"Pavé de saumon vapeur, riz complet, brocolis.",mac:{p:42,g:55,l:16},veg:false,vegAlt:{n:"Tempeh riz complet",e:"🌾",cal:510,t:"20 min",g:["balanced"],tags:["Végé","Protéines"],d:"Tempeh sauté sauce tamari, riz complet, brocolis.",mac:{p:34,g:55,l:16}}},
+    {n:"Poke bowl saumon",e:"🥗",cal:540,t:"15 min",g:["balanced"],tags:["Frais","Oméga-3"],d:"Riz, saumon cru, edamame, avocat, concombre, sauce soja.",mac:{p:38,g:58,l:16},veg:false,vegAlt:{n:"Poke bowl tofu",e:"🥗",cal:490,t:"15 min",g:["balanced"],tags:["Végé","Frais"],d:"Riz, tofu mariné, edamame, avocat, concombre, sauce soja.",mac:{p:26,g:60,l:16}}},
+    {n:"Salade César poulet light",e:"🥗",cal:410,t:"15 min",g:["cut"],tags:["Sèche","Protéines"],d:"Poulet grillé, salade romaine, parmesan, sauce yaourt allégée.",mac:{p:44,g:14,l:18},veg:false,vegAlt:{n:"Salade halloumi grillé",e:"🥗",cal:430,t:"15 min",g:["cut"],tags:["Végé","Sèche"],d:"Halloumi grillé, salade romaine, parmesan, sauce yaourt.",mac:{p:28,g:14,l:28}}},
+    {n:"Wrap thon avocat",e:"🌯",cal:440,t:"10 min",g:["cut","balanced"],tags:["Rapide"],d:"Tortilla complète, thon, avocat, tomates, roquette.",mac:{p:35,g:40,l:12},veg:false,vegAlt:{n:"Wrap pois chiches",e:"🌯",cal:410,t:"10 min",g:["balanced"],tags:["Végé","Rapide"],d:"Tortilla, pois chiches épicés, avocat, tomates, roquette.",mac:{p:18,g:52,l:12}}},
+    {n:"Buddha bowl complet",e:"🥙",cal:640,t:"25 min",g:["mass","balanced"],tags:["Végé","Masse"],d:"Riz, pois chiches rôtis, patate douce, avocat, graines, tahini.",mac:{p:24,g:82,l:22},veg:true},
   ],
   dinner:[
-    {n:"Curry Pois Chiches",e:"🍛",cal:490,t:"30 min",tags:["Vegan"],d:"Pois chiches, lait de coco, épinards, riz basmati.",mac:{p:22,g:72,l:14},veg:true},
-    {n:"Cabillaud Légumes",e:"🐠",cal:380,t:"25 min",tags:["Léger"],d:"Cabillaud en papillote, courgettes, herbes.",mac:{p:38,g:18,l:12},veg:false,vegAlt:{n:"Tofu Légumes",e:"🥦",cal:340,t:"20 min",tags:["Végé","Léger"],d:"Tofu ferme en papillote, courgettes, poivrons, herbes.",mac:{p:24,g:18,l:14}}},
-    {n:"Chicken Stir-fry",e:"🥘",cal:520,t:"20 min",tags:["Rapide"],d:"Poulet sauté, légumes, sauce soja-sésame, riz.",mac:{p:42,g:50,l:12},veg:false,vegAlt:{n:"Tofu Stir-fry",e:"🥢",cal:460,t:"20 min",tags:["Végé","Rapide"],d:"Tofu croustillant, légumes sautés, sauce soja-sésame, riz.",mac:{p:28,g:50,l:14}}},
-    {n:"Omelette Complète",e:"🍳",cal:440,t:"15 min",tags:["Protéines"],d:"4 œufs, fromage, jambon, poivrons.",mac:{p:38,g:8,l:26},veg:false,vegAlt:{n:"Omelette Végétarienne",e:"🍳",cal:380,t:"12 min",tags:["Végé","Protéines"],d:"4 œufs, fromage, poivrons, champignons, épinards.",mac:{p:28,g:10,l:22}}},
+    {n:"Riz cantonais poulet",e:"🍚",cal:620,t:"20 min",g:["mass"],tags:["Masse","Rapide"],d:"Riz sauté, poulet, œuf, petits pois, sauce soja.",mac:{p:42,g:74,l:14},veg:false,vegAlt:{n:"Riz cantonais tofu",e:"🍚",cal:560,t:"20 min",g:["mass"],tags:["Végé","Masse"],d:"Riz sauté, tofu, œuf, petits pois, sauce soja.",mac:{p:28,g:76,l:14}}},
+    {n:"Gratin patate douce poulet",e:"🧀",cal:600,t:"35 min",g:["mass","strength"],tags:["Masse","Réconfort"],d:"Patate douce, blanc de poulet, béchamel légère, gruyère.",mac:{p:46,g:56,l:18},veg:false,vegAlt:{n:"Gratin patate douce haricots",e:"🧀",cal:540,t:"35 min",g:["mass"],tags:["Végé","Masse"],d:"Patate douce, haricots rouges, béchamel légère, gruyère.",mac:{p:24,g:68,l:16}}},
+    {n:"Chicken stir-fry",e:"🥘",cal:520,t:"20 min",g:["balanced"],tags:["Rapide"],d:"Poulet sauté, légumes croquants, sauce soja-sésame, riz.",mac:{p:42,g:50,l:12},veg:false,vegAlt:{n:"Tofu stir-fry",e:"🥢",cal:460,t:"20 min",g:["balanced"],tags:["Végé","Rapide"],d:"Tofu croustillant, légumes sautés, sauce soja-sésame, riz.",mac:{p:28,g:50,l:14}}},
+    {n:"Curry pois chiches coco",e:"🍛",cal:490,t:"30 min",g:["balanced"],tags:["Vegan","Réconfort"],d:"Pois chiches, lait de coco, épinards, riz basmati.",mac:{p:22,g:72,l:14},veg:true},
+    {n:"Cabillaud légumes",e:"🐠",cal:360,t:"25 min",g:["cut"],tags:["Sèche","Léger"],d:"Cabillaud en papillote, courgettes, poivrons, herbes.",mac:{p:38,g:18,l:10},veg:false,vegAlt:{n:"Tofu légumes papillote",e:"🥦",cal:340,t:"20 min",g:["cut"],tags:["Végé","Léger"],d:"Tofu ferme en papillote, courgettes, poivrons, herbes.",mac:{p:24,g:18,l:14}}},
+    {n:"Omelette complète",e:"🍳",cal:420,t:"15 min",g:["cut"],tags:["Protéines","Sèche"],d:"4 œufs, fromage, jambon, poivrons.",mac:{p:38,g:8,l:26},veg:false,vegAlt:{n:"Omelette végétarienne",e:"🍳",cal:360,t:"12 min",g:["cut"],tags:["Végé","Protéines"],d:"4 œufs, fromage, poivrons, champignons, épinards.",mac:{p:28,g:10,l:22}}},
+    {n:"Soupe lentilles légumes",e:"🍲",cal:320,t:"30 min",g:["cut"],tags:["Vegan","Satiété"],d:"Lentilles corail, carottes, tomates, cumin, bouillon.",mac:{p:18,g:48,l:4},veg:true},
+    {n:"Tartare saumon avocat",e:"🥑",cal:440,t:"15 min",g:["balanced","cut"],tags:["Frais","Oméga-3"],d:"Saumon frais coupé, avocat, citron vert, sésame, riz.",mac:{p:34,g:24,l:24},veg:false,vegAlt:{n:"Tartare avocat edamame",e:"🥑",cal:380,t:"15 min",g:["balanced"],tags:["Végé","Frais"],d:"Avocat, edamame, concombre, citron vert, sésame, riz.",mac:{p:18,g:38,l:20}}},
   ],
   snacks:[
-    {n:"Shake Post-training",e:"🥤",cal:280,t:"2 min",tags:["Récup"],d:"Whey, lait, banane. Dans les 30 min post-séance.",mac:{p:30,g:28,l:4},veg:true},
-    {n:"Yaourt + Fruits secs",e:"🫙",cal:220,t:"2 min",tags:["Calcium"],d:"Yaourt grec, noix de cajou, amandes, miel.",mac:{p:14,g:22,l:10},veg:true},
-    {n:"Crackers + Houmous",e:"🫘",cal:180,t:"2 min",tags:["Fibres"],d:"Crackers sésame, houmous, carottes.",mac:{p:6,g:26,l:7},veg:true},
-    {n:"Banane + Beurre amande",e:"🍌",cal:250,t:"1 min",tags:["Énergie"],d:"1 banane + beurre d\'amande naturel.",mac:{p:6,g:36,l:10},veg:true},
+    {n:"Shake mass gainer maison",e:"🥤",cal:480,t:"3 min",g:["mass"],tags:["Masse","Récup"],d:"Whey, lait entier, banane, flocons avoine, beurre cacahuète.",mac:{p:38,g:52,l:14},veg:true},
+    {n:"Shake post-training",e:"🥤",cal:280,t:"2 min",g:["balanced","strength"],tags:["Récup"],d:"Whey, lait, banane. Dans les 30 min post-séance.",mac:{p:30,g:28,l:4},veg:true},
+    {n:"Barre énergétique maison",e:"🍫",cal:320,t:"5 min",g:["mass"],tags:["Énergie"],d:"Dattes, flocons avoine, beurre cacahuète, pépites chocolat.",mac:{p:10,g:46,l:12},veg:true},
+    {n:"Banane beurre amande",e:"🍌",cal:250,t:"1 min",g:["mass","balanced"],tags:["Énergie"],d:"1 banane et beurre amande naturel.",mac:{p:6,g:36,l:10},veg:true},
+    {n:"Yaourt grec fruits secs",e:"🫙",cal:220,t:"2 min",g:["balanced"],tags:["Calcium"],d:"Yaourt grec, noix de cajou, amandes, filet de miel.",mac:{p:14,g:22,l:10},veg:true},
+    {n:"Skyr miel cannelle",e:"🥛",cal:160,t:"1 min",g:["cut"],tags:["Sèche","Protéines"],d:"Skyr nature, filet de miel, cannelle.",mac:{p:20,g:16,l:1},veg:true},
+    {n:"Galette riz fromage blanc",e:"🍘",cal:140,t:"2 min",g:["cut"],tags:["Sèche","Léger"],d:"2 galettes de riz, fromage blanc, fruits rouges.",mac:{p:12,g:20,l:1},veg:true},
+    {n:"Poignée amandes noix",e:"🥜",cal:200,t:"1 min",g:["balanced","cut"],tags:["Bons gras"],d:"30g mélange amandes, noix, noisettes.",mac:{p:7,g:6,l:18},veg:true},
   ]
+};
+
+// Goal filters for nutrition
+const NUT_GOALS = {
+  mass:    {label:"Prise de masse", e:"💪", desc:"Surplus calorique, glucides élevés"},
+  cut:     {label:"Sèche / Perte",  e:"⚡", desc:"Déficit, protéines hautes, léger"},
+  balanced:{label:"Équilibré",      e:"🥗", desc:"Maintien, repas variés"},
 };
 
 const GOAL_LBL = {shape:"Remise en forme",strength:"Gain de force",endurance:"Endurance",loss:"Perte de poids"};
@@ -949,6 +972,7 @@ let userData    = null;   // Firestore data {username, profile, workouts, weight
 let obData      = {location:null, goals:[], days:[], age:null, weight:null, weight_goal:null, level:null, diet:null};
 let currentZone = null;
 let nutTab      = 'breakfast';
+let nutGoal     = null; // 'mass' | 'cut' | 'balanced' — null = auto from profile
 let isDark      = true;
 
 // ── Firestore helpers ──────────────────────────────
@@ -1541,24 +1565,54 @@ function closeSession(){
 }
 
 // ── Nutrition ───────────────────────────────────────
+// Detect default nutrition goal from profile weight direction
+function defaultNutGoal(p){
+  const wStart=p.weight_start||p.weight||70;
+  const wGoal=p.weight_goal||wStart;
+  const diff=wGoal-wStart;
+  if(diff>0.5) return 'mass';
+  if(diff<-0.5) return 'cut';
+  return 'balanced';
+}
+// Calorie adjustment per nutrition goal
+const NUT_GOAL_ADJ={mass:300,cut:-400,balanced:0};
+
+window.setNutGoal=(g)=>{ nutGoal=g; renderNutrition(); };
+
 window.renderNutrition=(tab)=>{
   if(tab) nutTab=tab;
   const p=userData?.profile||{};
   const isVeg=p.diet==='vegetarian';
-  const wStart=p.weight_start||p.weight||70;
-  const wGoal=p.weight_goal||wStart;
-  const diff=wGoal-wStart;
-  // calorie adjustment: +200 kcal/day to gain, -300 kcal/day to lose
-  const calAdj=diff>0.5?200:diff<-0.5?-300:0;
-  const goalLabel=diff>0.5?`🎯 Objectif : prendre ${(diff).toFixed(1)} kg — +200 kcal/j`:diff<-0.5?`🎯 Objectif : perdre ${(-diff).toFixed(1)} kg — -300 kcal/j`:'🎯 Objectif : maintien du poids';
-  const goalColor=diff>0.5?'#16a34a':diff<-0.5?'#DC2626':'#F97316';
+  if(!nutGoal) nutGoal=defaultNutGoal(p);
+  const calAdj=NUT_GOAL_ADJ[nutGoal]||0;
 
+  // ── Macro target (Mifflin-St Jeor) ──
+  const w=p.weight_start||70, a=p.age||25;
+  const bmr=Math.round(10*w+6.25*170-5*a+5);
+  const actFactor={1:1.2,2:1.375,3:1.375,4:1.55,5:1.55,6:1.725,7:1.9}[p.days?.length||3]||1.375;
+  const tdee=Math.round(bmr*actFactor);
+  const target=tdee+calAdj;
+  const protG=Math.round(w*(nutGoal==='cut'?2.2:nutGoal==='mass'?2:1.8));
+  const lipG=Math.round(target*(nutGoal==='cut'?0.25:0.28)/9);
+  const carbG=Math.max(0,Math.round((target-protG*4-lipG*9)/4));
+
+  // ── Goal filter buttons ──
+  const goalBtns=Object.entries(NUT_GOALS).map(([k,v])=>`
+    <button onclick="setNutGoal('${k}')" class="flex-1 rounded-xl py-2 px-1 text-center transition" style="${nutGoal===k?'background:linear-gradient(135deg,#DC2626,#F97316);color:white':'background:var(--bg-inner);color:var(--text-muted)'}">
+      <div class="text-base leading-none">${v.e}</div>
+      <div class="text-xs font-bold mt-0.5">${v.label}</div>
+    </button>`).join('');
+
+  // ── Meal tabs ──
   const tabs=[{k:'breakfast',l:'Petit-déj',e:'🌅'},{k:'lunch',l:'Déjeuner',e:'☀️'},{k:'dinner',l:'Dîner',e:'🌙'},{k:'snacks',l:'Collation',e:'⚡'}];
   const tabsHtml=tabs.map(t=>`<button onclick="renderNutrition('${t.k}')" class="flex-1 py-2 text-xs font-semibold rounded-xl" style="${nutTab===t.k?'background:linear-gradient(135deg,#DC2626,#F97316);color:white':'color:var(--text-muted)'}">${t.e} ${t.l}</button>`).join('');
-  const mealsHtml=MEALS[nutTab].map(raw=>{
-    // pick vegetarian alternative if available and user is veg
+
+  // ── Filter meals by goal ──
+  const filtered=MEALS[nutTab].filter(m=>!m.g||m.g.includes(nutGoal));
+  const shown=filtered.length?filtered:MEALS[nutTab];
+  const mealsHtml=shown.map(raw=>{
     const m=(isVeg&&!raw.veg&&raw.vegAlt)?raw.vegAlt:raw;
-    const adjCal=m.cal+calAdj;
+    const adjCal=m.cal+(nutTab==='snacks'?Math.round(calAdj/4):Math.round(calAdj/3));
     const tot=m.mac.p+m.mac.g+m.mac.l;
     const vegBadge=(isVeg&&!raw.veg&&raw.vegAlt)?'<span class="badge" style="background:#16a34a22;color:#16a34a">🌿 Végé</span>':'';
     return`<div class="card rounded-xl p-3.5 cursor-pointer" onclick="this.querySelector('.meal-d').classList.toggle('hidden')">
@@ -1576,36 +1630,139 @@ window.renderNutrition=(tab)=>{
           <div class="flex items-center gap-2 mb-1.5"><span class="text-xs w-16" style="color:var(--text-muted)">${l}</span>
             <div class="flex-1 h-1.5 rounded-full" style="background:var(--bg-faint)"><div class="h-full rounded-full" style="width:${Math.round(v/tot*100)}%;background:${c}"></div></div>
             <span class="text-xs font-semibold w-7 text-right">${v}g</span></div>`).join('')}
-        ${calAdj!==0?`<p class="text-xs mt-2" style="color:var(--text-faint)">${calAdj>0?'+'+calAdj:calAdj} kcal ajustés selon ton objectif</p>`:''}
       </div>
     </div>`;
   }).join('');
 
   const dietBadge=isVeg?'🌿 Végétarien':'🥩 Omnivore';
   document.getElementById('tab-nutrition').innerHTML=`<div class="max-w-sm mx-auto">
-    <div class="mb-4"><p class="text-sm" style="color:var(--text-muted)">Alimentation adaptée</p><h1 class="font-display text-4xl font-bold mt-0.5">NUTRITION</h1></div>
-    <!-- goal + diet banner -->
-    <div class="card rounded-xl p-3 mb-4 flex items-center gap-3">
-      <div class="flex-1">
-        <div class="text-xs font-semibold" style="color:${goalColor}">${goalLabel}</div>
+    <div class="mb-4"><p class="text-sm" style="color:var(--text-muted)">Adaptée à ton objectif</p><h1 class="font-display text-4xl font-bold mt-0.5">NUTRITION</h1></div>
+
+    <!-- Goal filter -->
+    <div class="flex gap-2 mb-3">${goalBtns}</div>
+    <p class="text-xs mb-4 text-center" style="color:var(--text-faint)">${NUT_GOALS[nutGoal].desc} · ${dietBadge}</p>
+
+    <!-- Daily macro target -->
+    <div class="card rounded-2xl p-4 mb-4">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-display text-sm font-bold">TES BESOINS DU JOUR</h3>
+        <span class="badge font-semibold" style="background:linear-gradient(90deg,#DC262622,#F9731622);color:#F97316">${NUT_GOALS[nutGoal].e} ${NUT_GOALS[nutGoal].label}</span>
       </div>
-      <div class="badge" style="background:var(--bg-inner);color:var(--text-muted)">${dietBadge}</div>
+      <div class="text-center mb-3">
+        <span class="font-display text-4xl font-bold text-fire">${target}</span>
+        <span class="text-xs" style="color:var(--text-faint)"> kcal/jour</span>
+        <div class="text-xs mt-0.5" style="color:var(--text-faint)">Maintien ${tdee} kcal ${calAdj>0?'· surplus +'+calAdj:calAdj<0?'· déficit '+calAdj:''}</div>
+      </div>
+      <div class="grid grid-cols-3 gap-2">
+        ${[['Protéines','#DC2626',protG],['Glucides','#F97316',carbG],['Lipides','#FBBF24',lipG]].map(([l,c,v])=>`
+        <div class="rounded-xl p-2 text-center" style="background:var(--bg-inner)">
+          <div class="text-xs" style="color:var(--text-muted)">${l}</div>
+          <div class="font-display text-lg font-bold" style="color:${c}">${v}<span class="text-xs">g</span></div>
+        </div>`).join('')}
+      </div>
     </div>
-    <div class="flex gap-1 p-1 rounded-2xl card mb-4">${tabsHtml}</div>
+
+    <!-- Menu du jour -->
+    <button onclick="generateDayMenu()" class="btn-fire w-full rounded-2xl py-3.5 text-white font-display text-lg font-bold mb-4 flex items-center justify-center gap-2">
+      🍽️ GÉNÉRER MON MENU DU JOUR
+    </button>
+    <div id="day-menu"></div>
+
+    <!-- Meal tabs + recipes -->
+    <div class="flex gap-1 p-1 rounded-2xl card mb-3">${tabsHtml}</div>
+    <div class="flex items-center justify-between mb-2 px-1">
+      <span class="text-xs font-semibold" style="color:var(--text-muted)">${shown.length} recette${shown.length>1?'s':''} pour ${NUT_GOALS[nutGoal].label.toLowerCase()}</span>
+    </div>
     <div class="space-y-2.5 mb-5">${mealsHtml}</div>
+
+    <!-- Focus -->
     <div class="card rounded-2xl p-4">
       <h3 class="font-display text-sm font-bold mb-3">FOCUS NUTRITIONNEL</h3>
       ${(()=>{
-        const goals=p.goals||(p.goal?[p.goal]:[]);
-        // base tips always shown
-        const base=[['💧','Hydratation','2L min/jour, 3L les jours d\'effort'],[isVeg?'🌿':'🥩','Protéines',isVeg?'Légumineuses, tofu, tempeh, œufs':'1.6–2g/kg de poids corporel']];
-        // goal-specific tips (deduplicated by title)
+        const tipsByGoal={
+          mass:[['💪','Surplus calorique','+300 à +500 kcal/jour pour construire du muscle'],['🍚','Glucides élevés','Riz, pâtes, avoine, patate douce autour des séances'],['🥩','Protéines','2g/kg réparties sur 4-5 repas'],['🌙','Collation du soir','Caséine ou fromage blanc avant de dormir']],
+          cut:[['⚡','Déficit contrôlé','-400 kcal/jour, perte de 0.5-0.7 kg/semaine'],['🥩','Protéines hautes','2.2g/kg pour préserver le muscle en sèche'],['🥦','Volume + fibres','Légumes à volonté pour la satiété'],['💧','Hydratation','2.5-3L/jour, coupe la fausse faim']],
+          balanced:[['🥗','Équilibre','40% glucides / 30% protéines / 30% lipides'],['🌈','Variété','Change de sources pour tous les micronutriments'],['⏰','Régularité','3 repas + 1-2 collations à heures fixes']],
+        };
+        const base=[['💧','Hydratation','2L minimum par jour, plus les jours de sport'],[isVeg?'🌿':'🥩','Source protéines',isVeg?'Légumineuses, tofu, tempeh, œufs, skyr':'Viande maigre, poisson, œufs, laitages']];
         const seen=new Set(base.map(b=>b[1]));
-        const extra=goals.flatMap(g=>(GOAL_NUT_TIPS[g]||[]).filter(([,t])=>!seen.has(t)&&seen.add(t)));
+        const extra=(tipsByGoal[nutGoal]||[]).filter(([,t])=>!seen.has(t)&&seen.add(t));
         return [...base,...extra].map(([e,t,d])=>`<div class="flex gap-3 mb-3"><span class="text-lg">${e}</span><div><div class="font-semibold text-sm">${t}</div><div class="text-xs" style="color:var(--text-muted)">${d}</div></div></div>`).join('');
       })()}
     </div>
   </div>`;
+};
+
+// ── Menu du jour (générateur) ───────────────────────
+window.generateDayMenu=()=>{
+  const p=userData?.profile||{};
+  const isVeg=p.diet==='vegetarian';
+  if(!nutGoal) nutGoal=defaultNutGoal(p);
+  const calAdj=NUT_GOAL_ADJ[nutGoal]||0;
+  // Target
+  const w=p.weight_start||70, a=p.age||25;
+  const bmr=Math.round(10*w+6.25*170-5*a+5);
+  const actFactor={1:1.2,2:1.375,3:1.375,4:1.55,5:1.55,6:1.725,7:1.9}[p.days?.length||3]||1.375;
+  const target=Math.round(bmr*actFactor)+calAdj;
+
+  // Resolve a meal (apply veg alt)
+  const resolve=(m)=>(isVeg&&!m.veg&&m.vegAlt)?m.vegAlt:m;
+  // Candidate pools per category, filtered by goal
+  const pool=(cat)=>{
+    const f=MEALS[cat].filter(m=>!m.g||m.g.includes(nutGoal));
+    return (f.length?f:MEALS[cat]).map(resolve);
+  };
+  const bP=pool('breakfast'), lP=pool('lunch'), sP=pool('snacks'), dP=pool('dinner');
+
+  // Try random combinations to get closest to target (calorie split ~25/35/15/25)
+  const rand=arr=>arr[Math.floor(Math.random()*arr.length)];
+  let best=null, bestDiff=Infinity;
+  for(let i=0;i<400;i++){
+    const combo={breakfast:rand(bP),lunch:rand(lP),snacks:rand(sP),dinner:rand(dP)};
+    const tot=combo.breakfast.cal+combo.lunch.cal+combo.snacks.cal+combo.dinner.cal;
+    const diff=Math.abs(tot-target);
+    if(diff<bestDiff){bestDiff=diff;best={...combo,_tot:tot};}
+    if(diff<60) break;
+  }
+
+  const totP=best.breakfast.mac.p+best.lunch.mac.p+best.snacks.mac.p+best.dinner.mac.p;
+  const totC=best.breakfast.mac.g+best.lunch.mac.g+best.snacks.mac.g+best.dinner.mac.g;
+  const totL=best.breakfast.mac.l+best.lunch.mac.l+best.snacks.mac.l+best.dinner.mac.l;
+  const labels={breakfast:['🌅','Petit-déjeuner'],lunch:['☀️','Déjeuner'],snacks:['⚡','Collation'],dinner:['🌙','Dîner']};
+
+  const rows=['breakfast','lunch','snacks','dinner'].map(cat=>{
+    const m=best[cat];const[e,l]=labels[cat];
+    return`<div class="flex items-center gap-3 py-2.5" style="border-bottom:1px solid var(--border)">
+      <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg flex-shrink-0" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${m.e}</div>
+      <div class="flex-1 min-w-0">
+        <div class="text-xs" style="color:var(--text-faint)">${e} ${l}</div>
+        <div class="font-semibold text-sm truncate">${m.n}</div>
+        <div class="text-xs" style="color:var(--text-muted)">P${m.mac.p} · G${m.mac.g} · L${m.mac.l}</div>
+      </div>
+      <div class="text-right flex-shrink-0"><span class="font-display font-bold text-fire">${m.cal}</span><div class="text-xs" style="color:var(--text-faint)">kcal</div></div>
+    </div>`;
+  }).join('');
+
+  const diffPct=Math.round((best._tot-target));
+  document.getElementById('day-menu').innerHTML=`
+    <div class="card rounded-2xl p-4 mb-4">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="font-display text-sm font-bold">🍽️ MENU DU JOUR</h3>
+        <button onclick="generateDayMenu()" class="text-xs font-semibold px-2.5 py-1 rounded-lg" style="background:var(--bg-inner);color:var(--text-muted)">🔄 Régénérer</button>
+      </div>
+      <p class="text-xs mb-2" style="color:var(--text-faint)">${NUT_GOALS[nutGoal].e} ${NUT_GOALS[nutGoal].label}${isVeg?' · 🌿 Végé':''}</p>
+      ${rows}
+      <div class="mt-3 pt-3 grid grid-cols-4 gap-2 text-center" style="border-top:1px solid var(--border)">
+        <div><div class="font-display text-lg font-bold text-fire">${best._tot}</div><div class="text-xs" style="color:var(--text-muted)">kcal</div></div>
+        <div><div class="font-display text-lg font-bold" style="color:#DC2626">${totP}</div><div class="text-xs" style="color:var(--text-muted)">prot.</div></div>
+        <div><div class="font-display text-lg font-bold" style="color:#F97316">${totC}</div><div class="text-xs" style="color:var(--text-muted)">gluc.</div></div>
+        <div><div class="font-display text-lg font-bold" style="color:#FBBF24">${totL}</div><div class="text-xs" style="color:var(--text-muted)">lip.</div></div>
+      </div>
+      <div class="mt-2 text-xs text-center rounded-lg py-1.5" style="background:var(--bg-inner);color:${Math.abs(diffPct)<=150?'#16a34a':'var(--text-muted)'}">
+        Cible : ${target} kcal · ${diffPct>=0?'+':''}${diffPct} kcal ${Math.abs(diffPct)<=150?'✅ parfait':''}
+      </div>
+    </div>`;
+  document.getElementById('day-menu').scrollIntoView({behavior:'smooth',block:'nearest'});
 };
 
 // ── Profile ─────────────────────────────────────────

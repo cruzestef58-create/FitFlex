@@ -161,19 +161,14 @@
       <button id="login-btn" onclick="doLogin()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold">SE CONNECTER</button>
       <button type="button" onclick="toggleForgot()" class="w-full text-center text-xs py-1" style="background:none;border:none;cursor:pointer;color:var(--text-faint)">Code oublié ou ancien compte ?</button>
       <!-- Panneau récupération / migration -->
-      <div id="forgot-panel" class="hidden rounded-2xl p-3 space-y-3" style="background:var(--bg-inner);border:1px solid var(--border-in)">
-        <div>
-          <p class="text-xs font-semibold mb-1.5" style="color:var(--text-muted)">Tu avais un ancien mot de passe ? Entre-le une dernière fois pour le remplacer par un code.</p>
-          <input id="mig-user" class="inp mb-2" type="text" placeholder="Ton pseudo" autocapitalize="none"/>
-          <input id="mig-old" class="inp mb-2" type="password" placeholder="Ancien mot de passe"/>
-          <input id="mig-pin" class="pin-inp mb-2" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" oninput="onPinInput(this)"/>
-          <button onclick="migrateToPin()" class="w-full rounded-xl py-2.5 text-sm font-bold text-white" style="background:linear-gradient(90deg,#DC2626,#F97316);border:none;cursor:pointer">Définir mon code 🔐</button>
-        </div>
-        <div style="border-top:1px solid var(--border)" class="pt-3">
-          <p class="text-xs font-semibold mb-1.5" style="color:var(--text-muted)">Code totalement oublié ? Reçois un lien par mail :</p>
-          <input id="forgot-pseudo" class="inp mb-2" type="text" placeholder="Ton pseudo" autocapitalize="none"/>
-          <button onclick="doForgotPassword()" class="w-full rounded-xl py-2.5 text-sm font-bold" style="background:var(--bg-faint);color:var(--text);border:none;cursor:pointer">Envoyer le lien 📬</button>
-        </div>
+      <div id="forgot-panel" class="hidden rounded-2xl p-3 space-y-2" style="background:var(--bg-inner);border:1px solid var(--border-in)">
+        <p class="text-xs font-semibold" style="color:var(--text-muted)">Ton compte date d'avant les codes ? Entre tes anciens identifiants une dernière fois pour le convertir.</p>
+        <input id="mig-user" class="inp" type="text" placeholder="Ton pseudo" autocapitalize="none"/>
+        <input id="mig-email" class="inp" type="email" placeholder="Email du compte" autocapitalize="none" inputmode="email"/>
+        <input id="mig-old" class="inp" type="password" placeholder="Ancien mot de passe"/>
+        <input id="mig-pin" class="pin-inp" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" oninput="onPinInput(this)"/>
+        <button onclick="migrateToPin()" class="w-full rounded-xl py-2.5 text-sm font-bold text-white" style="background:linear-gradient(90deg,#DC2626,#F97316);border:none;cursor:pointer">Convertir en code 🔐</button>
+        <p class="text-xs" style="color:var(--text-faint)">Code oublié sans ancien compte ? Crée-en un nouveau depuis l'onglet Inscription.</p>
         <div id="forgot-msg" class="hidden text-xs rounded-xl p-2.5" style="background:var(--bg-faint);color:var(--text-muted)"></div>
       </div>
     </div>
@@ -515,7 +510,7 @@
 import { initializeApp }                          from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword,
          signInWithEmailAndPassword, signOut,
-         sendPasswordResetEmail, updatePassword,
+         sendPasswordResetEmail, updatePassword, updateEmail,
          onAuthStateChanged }                     from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc,
          updateDoc, serverTimestamp }             from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
@@ -1058,7 +1053,6 @@ let isDark      = true;
 
 // ── Firestore helpers ──────────────────────────────
 const userRef = () => doc(db, 'users', currentUser.uid);
-const usernameRef = (u) => doc(db, 'usernames', u.toLowerCase());
 
 // Migration des anciennes zones (upper/lower) vers le nouveau split musculaire
 const ZONE_MIGRATION = {upper:'chest', lower:'legs', core:'core', fullbody:'fullbody'};
@@ -1173,10 +1167,7 @@ window.quickSwitch = async (username) => {
   if(!acc || !acc.pin){ toast('Reconnecte-toi une fois avec ton code','⚠️'); return; }
   toast('Connexion à '+username+'...','🔄');
   try {
-    let email = acc.email;
-    if(!email){ const s = await getDoc(usernameRef(username)); email = s.exists()?s.data().email:null; }
-    if(!email){ toast('Compte introuvable','❌'); return; }
-    await signInWithEmailAndPassword(auth, email, pinToPassword(username, acc.pin));
+    await signInWithEmailAndPassword(auth, authEmail(username), pinToPassword(username, acc.pin));
   } catch(e){
     toast('Échec — le code a peut-être changé','❌');
     removeSavedAccount(username);
@@ -1185,6 +1176,8 @@ window.quickSwitch = async (username) => {
 
 // Le code à 4 chiffres est transformé en mot de passe Firebase valide (min. 6 car.)
 const pinToPassword = (user, pin) => 'ff·' + user.toLowerCase() + '·' + pin;
+// Identité Firebase dérivée du pseudo : aucune lecture Firestore avant connexion
+const authEmail = (user) => user.toLowerCase() + '@fitflex-app.io';
 const isPin = v => /^\d{4}$/.test(v);
 window.onPinInput = (el) => {
   el.value = el.value.replace(/\D/g,'').slice(0,4);
@@ -1199,40 +1192,46 @@ window.doLogin = async () => {
   const btn = document.getElementById('login-btn');
   btn.disabled=true; btn.textContent='Connexion...';
   try {
-    const uSnap = await getDoc(usernameRef(u));
-    if (!uSnap.exists()) { toast('Pseudo introuvable','❌'); return; }
-    const email = uSnap.data().email;
-    await signInWithEmailAndPassword(auth, email, pinToPassword(u, pin));
-    saveAccount({username:u, pin, email});
+    await signInWithEmailAndPassword(auth, authEmail(u), pinToPassword(u, pin));
+    saveAccount({username:u, pin});
   } catch(e) {
-    if (e.code==='auth/wrong-password' || e.code==='auth/invalid-credential') {
-      toast('Code incorrect (ancien compte ? touche « Code oublié »)','❌');
-    } else toast('Erreur de connexion','❌');
+    if (e.code==='auth/wrong-password' || e.code==='auth/invalid-credential' || e.code==='auth/user-not-found') {
+      toast('Pseudo ou code incorrect','❌');
+    } else if (e.code==='auth/too-many-requests') {
+      toast('Trop de tentatives, réessaie dans un moment','⏳');
+    } else if (e.code==='auth/network-request-failed') {
+      toast('Pas de connexion internet','📶');
+    } else toast('Erreur : '+(e.code||e.message),'❌');
   } finally { btn.disabled=false; btn.textContent='SE CONNECTER'; }
 };
 
 // Ancien compte avec mot de passe long -> bascule vers un code à 4 chiffres
 window.migrateToPin = async () => {
   const u = document.getElementById('mig-user').value.trim().toLowerCase();
+  const oldEmail = document.getElementById('mig-email').value.trim().toLowerCase();
   const oldPass = document.getElementById('mig-old').value;
   const pin = document.getElementById('mig-pin').value.trim();
   const msgEl = document.getElementById('forgot-msg');
   msgEl.classList.add('hidden');
-  if (!u || !oldPass) { toast('Pseudo et ancien mot de passe requis','⚠️'); return; }
+  if (!u || !oldEmail || !oldPass) { toast('Pseudo, email et ancien mot de passe requis','⚠️'); return; }
   if (!isPin(pin)) { toast('Choisis un code à 4 chiffres','⚠️'); return; }
+  const show = (t) => { msgEl.innerHTML = t; msgEl.classList.remove('hidden'); };
   try {
-    const uSnap = await getDoc(usernameRef(u));
-    if (!uSnap.exists()) { toast('Pseudo introuvable','❌'); return; }
-    const email = uSnap.data().email;
-    const cred = await signInWithEmailAndPassword(auth, email, oldPass);
+    // Connexion avec l'ancienne identité, puis bascule vers pseudo + code
+    const cred = await signInWithEmailAndPassword(auth, oldEmail, oldPass);
     await updatePassword(cred.user, pinToPassword(u, pin));
-    saveAccount({username:u, pin, email});
-    toast('Code enregistré 🔐 Connecté !','✅');
+    try {
+      await updateEmail(cred.user, authEmail(u));
+      saveAccount({username:u, pin});
+      toast('Compte converti 🔐 Connecté !','✅');
+    } catch(e2) {
+      show('⚠️ Le code est enregistré, mais Firebase refuse de changer l\'identifiant '
+         + '(<b>'+(e2.code||'')+'</b>).<br>Crée plutôt un nouveau compte depuis l\'onglet Inscription.');
+    }
   } catch(e) {
-    msgEl.innerHTML = e.code==='auth/wrong-password'||e.code==='auth/invalid-credential'
-      ? '❌ Ancien mot de passe incorrect.'
-      : '❌ '+e.message;
-    msgEl.classList.remove('hidden');
+    show(e.code==='auth/wrong-password'||e.code==='auth/invalid-credential'
+      ? '❌ Email ou ancien mot de passe incorrect.'
+      : '❌ '+(e.code||e.message));
   }
 };
 
@@ -1250,19 +1249,22 @@ window.doRegister = async () => {
   const btn = document.getElementById('reg-btn');
   btn.disabled=true; btn.textContent='Création...';
   try {
-    const uSnap = await getDoc(usernameRef(u));
-    if (uSnap.exists()) { toast('Pseudo déjà pris','❌'); return; }
-    const cred = await createUserWithEmailAndPassword(auth, realEmail, pinToPassword(u, pin));
+    // L'unicité du pseudo est garantie par Firebase (email dérivé unique),
+    // donc aucune lecture Firestore n'est nécessaire avant la création.
+    const cred = await createUserWithEmailAndPassword(auth, authEmail(u), pinToPassword(u, pin));
     const uid = cred.user.uid;
-    await setDoc(usernameRef(u), {uid, email: realEmail});
     await setDoc(doc(db,'users',uid), {
       username: u, email: realEmail, profile: null,
       workouts: [], weight: [], createdAt: new Date().toISOString()
     });
-    saveAccount({username:u, pin, email:realEmail});
+    saveAccount({username:u, pin});
     toast('Bienvenue '+u+' 🎉','✅');
   } catch(e) {
-    const msg = e.code==='auth/email-already-in-use' ? 'Cet email a déjà un compte' : ('Erreur: '+e.message);
+    let msg;
+    if (e.code==='auth/email-already-in-use') msg='Ce pseudo est déjà pris';
+    else if (e.code==='auth/network-request-failed') msg='Pas de connexion internet';
+    else if (e.code==='permission-denied') msg='Base de données bloquée (règles Firestore)';
+    else msg='Erreur : '+(e.code||e.message);
     toast(msg,'❌');
   } finally { btn.disabled=false; btn.textContent='CRÉER MON COMPTE'; }
 };
@@ -1272,37 +1274,10 @@ window.toggleForgot = () => {
   panel.classList.toggle('hidden');
   if (!panel.classList.contains('hidden')) {
     const u = document.getElementById('login-user').value.trim().toLowerCase();
-    if (u) {
-      document.getElementById('forgot-pseudo').value = u;
-      document.getElementById('mig-user').value = u;
-    }
-    document.getElementById('mig-old').focus();
+    if (u) document.getElementById('mig-user').value = u;
+    document.getElementById('mig-email').focus();
   }
 };
-window.doForgotPassword = async () => {
-  const u = document.getElementById('forgot-pseudo').value.trim().toLowerCase();
-  const msgEl = document.getElementById('forgot-msg');
-  msgEl.classList.add('hidden');
-  if (!u) { toast('Entre ton pseudo','⚠️'); return; }
-  try {
-    const uSnap = await getDoc(usernameRef(u));
-    if (!uSnap.exists()) { toast('Pseudo introuvable','❌'); return; }
-    const email = uSnap.data().email || '';
-    if (!email || email.endsWith('@fitflex-app.io')) {
-      // Vieux compte sans vrai email — afficher message explicatif
-      msgEl.innerHTML = '⚠️ Ce compte a été créé sans email réel.<br>Crée un nouveau compte avec ton email pour pouvoir récupérer ton mot de passe.';
-      msgEl.classList.remove('hidden');
-      return;
-    }
-    await sendPasswordResetEmail(auth, email);
-    toast('Lien envoyé sur ' + email.replace(/(.{2}).+(@.+)/, '$1…$2') + ' 📬','✅');
-    document.getElementById('forgot-panel').classList.add('hidden');
-    document.getElementById('forgot-pseudo').value = '';
-  } catch(e) {
-    toast('Erreur : ' + e.message, '❌');
-  }
-};
-
 window.logout = async () => {
   await signOut(auth);
   currentUser=null; userData=null;

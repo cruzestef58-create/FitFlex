@@ -228,7 +228,7 @@
         <div><div class="font-display text-xl font-bold">À LA MAISON</div><p class="text-xs mt-0.5" style="color:var(--text-muted)">Poids du corps, élastiques, chaise</p></div>
       </div>
     </div>
-    <button id="ob-next-1" onclick="obStep(2)" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold mt-5" disabled>CONTINUER →</button>
+    <button id="ob-next-1" onclick="obNext1()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold mt-5" disabled>CONTINUER →</button>
   </div>
   <!-- Step 2 -->
   <div id="ob-2" class="ob-step hidden flex-1 flex flex-col">
@@ -542,6 +542,8 @@ const EXERCISES = {
       {n:"Développé haltères à plat",s:"4×10-12",r:"75s",e:"🏋️",m:"Pectoraux · Stabilisateurs",d:"Haltères à plat, descendre plus bas que la barre.",tip:"Meilleure amplitude que la barre.",a:"push",lvl:2},
       {n:"Pull-over haltère",s:"3×12",r:"60s",e:"🔄",m:"Pectoraux · Grand dorsal",d:"Allongé en travers du banc, haltère derrière la tête.",tip:"Étire bien la cage thoracique.",a:"push",lvl:2},
       {n:"Pompes lestées",s:"3×12",r:"60s",e:"💥",m:"Pectoraux · Triceps · Gainage",d:"Pompes avec un disque sur le haut du dos.",tip:"Gainage serré, corps aligné.",a:"push",lvl:2},
+      {n:"Floor press haltères",s:"4×10",r:"75s",e:"🏋️",m:"Pectoraux · Triceps",d:"Allongé au sol, pousser les haltères vers le plafond.",tip:"Le développé couché sans banc : coudes qui touchent le sol.",a:"push",lvl:1},
+      {n:"Écarté au sol haltères",s:"3×12",r:"60s",e:"🦋",m:"Pectoraux",d:"Allongé au sol, ouvrir les bras jusqu à toucher le sol.",tip:"Le sol protège tes épaules.",a:"push",lvl:1},
     ],
     back:[
       {n:'Tractions pronation',s:'4×6-8',r:'90s',e:'⬆️',m:'Grand dorsal · Biceps · Trapèzes',d:'Mains en pronation, descendre complet, tirer jusqu\'au menton.',tip:'Initier le mouvement par les coudes, pas les mains.',a:'pull_v'},
@@ -554,6 +556,9 @@ const EXERCISES = {
       {n:"Rowing T-bar",s:"4×10",r:"75s",e:"🅃",m:"Dos épais · Trapèzes",d:"Penché sur la barre en T, tirer vers le sternum.",tip:"Dos plat, buste stable.",a:"pull_h",lvl:3},
       {n:"Pull-over à la poulie",s:"3×15",r:"45s",e:"⬇️",m:"Grand dorsal · Isolation",d:"Bras tendus, ramener la barre vers les cuisses.",tip:"Bras quasi tendus tout du long.",a:"pull_v",lvl:2},
       {n:"Hyperextensions lombaires",s:"3×15",r:"45s",e:"🌅",m:"Lombaires · Fessiers",d:"Sur le banc à lombaires, monter le buste à l horizontale.",tip:"Ne pas hyper-cambrer en haut.",a:"hinge",lvl:1},
+      {n:"Rowing haltères penché",s:"4×12",r:"60s",e:"🔗",m:"Dos · Biceps",d:"Buste penché à 45 degrés, tirer les haltères vers les hanches.",tip:"Dos plat, serre les omoplates.",a:"pull_h",lvl:2},
+      {n:"Rowing kettlebell",s:"4×12 par bras",r:"60s",e:"🔔",m:"Dos · Biceps",d:"Une main en appui, tirer le kettlebell vers la hanche.",tip:"Coude qui frôle le corps.",a:"pull_h",lvl:1},
+      {n:"Soulevé de terre haltères",s:"4×10",r:"90s",e:"🔻",m:"Dos · Fessiers · Ischio",d:"Haltères devant les cuisses, descendre dos plat, remonter.",tip:"Pousse le sol avec les pieds.",a:"hinge",lvl:2},
     ],
     legs:[
       {n:'Squat barre',s:'4×6-8',r:'120s',e:'🦵',m:'Quadriceps · Fessiers · Ischio',d:'Pieds largeur épaules, descendre cuisses parallèles, buste droit.',tip:'Genoux dans l\'axe des pieds.',a:'squat'},
@@ -566,6 +571,11 @@ const EXERCISES = {
       {n:"Leg curl assis",s:"4×12",r:"60s",e:"🔁",m:"Ischio-jambiers",d:"Assis, ramener les talons sous le siège.",tip:"Contrôler la remontée.",a:"hinge",lvl:1},
       {n:"Fentes bulgares haltères",s:"4×10 par jambe",r:"75s",e:"🎿",m:"Quadriceps · Fessiers · Équilibre",d:"Pied arrière sur un banc, haltères en main.",tip:"Le plus efficace pour les fessiers.",a:"lunge",lvl:3},
       {n:"Mollets assis",s:"4×20",r:"30s",e:"🪑",m:"Soléaires",d:"Assis, charge sur les genoux, monter sur la pointe.",tip:"Cible le mollet profond.",a:"calf",lvl:1},
+      {n:"Squat gobelet haltère",s:"4×12",r:"75s",e:"🏆",m:"Quadriceps · Fessiers",d:"Un haltère tenu contre la poitrine, squatter profond.",tip:"Le meilleur squat sans rack.",a:"squat",lvl:1},
+      {n:"Soulevé de terre roumain haltères",s:"4×10",r:"75s",e:"🔻",m:"Ischio-jambiers · Fessiers",d:"Jambes presque tendues, descendre les haltères le long des jambes.",tip:"Hanches qui reculent, dos plat.",a:"hinge",lvl:2},
+      {n:"Fentes avant haltères",s:"3×10 par jambe",r:"60s",e:"🚶",m:"Quadriceps · Fessiers",d:"Un haltère dans chaque main, grand pas en avant.",tip:"Genou avant au-dessus de la cheville.",a:"lunge",lvl:2},
+      {n:"Squat sumo kettlebell",s:"4×15",r:"60s",e:"🔔",m:"Quadriceps · Adducteurs · Fessiers",d:"Pieds écartés, kettlebell tenu bras tendus entre les jambes.",tip:"Genoux vers l extérieur.",a:"squat",lvl:1},
+      {n:"Mollets debout haltères",s:"4×15",r:"45s",e:"🦶",m:"Mollets",d:"Haltères en main, monter sur la pointe des pieds.",tip:"Sur une marche pour plus d amplitude.",a:"calf",lvl:1},
     ],
     shoulders:[
       {n:'Développé militaire barre',s:'4×8-10',r:'90s',e:'⬆️',m:'Deltoïdes · Triceps',d:'Barre de la clavicule, pousser jusqu\'à l\'extension, revenir en contrôle.',tip:'Évite de cambrer le bas du dos.',a:'press'},
@@ -578,6 +588,9 @@ const EXERCISES = {
       {n:"Élévations latérales poulie",s:"3×15 par bras",r:"45s",e:"🎣",m:"Deltoïde latéral",d:"Un bras à la fois, poulie basse, lever sur le côté.",tip:"Tension constante, mieux que les haltères.",a:"press",lvl:2},
       {n:"Rowing menton",s:"3×12",r:"60s",e:"⬆️",m:"Deltoïdes · Trapèzes",d:"Barre le long du corps, tirer jusqu au menton.",tip:"Prise large pour épargner les épaules.",a:"press",lvl:2},
       {n:"Oiseau à la machine",s:"3×15",r:"45s",e:"🐦",m:"Deltoïde postérieur",d:"Assis face à la machine, ouvrir les bras en arrière.",tip:"Mouvement lent et contrôlé.",a:"pull_h",lvl:1},
+      {n:"Shrugs haltères",s:"4×15",r:"45s",e:"🏔️",m:"Trapèzes",d:"Haltères le long du corps, hausser les épaules.",tip:"Tenir 1 seconde en haut.",a:"press",lvl:1},
+      {n:"Élévations frontales haltères",s:"3×12",r:"45s",e:"⬆️",m:"Deltoïde antérieur",d:"Lever les haltères devant toi jusqu à hauteur des yeux.",tip:"Pas d élan.",a:"press",lvl:1},
+      {n:"Développé kettlebell",s:"4×10 par bras",r:"60s",e:"🔔",m:"Deltoïdes · Triceps",d:"Kettlebell à l épaule, pousser au-dessus de la tête.",tip:"Gaine les abdos.",a:"press",lvl:2},
     ],
     arms:[
       {n:'Curl barre EZ',s:'4×10-12',r:'45s',e:'〽️',m:'Biceps · Avant-bras',d:'Fléchir jusqu\'à hauteur des épaules, descendre lentement.',tip:'Coudes collés, sans balancement.',a:'curl'},
@@ -590,6 +603,9 @@ const EXERCISES = {
       {n:"Extension corde au-dessus tête",s:"4×12",r:"60s",e:"🙆",m:"Triceps longue portion",d:"Corde derrière la tête, tendre les bras vers le haut.",tip:"La seule qui cible vraiment la longue portion.",a:"press",lvl:2},
       {n:"Dips machine triceps",s:"3×15",r:"45s",e:"🎚️",m:"Triceps",d:"Assis, pousser les poignées vers le bas.",tip:"Coudes fixes contre le buste.",a:"press",lvl:1},
       {n:"Curl inversé barre",s:"3×12",r:"45s",e:"🔄",m:"Avant-bras · Brachial",d:"Prise en pronation, monter la barre.",tip:"Renforce la poigne et l avant-bras.",a:"curl",lvl:2},
+      {n:"Extension triceps haltère",s:"4×12",r:"60s",e:"🙆",m:"Triceps",d:"Un haltère tenu à deux mains derrière la tête, tendre les bras.",tip:"Coudes pointés vers le plafond.",a:"press",lvl:1},
+      {n:"Kickback triceps haltère",s:"3×15 par bras",r:"45s",e:"↩️",m:"Triceps",d:"Penché, tendre le bras vers l arrière.",tip:"Bras collé au corps.",a:"press",lvl:1},
+      {n:"Curl concentration haltère",s:"3×12 par bras",r:"45s",e:"🎯",m:"Biceps",d:"Assis, coude contre la cuisse, monter l haltère.",tip:"Lent à la descente.",a:"curl",lvl:1},
     ],
     glutes:[
       {n:'Hip thrust barre',s:'4×12',r:'75s',e:'🍑',m:'Fessiers · Ischio',d:'Épaules sur banc, barre sur les hanches, pousser vers le haut.',tip:'Serrer fort les fessiers en haut, maintenir 2s.',a:'hinge'},
@@ -602,6 +618,9 @@ const EXERCISES = {
       {n:"Step-up sur banc",s:"3×12 par jambe",r:"60s",e:"🪜",m:"Fessiers · Quadriceps",d:"Monter sur un banc haut, haltères en main.",tip:"Ne pas prendre d élan avec la jambe au sol.",a:"lunge",lvl:2},
       {n:"Pont fessier machine",s:"4×15",r:"60s",e:"🌉",m:"Fessiers",d:"Machine à hip thrust, pousser les hanches.",tip:"Bloquer 2 secondes en haut.",a:"hinge",lvl:1},
       {n:"Good morning barre",s:"3×12",r:"75s",e:"🌄",m:"Ischio · Lombaires · Fessiers",d:"Barre sur les trapèzes, buste vers l avant.",tip:"Charge légère, dos absolument plat.",a:"hinge",lvl:3},
+      {n:"Pont fessier haltère",s:"4×15",r:"45s",e:"🍑",m:"Fessiers · Ischio",d:"Allongé, haltère sur les hanches, monter le bassin.",tip:"Serrer fort 2 secondes en haut.",a:"hinge",lvl:1},
+      {n:"Swing kettlebell",s:"4×20",r:"60s",e:"🔔",m:"Fessiers · Ischio · Cardio",d:"Balancer le kettlebell avec un coup de hanches.",tip:"Ce sont les hanches qui propulsent, pas les bras.",a:"hinge",lvl:2},
+      {n:"Fentes bulgares fessiers",s:"3×10 par jambe",r:"60s",e:"🎿",m:"Fessiers · Quadriceps",d:"Pied arrière sur une chaise, haltères en main.",tip:"Buste légèrement penché = plus de fessiers.",a:"lunge",lvl:2},
     ],
     core:[
       {n:'Crunch câble',s:'4×15',r:'45s',e:'📎',m:'Abdominaux',d:'À genoux face à la poulie, fléchir le buste vers le sol.',tip:'Mouvement part des abdos.',a:'core'},
@@ -614,6 +633,9 @@ const EXERCISES = {
       {n:"Gainage latéral",s:"3×45s par côté",r:"30s",e:"📐",m:"Obliques · Gainage",d:"Sur le côté, en appui sur l avant-bras.",tip:"Hanches hautes, corps aligné.",a:"plank",lvl:1},
       {n:"Pallof press",s:"3×12 par côté",r:"45s",e:"🚫",m:"Anti-rotation · Core",d:"Poulie sur le côté, pousser les bras devant soi.",tip:"Résister à la rotation, c est le but.",a:"core",lvl:2},
       {n:"Rameur 500m",s:"4×500m",r:"60s",e:"🚣",m:"Cardio · Dos · Jambes",d:"Sprint de 500 mètres au rameur.",tip:"Jambes, buste, bras dans cet ordre.",a:"cardio",lvl:2},
+      {n:"Woodchop haltère",s:"3×12 par côté",r:"45s",e:"🪓",m:"Obliques · Gainage",d:"Un haltère, mouvement en diagonale du haut vers le bas.",tip:"Pivote les pieds.",a:"core",lvl:2},
+      {n:"Crunch lesté haltère",s:"3×15",r:"45s",e:"🌀",m:"Abdominaux",d:"Crunch classique avec un haltère contre la poitrine.",tip:"Expire en montant.",a:"core",lvl:1},
+      {n:"Windmill kettlebell",s:"3×8 par côté",r:"45s",e:"🔔",m:"Obliques · Épaules",d:"Kettlebell au-dessus de la tête, descendre la main libre vers le pied.",tip:"Bras du haut toujours tendu.",a:"core",lvl:3},
     ],
     fullbody:[
       {n:'Deadlift',s:'4×5',r:'120s',e:'🏋️',m:'Dos · Fessiers · Ischio',d:'Barre au sol, pousser dans le sol en redressant le buste.',tip:'Dos plat absolu.',a:'hinge'},
@@ -626,6 +648,9 @@ const EXERCISES = {
       {n:"Box jump",s:"4×10",r:"60s",e:"📦",m:"Explosivité · Jambes",d:"Saut à pieds joints sur une box.",tip:"Atterrir en douceur, genoux fléchis.",a:"squat",lvl:2},
       {n:"Wall ball",s:"4×15",r:"60s",e:"⚽",m:"Full body · Cardio",d:"Squat puis lancer le ballon contre le mur.",tip:"Le lancer vient des jambes.",a:"squat",lvl:2},
       {n:"Turkish get-up",s:"3×5 par côté",r:"90s",e:"🤸",m:"Full body · Mobilité",d:"Passer de allongé à debout avec un poids au-dessus.",tip:"Lent et contrôlé, bras toujours tendu.",a:"press",lvl:3},
+      {n:"Man maker haltères",s:"4×6",r:"90s",e:"💪",m:"Full body",d:"Pompe, rowing de chaque bras, squat puis développé.",tip:"L exercice qui fait tout.",a:"press",lvl:3},
+      {n:"Snatch kettlebell",s:"4×8 par bras",r:"75s",e:"🔔",m:"Full body · Explosivité",d:"Du sol au-dessus de la tête en un mouvement.",tip:"Les hanches donnent l élan.",a:"press",lvl:3},
+      {n:"Thruster kettlebell",s:"4×12",r:"60s",e:"🚀",m:"Full body · Cardio",d:"Squat avec le kettlebell puis développé au-dessus.",tip:"Un mouvement fluide.",a:"press",lvl:2},
     ],
   },
   home:{
@@ -1143,6 +1168,7 @@ function normalizeProfile(p) {
   const n = {...p};
   if (!Array.isArray(n.days) || !n.days.length) n.days = ['L','Me','V'];
   if (n.location !== 'gym' && n.location !== 'home') n.location = 'home';
+  n.equipment = Array.isArray(n.equipment) ? n.equipment.filter(k => EQ_BY_KEY[k]) : [];
   if (!['beginner','intermediate','advanced'].includes(n.level)) n.level = 'intermediate';
   if (n.diet !== 'vegetarian' && n.diet !== 'omnivore') n.diet = 'omnivore';
   if (!Array.isArray(n.goals) || !n.goals.length) n.goals = n.goal ? [n.goal] : ['shape'];
@@ -1181,6 +1207,73 @@ window.shuffleExercises = () => {
   toast('Variante ' + variantLabel() + ' — nouveaux exercices 🔀','💪');
 };
 
+// ── Matériel à la maison ────────────────────────────
+const EQUIPMENT = [
+  {k:'halteres',  e:'🏋️', l:'Haltères'},
+  {k:'barre',     e:'➖', l:'Barre + disques'},
+  {k:'banc',      e:'🛋️', l:'Banc (développé couché)'},
+  {k:'rack',      e:'🏗️', l:'Rack à squat'},
+  {k:'traction',  e:'🚪', l:'Barre de traction'},
+  {k:'dips',      e:'🤸', l:'Barres à dips'},
+  {k:'elastique', e:'🎗️', l:'Élastiques'},
+  {k:'kettlebell',e:'🔔', l:'Kettlebell'},
+  {k:'poulie',    e:'🎣', l:'Poulie / câbles'},
+  {k:'machines',  e:'⚙️', l:'Machines (presse, leg ext…)'},
+  {k:'cardio',    e:'🚴', l:'Vélo / rameur'},
+  {k:'abwheel',   e:'🎡', l:'Roulette abdo'},
+  {k:'medball',   e:'⚽', l:'Médecine-ball'},
+];
+const EQ_BY_KEY = Object.fromEntries(EQUIPMENT.map(x=>[x.k,x]));
+
+// Déduit le matériel nécessaire à partir du nom / de la description de l'exercice
+const _eqCache = new WeakMap();
+function exEq(ex) {
+  if (_eqCache.has(ex)) return _eqCache.get(ex);
+  const n = ex.n.toLowerCase(), d = (ex.d||'').toLowerCase();
+  const has = (...w) => w.some(x => n.includes(x));
+  const eq = new Set();
+  if (has('élastique')) eq.add('elastique');
+  if (has('machine','leg press','leg extension','leg curl','pec deck','hack squat','presse mollets','mollets assis','abducteur machine','hyperextension')) eq.add('machines');
+  if (has('poulie','câble','corde au-dessus','face pull','pallof','tirage poitrine','pushdown')) eq.add('poulie');
+  if (has('haltère','marteau','russian twist lesté') || d.includes('haltère')) eq.add('halteres');
+  if (has('kettlebell','turkish')) eq.add('kettlebell');
+  if ((has('barre') && !has('barre de porte')) || has('deadlift','soulevé de terre','skull','pupitre','clean and press','t-bar','rowing menton','pompes lestées') || d.includes('barre ez')) eq.add('barre');
+  if (has('traction','chin-up','leg raise suspendu')) eq.add('traction');
+  if (has('dips') && !has('chaise','machine')) eq.add('dips');
+  if (has('développé incliné','développé décliné','curl incliné','développé couché','écarté haltères','pull-over haltère','hip thrust barre','row haltère','développé haltères')) eq.add('banc');
+  if (has('squat barre')) eq.add('rack');
+  if (has('vélo','rameur','battle')) eq.add('cardio');
+  if (has('roulette')) eq.add('abwheel');
+  if (has('wall ball')) eq.add('medball');
+  if ((eq.has('halteres') || eq.has('kettlebell')) && !has('barre')) eq.delete('barre');
+  if (eq.has('elastique')) { eq.delete('poulie'); eq.delete('halteres'); }
+  if (eq.has('machines')) eq.delete('halteres');
+  const out = [...eq];
+  _eqCache.set(ex, out);
+  return out;
+}
+const userEquipment = () => (userData && userData.profile && userData.profile.equipment) || [];
+const canDo = (ex, owned) => exEq(ex).every(k => owned.includes(k));
+
+// Toutes les options d'une zone pour un lieu (maison = poids du corps + matériel possédé)
+function zonePool(loc, zone, owned) {
+  const z = safeZone(zone);
+  if (loc !== 'home') return (EXERCISES.gym[z] || EXERCISES.gym.fullbody).slice();
+  owned = owned || userEquipment();
+  const seen = new Set(), out = [];
+  [...(EXERCISES.home[z]||[]), ...(EXERCISES.gym[z]||[])].forEach(ex => {
+    if (seen.has(ex.n) || !canDo(ex, owned)) return;
+    seen.add(ex.n); out.push(ex);
+  });
+  return out.length ? out : (EXERCISES.home.fullbody || []);
+}
+const rotatePick = (arr, n, stride) => {
+  if (arr.length <= n) return arr.slice();
+  const start = (variantOffset() * stride) % arr.length, out = [];
+  for (let i = 0; i < n; i++) out.push(arr[(start + i) % arr.length]);
+  return out;
+};
+
 // Ordre logique d'une séance : les gros mouvements d'abord (on est frais),
 // l'isolation et les mollets à la fin.
 const MOVE_ORDER = {squat:0, hinge:0, pull_v:1, press:1, push:1, pull_h:1, lunge:2, curl:3, core:4, plank:4, calf:5, cardio:6};
@@ -1188,16 +1281,26 @@ const movePriority = ex => (MOVE_ORDER[ex && ex.a] !== undefined ? MOVE_ORDER[ex
 
 // Liste d'exercices garantie non vide. all=true renvoie tout le catalogue.
 function exercisesFor(loc, zone, all) {
-  const pack = EXERCISES[loc] || EXERCISES.home;
-  const pool = pack[safeZone(zone)] || pack.fullbody || [];
+  const pool = zonePool(loc, zone);
   if (all) return pool;
   let picked;
-  if (pool.length <= EX_PER_SESSION) picked = pool.slice();
-  else {
-    const start = (variantOffset() * 3) % pool.length;
-    picked = [];
-    for (let i = 0; i < EX_PER_SESSION; i++) picked.push(pool[(start + i) % pool.length]);
+  const equipped = pool.filter(ex => exEq(ex).length);
+  if (loc === 'home' && equipped.length >= 1) {
+    // À la maison avec du matériel : on mélange exercices avec charge et poids du corps
+    const bw = pool.filter(ex => !exEq(ex).length);
+    const nEq = Math.min(equipped.length, equipped.length >= 6 ? 4 : 3, EX_PER_SESSION);
+    picked = [...rotatePick(equipped, nEq, 3), ...rotatePick(bw, EX_PER_SESSION - nEq, 2)];
+  } else {
+    picked = rotatePick(pool, EX_PER_SESSION, 3);
   }
+  // Un seul exercice de mollets par séance : on remplace les doublons
+  let calves = 0;
+  picked = picked.map(ex => {
+    if (ex.a !== 'calf') return ex;
+    if (++calves === 1) return ex;
+    return pool.find(o => o.a !== 'calf' && !picked.includes(o)) || ex;
+  });
+  picked = picked.filter((ex, i) => picked.indexOf(ex) === i);
   // Tri stable : priorité du mouvement, puis ordre du catalogue
   return picked
     .map((ex, i) => ({ex, i}))
@@ -1475,6 +1578,90 @@ window.pickLoc = (v,el) => {
   el.classList.add('on');
   document.getElementById('ob-next-1').disabled=false;
 };
+window.obNext1 = () => {
+  if (obData.location === 'home') openEquipment('onboarding');
+  else obStep(2);
+};
+
+// ── Sélecteur lieu + matériel ───────────────────────
+let _eqSel = new Set(), _eqLoc = 'home', _eqMode = 'app';
+const countAvailable = (loc, owned) =>
+  Object.keys(ZONE_META).reduce((a,z) => a + zonePool(loc, z, owned).length, 0);
+
+window.openEquipment = (mode) => {
+  _eqMode = mode || 'app';
+  const p = (userData && userData.profile) || {};
+  _eqLoc = _eqMode === 'onboarding' ? 'home' : (p.location || 'home');
+  _eqSel = new Set(_eqMode === 'onboarding' ? (obData.equipment||[]) : (p.equipment||[]));
+  document.body.insertAdjacentHTML('beforeend',
+    `<div id="eq-modal" style="position:fixed;inset:0;z-index:320;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center" onclick="if(event.target===this)closeEquipment()">
+       <div id="eq-sheet" style="background:var(--bg-card);border:1px solid var(--border-in);border-radius:1.5rem 1.5rem 0 0;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1.25rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom))"></div>
+     </div>`);
+  renderEquipment();
+};
+window.closeEquipment = () => { const m = document.getElementById('eq-modal'); if (m) m.remove(); };
+window.eqSetLoc = (l) => { _eqLoc = l; renderEquipment(); };
+window.eqToggle = (k) => { _eqSel.has(k) ? _eqSel.delete(k) : _eqSel.add(k); renderEquipment(); };
+window.eqPreset = (which) => {
+  _eqSel = new Set(which === 'none' ? [] : which === 'basic' ? ['halteres','elastique','banc'] : EQUIPMENT.map(x=>x.k));
+  renderEquipment();
+};
+
+function renderEquipment() {
+  const sheet = document.getElementById('eq-sheet'); if (!sheet) return;
+  const owned = [..._eqSel];
+  const nb = countAvailable(_eqLoc, owned);
+  const locBtn = (k, e, l) => `<button onclick="eqSetLoc('${k}')" class="flex-1 rounded-xl py-3 font-bold text-sm" style="border:none;cursor:pointer;${_eqLoc===k?'background:linear-gradient(135deg,#DC2626,#F97316);color:#fff':'background:var(--bg-inner);color:var(--text-muted)'}">${e} ${l}</button>`;
+  const chips = EQUIPMENT.map(x => {
+    const on = _eqSel.has(x.k);
+    return `<button onclick="eqToggle('${x.k}')" class="rounded-xl p-2.5 flex items-center gap-2 text-left" style="cursor:pointer;border:2px solid ${on?'#F97316':'var(--border-in)'};background:${on?'linear-gradient(135deg,#DC262618,#F9731618)':'var(--bg-inner)'}">
+      <span class="text-xl flex-shrink-0">${x.e}</span>
+      <span class="flex-1" style="font-size:12.5px;font-weight:600;line-height:1.2;color:var(--text)">${x.l}</span>
+      <span class="flex-shrink-0 rounded-md flex items-center justify-center" style="width:20px;height:20px;font-size:12px;color:#fff;background:${on?'#F97316':'transparent'};border:1.5px solid ${on?'#F97316':'var(--border-strong)'}">${on?'✓':''}</span>
+    </button>`;
+  }).join('');
+  sheet.innerHTML = `
+    <div class="flex items-center justify-between mb-3">
+      <div class="font-display text-2xl font-bold">${_eqMode==='onboarding' ? 'TON MATÉRIEL' : 'LIEU & MATÉRIEL'}</div>
+      <button onclick="closeEquipment()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:30px;height:30px;font-size:15px;cursor:pointer">✕</button>
+    </div>
+    ${_eqMode==='app' ? `<div class="flex gap-2 mb-4">${locBtn('gym','🏋️','Salle')}${locBtn('home','🏠','Maison')}</div>` : ''}
+    ${_eqLoc==='home' ? `
+      <p class="text-sm mb-1" style="color:var(--text-muted)">Coche ce que tu as chez toi.</p>
+      <p class="text-xs mb-3" style="color:var(--text-faint)">Les exercices au poids du corps sont toujours inclus.</p>
+      <div class="flex gap-1.5 mb-3">
+        <button onclick="eqPreset('none')" class="rounded-lg px-2.5 py-1.5 text-xs font-semibold" style="border:none;cursor:pointer;background:var(--bg-inner);color:var(--text-muted)">Rien</button>
+        <button onclick="eqPreset('basic')" class="rounded-lg px-2.5 py-1.5 text-xs font-semibold" style="border:none;cursor:pointer;background:var(--bg-inner);color:var(--text-muted)">Basique</button>
+        <button onclick="eqPreset('all')" class="rounded-lg px-2.5 py-1.5 text-xs font-semibold" style="border:none;cursor:pointer;background:var(--bg-inner);color:var(--text-muted)">Tout cocher</button>
+      </div>
+      <div class="grid grid-cols-2 gap-2 mb-4">${chips}</div>`
+    : `<p class="text-sm mb-4" style="color:var(--text-muted)">À la salle, tout le matériel est disponible.</p>`}
+    <div class="rounded-xl p-3 mb-3 text-center" style="background:var(--bg-inner)">
+      <span class="font-display text-2xl font-bold text-fire">${nb}</span>
+      <span class="text-sm" style="color:var(--text-muted)"> exercices disponibles</span>
+    </div>
+    <button onclick="saveEquipment()" class="btn-fire w-full rounded-2xl py-3.5 text-white font-display text-lg font-bold">${_eqMode==='onboarding' ? 'CONTINUER →' : 'ENREGISTRER'}</button>`;
+}
+
+window.saveEquipment = async () => {
+  const owned = EQUIPMENT.map(x=>x.k).filter(k => _eqSel.has(k));
+  if (_eqMode === 'onboarding') {
+    obData.equipment = owned;
+    closeEquipment();
+    obStep(2);
+    return;
+  }
+  const profile = {...userData.profile, location:_eqLoc, equipment: _eqLoc==='home' ? owned : (userData.profile.equipment||[])};
+  closeEquipment();
+  currentZone = null;
+  await saveUserData({profile});
+  const active = document.querySelector('.tab-pane.active');
+  if (active && active.id === 'tab-exercise') renderExercise();
+  else if (active && active.id === 'tab-profile') renderProfile();
+  else if (active && active.id === 'tab-home') renderHome();
+  toast(_eqLoc==='home' ? 'Matériel enregistré 🏠' : 'Mode salle activé 🏋️','✅');
+};
+
 window.pickGoal = (v,el) => {
   const idx=obData.goals.indexOf(v);
   if(idx===-1){obData.goals.push(v);el.classList.add('on');}
@@ -1540,6 +1727,7 @@ window.checkObStats = () => {
 window.finishOnboarding = async () => {
   const profile={
     location:obData.location,
+    equipment:obData.location==='home' ? (obData.equipment||[]) : [],
     goals:obData.goals,
     goal:obData.goals[0]||'shape', // compat legacy
     days:obData.days,
@@ -1719,6 +1907,7 @@ function exListHtml(zone, p, goals) {
                 <span style="font-size:11px;color:var(--text-faint)">${dots} ${LVL_LABEL[lvl]}</span>
               </div>
               <div class="mt-1" style="font-size:11.5px;color:var(--text-muted)">${ae.m}</div>
+              <div class="flex flex-wrap gap-1 mt-1.5">${(exEq(ex).length ? exEq(ex).map(k=>`<span style="font-size:10.5px;padding:2px 7px;border-radius:999px;background:var(--bg-inner);color:var(--text-muted)">${EQ_BY_KEY[k].e} ${EQ_BY_KEY[k].l}</span>`).join('') : `<span style="font-size:10.5px;padding:2px 7px;border-radius:999px;background:var(--bg-inner);color:var(--text-muted)">🙌 Poids du corps</span>`)}</div>
             </div>
           </div>
           <div class="flex gap-1.5">
@@ -1842,6 +2031,14 @@ window.renderExercise = (zone) => {
       <p class="text-sm" style="color:var(--text-muted)">Ton programme • ${p.location==='gym'?'🏋️ Salle':'🏠 Maison'}</p>
       <h1 class="font-display text-4xl font-bold mt-0.5">PROGRAMME</h1>
     </div>
+    <button onclick="openEquipment('app')" class="card w-full rounded-2xl p-3 mb-3 flex items-center gap-3 text-left" style="cursor:pointer">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0" style="background:linear-gradient(135deg,#DC262618,#F9731618)">${p.location==='gym'?'🏋️':'🧰'}</div>
+      <div class="flex-1 min-w-0">
+        <div class="font-semibold text-sm">${p.location==='gym' ? 'Salle de sport' : 'Maison'}</div>
+        <div class="text-xs truncate" style="color:var(--text-muted)">${p.location==='gym' ? 'Tout le matériel disponible' : ((p.equipment||[]).length ? (p.equipment||[]).map(k=>EQ_BY_KEY[k]?EQ_BY_KEY[k].e:'').join(' ')+' · '+(p.equipment||[]).length+' équipement'+((p.equipment||[]).length>1?'s':'') : 'Poids du corps uniquement — ajoute ton matériel')}</div>
+      </div>
+      <span class="text-xs font-semibold flex-shrink-0" style="color:#F97316">Modifier ›</span>
+    </button>
     ${adaptHints.length?`<div class="flex gap-2 mb-3">${adaptHints.map(h=>`<span class="badge" style="background:linear-gradient(90deg,#DC262618,#F9731618);color:#F97316">${h}</span>`).join('')}</div>`:''}
     <div class="space-y-2 mb-2">${splitRows}</div>
     <button onclick="showAllZones()" class="w-full text-center text-xs py-2 mb-1" style="background:none;border:none;cursor:pointer;color:var(--text-faint)">Voir toutes les zones musculaires ›</button>
@@ -2493,6 +2690,8 @@ window.renderProfile=()=>{
       <h3 class="font-display text-sm font-bold mb-3">PARAMÈTRES</h3>
       <button onclick="showScreen('onboarding');obData={location:null,goals:[],days:[],age:null,weight:null,weight_goal:null,level:null,diet:null};obStep(1)" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
         <span>⚙️</span><span>Reconfigurer le profil</span><span class="ml-auto" style="color:#444">›</span></button>
+      <button onclick="openEquipment('app')" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
+        <span>🧰</span><span>Lieu & matériel</span><span class="ml-auto text-xs" style="color:var(--text-faint)">${p.location==='gym'?'Salle':'Maison · '+(p.equipment||[]).length+' équip.'}</span><span style="color:#444">›</span></button>
       <button onclick="toggleTheme()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
         <span>🌙</span><span>Thème sombre / clair</span><span class="ml-auto" style="color:#444">›</span></button>
       <button onclick="switchAccount()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">

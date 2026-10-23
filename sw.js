@@ -1,5 +1,5 @@
 // Bump ce numéro à chaque déploiement pour purger l'ancien cache
-const CACHE = 'fitflex-v3';
+const CACHE = 'fitflex-v4';
 const ASSETS = ['/', '/index.html', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', e => {

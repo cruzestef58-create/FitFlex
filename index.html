@@ -52,8 +52,6 @@
     .inp::placeholder{color:var(--text-muted)}
     .prog-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,#DC2626,#F97316);transition:width .5s ease}
     .ob-prog{height:3px;border-radius:99px;background:var(--bg-faint);overflow:hidden}
-    .nav-btn.active .nav-dot{background:linear-gradient(135deg,#DC2626,#F97316)!important}
-    .nav-btn.active .nav-lbl{color:#F97316!important}
     .avatar{background:linear-gradient(135deg,#DC2626,#F97316);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;color:white}
     .pin-inp{width:100%;background:var(--bg-inner);border:1.5px solid var(--border-in);border-radius:1rem;padding:.9rem 1rem;color:var(--text);font-size:28px;font-weight:800;letter-spacing:.85em;text-indent:.85em;text-align:center;outline:none;-webkit-appearance:none;transition:border-color .2s,background .25s;font-family:'Barlow Condensed',sans-serif}
     .pin-inp:focus{border-color:#F97316}
@@ -79,9 +77,55 @@
     #loading{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;transition:background .25s}
     #loading .spin{width:40px;height:40px;border:3px solid var(--bg-faint);border-top-color:#F97316;border-radius:50%;animation:spin .8s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
-    /* Nav dots dark/light */
-    .nav-dot{background:var(--bg-inner)!important;transition:background .25s}
-    .nav-btn.active .nav-dot{background:linear-gradient(135deg,#DC2626,#F97316)!important}
+
+    /* ── Design system v2 : lisibilité, icônes, une seule couleur d'accent ── */
+    .ic{display:inline-block;flex-shrink:0;vertical-align:middle}
+    .page-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:34px;line-height:1;letter-spacing:.01em}
+    .page-sub{font-size:13.5px;color:var(--text-muted);margin-top:4px}
+    .label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint)}
+    .muted{color:var(--text-muted)} .faint{color:var(--text-faint)} .accent{color:#F97316}
+    .tile{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--bg-inner);color:var(--text-muted);flex-shrink:0}
+    .tile.acc{background:rgba(249,115,22,.13);color:#F97316}
+    .num-tile{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--bg-inner);color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;flex-shrink:0}
+    .stat-num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:28px;line-height:1;color:var(--text)}
+    .btn-primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 16px;border:none;border-radius:14px;cursor:pointer;color:#fff;font-weight:700;font-size:15px;background:linear-gradient(135deg,#DC2626,#F97316);transition:transform .15s,filter .15s}
+    .btn-primary:active{transform:scale(.98)}
+    .btn-soft{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 16px;border:none;border-radius:14px;cursor:pointer;color:var(--text);font-weight:600;font-size:14px;background:var(--bg-inner)}
+    .btn-link{display:inline-flex;align-items:center;gap:6px;border:none;background:none;cursor:pointer;color:#F97316;font-weight:600;font-size:13px;padding:6px 0}
+    .btn-chip{display:inline-flex;align-items:center;gap:6px;border:none;cursor:pointer;color:var(--text);font-weight:600;font-size:13px;padding:8px 12px;border-radius:12px;background:var(--bg-inner)}
+    .seg{display:flex;gap:4px;padding:4px;background:var(--bg-inner);border-radius:14px}
+    .seg button{flex:1;padding:9px 4px;border-radius:10px;font-size:13px;font-weight:600;color:var(--text-muted);border:none;background:transparent;cursor:pointer;transition:all .15s;white-space:nowrap}
+    .seg button.on{background:#F97316;color:#fff}
+    .row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
+    .row:last-child{border-bottom:none}
+    .row-btn{width:100%;text-align:left;background:none;border:none;cursor:pointer;color:var(--text);font-size:14.5px}
+    .card-pad{padding:16px}
+    .ex-name{font-weight:600;font-size:15px;line-height:1.3;color:var(--text)}
+    .ex-sub{font-size:12.5px;color:var(--text-faint);margin-top:2px}
+    .ex-line{font-size:13px;color:var(--text-muted);margin-top:8px;line-height:1.45}
+    .ex-line b{color:var(--text);font-weight:600}
+    .chev{color:var(--text-faint);transition:transform .2s;flex-shrink:0}
+    .dchip{flex-shrink:0;min-width:72px;padding:9px 12px;border-radius:14px;border:1.5px solid var(--border);background:var(--bg-card);cursor:pointer;text-align:left;color:var(--text)}
+    .dchip .d{display:block;font-size:10.5px;font-weight:700;letter-spacing:.08em;color:var(--text-faint)}
+    .dchip .z{display:block;font-size:14px;font-weight:600;margin-top:1px}
+    .dchip.on{border-color:#F97316;background:rgba(249,115,22,.1)}
+    .dchip.on .d{color:#F97316}
+    .hscroll{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -20px;padding:0 20px 2px}
+    .hscroll::-webkit-scrollbar{display:none}
+    .wk-c{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--bg-inner)}
+    .wk-c.plan{background:transparent;border:2px solid var(--border-strong)}
+    .wk-c.done{background:#F97316;color:#fff}
+    .macro-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+    .note{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--bg-inner);font-size:13.5px;line-height:1.45}
+    .note .ic{color:#F97316;margin-top:1px}
+    .step-n{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--bg-faint);color:var(--text-muted);font-size:12px;font-weight:700}
+    /* Navigation */
+    nav .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 8px;color:var(--text-faint);font-size:11px;font-weight:600;background:none;border:none;cursor:pointer}
+    nav .nav-btn.active{color:#F97316}
+    /* Onboarding : tuiles d'icônes */
+    .ob-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--bg-inner);color:var(--text-muted);flex-shrink:0}
+    .sel-card.on .ob-ic,.sel-card.selected .ob-ic{background:rgba(249,115,22,.15);color:#F97316}
+    #toast{display:flex;align-items:center;gap:8px}
   </style>
 </head>
 <body>
@@ -167,7 +211,7 @@
         <input id="mig-email" class="inp" type="email" placeholder="Email du compte" autocapitalize="none" inputmode="email"/>
         <input id="mig-old" class="inp" type="password" placeholder="Ancien mot de passe"/>
         <input id="mig-pin" class="pin-inp" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" oninput="onPinInput(this)"/>
-        <button onclick="migrateToPin()" class="w-full rounded-xl py-2.5 text-sm font-bold text-white" style="background:linear-gradient(90deg,#DC2626,#F97316);border:none;cursor:pointer">Convertir en code 🔐</button>
+        <button onclick="migrateToPin()" class="w-full rounded-xl py-2.5 text-sm font-bold text-white" style="background:linear-gradient(90deg,#DC2626,#F97316);border:none;cursor:pointer">Convertir en code</button>
         <p class="text-xs" style="color:var(--text-faint)">Code oublié sans ancien compte ? Crée-en un nouveau depuis l'onglet Inscription.</p>
         <div id="forgot-msg" class="hidden text-xs rounded-xl p-2.5" style="background:var(--bg-faint);color:var(--text-muted)"></div>
       </div>
@@ -189,7 +233,7 @@
       <button id="reg-btn" onclick="doRegister()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold">CRÉER MON COMPTE</button>
     </div>
   </div>
-  <p class="text-center text-xs mt-8" style="color:var(--text-faint)">Compte synchronisé sur tous tes appareils 🌐</p>
+  <p class="text-center text-xs mt-8" style="color:var(--text-faint)">Compte synchronisé sur tous tes appareils</p>
 </div>
 
 <!-- ═══ ONBOARDING ══════════════════════════════════ -->
@@ -220,12 +264,12 @@
     <p class="text-sm mb-5" style="color:var(--text-muted)">Ça détermine les exercices adaptés.</p>
     <div class="flex flex-col gap-3">
       <div class="sel-card p-4 card flex items-center gap-4" onclick="pickLoc('gym',this)">
-        <div class="text-3xl w-12 text-center flex-shrink-0">🏋️</div>
+        <div class="ob-ic"><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.4 14.4 9.6 9.6"/><path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"/><path d="m21.5 21.5-1.4-1.4"/><path d="M3.9 3.9 2.5 2.5"/><path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/></svg></div>
         <div><div class="font-display text-xl font-bold">SALLE DE SPORT</div><p class="text-xs mt-0.5" style="color:var(--text-muted)">Machines, barres, haltères, câbles</p></div>
       </div>
       <div class="sel-card p-4 card flex items-center gap-4" onclick="pickLoc('home',this)">
-        <div class="text-3xl w-12 text-center flex-shrink-0">🏠</div>
-        <div><div class="font-display text-xl font-bold">À LA MAISON</div><p class="text-xs mt-0.5" style="color:var(--text-muted)">Poids du corps, élastiques, chaise</p></div>
+        <div class="ob-ic"><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+        <div><div class="font-display text-xl font-bold">À LA MAISON</div><p class="text-xs mt-0.5" style="color:var(--text-muted)">Poids du corps et ton matériel</p></div>
       </div>
     </div>
     <button id="ob-next-1" onclick="obNext1()" class="btn-fire w-full rounded-2xl py-4 text-white font-display text-xl font-bold mt-5" disabled>CONTINUER →</button>
@@ -236,22 +280,22 @@
     <p class="text-sm mb-4" style="color:var(--text-muted)">Sélectionne un ou plusieurs — tout s'adapte.</p>
     <div class="grid grid-cols-2 gap-3">
       <div class="sel-card p-4 card" onclick="pickGoal('shape',this)">
-        <div class="text-3xl mb-2">🔥</div>
+        <div class="ob-ic mb-3"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
         <div class="font-display text-base font-bold">REMISE EN FORME</div>
         <div class="text-xs mt-1" style="color:var(--text-muted)">Cardio + tonicité</div>
       </div>
       <div class="sel-card p-4 card" onclick="pickGoal('strength',this)">
-        <div class="text-3xl mb-2">💪</div>
+        <div class="ob-ic mb-3"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.4 14.4 9.6 9.6"/><path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"/><path d="m21.5 21.5-1.4-1.4"/><path d="M3.9 3.9 2.5 2.5"/><path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/></svg></div>
         <div class="font-display text-base font-bold">GAIN DE FORCE</div>
         <div class="text-xs mt-1" style="color:var(--text-muted)">Charges lourdes + masse</div>
       </div>
       <div class="sel-card p-4 card" onclick="pickGoal('endurance',this)">
-        <div class="text-3xl mb-2">🏃</div>
+        <div class="ob-ic mb-3"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
         <div class="font-display text-base font-bold">ENDURANCE</div>
         <div class="text-xs mt-1" style="color:var(--text-muted)">Répétitions + cardio</div>
       </div>
       <div class="sel-card p-4 card" onclick="pickGoal('loss',this)">
-        <div class="text-3xl mb-2">⚡</div>
+        <div class="ob-ic mb-3"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 17 13.5 8.5 8.5 13.5 2 7"/><path d="M16 17h6v-6"/></svg></div>
         <div class="font-display text-base font-bold">PERTE DE POIDS</div>
         <div class="text-xs mt-1" style="color:var(--text-muted)">Déficit + HIIT</div>
       </div>
@@ -285,17 +329,17 @@
     <label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">NIVEAU</label>
     <div id="ob-level-grid" class="grid grid-cols-3 gap-2 mb-2">
       <div class="sel-card p-2.5 card flex flex-col items-center text-center" onclick="pickLevel('beginner',this)">
-        <div class="text-xl mb-0.5">🌱</div>
+        <div class="mb-1 accent"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="16" width="4" height="5" rx="1.5" fill="currentColor"/><rect x="10" y="11" width="4" height="10" rx="1.5" fill="none"/><rect x="17" y="6" width="4" height="15" rx="1.5" fill="none"/></svg></div>
         <div class="font-display text-sm font-bold">DÉBUTANT</div>
         <div class="text-xs" style="color:var(--text-muted)">< 6 mois</div>
       </div>
       <div class="sel-card p-2.5 card flex flex-col items-center text-center" onclick="pickLevel('intermediate',this)">
-        <div class="text-xl mb-0.5">⚡</div>
+        <div class="mb-1 accent"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="16" width="4" height="5" rx="1.5" fill="currentColor"/><rect x="10" y="11" width="4" height="10" rx="1.5" fill="currentColor"/><rect x="17" y="6" width="4" height="15" rx="1.5" fill="none"/></svg></div>
         <div class="font-display text-sm font-bold">INTER</div>
         <div class="text-xs" style="color:var(--text-muted)">6m – 2 ans</div>
       </div>
       <div class="sel-card p-2.5 card flex flex-col items-center text-center" onclick="pickLevel('advanced',this)">
-        <div class="text-xl mb-0.5">🔥</div>
+        <div class="mb-1 accent"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="16" width="4" height="5" rx="1.5" fill="currentColor"/><rect x="10" y="11" width="4" height="10" rx="1.5" fill="currentColor"/><rect x="17" y="6" width="4" height="15" rx="1.5" fill="currentColor"/></svg></div>
         <div class="font-display text-sm font-bold">AVANCÉ</div>
         <div class="text-xs" style="color:var(--text-muted)">2+ ans</div>
       </div>
@@ -304,11 +348,11 @@
     <label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">RÉGIME ALIMENTAIRE</label>
     <div id="ob-diet-grid" class="grid grid-cols-2 gap-2 mb-2">
       <div class="sel-card p-2.5 card flex items-center gap-2" onclick="pickDiet('omnivore',this)">
-        <span class="text-xl">🥩</span>
+        <div class="ob-ic" style="width:36px;height:36px"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></div>
         <div><div class="font-display text-sm font-bold">OMNIVORE</div><div class="text-xs" style="color:var(--text-muted)">Viande, poisson…</div></div>
       </div>
       <div class="sel-card p-2.5 card flex items-center gap-2" onclick="pickDiet('vegetarian',this)">
-        <span class="text-xl">🌿</span>
+        <div class="ob-ic" style="width:36px;height:36px"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></div>
         <div><div class="font-display text-sm font-bold">VÉGÉTARIEN</div><div class="text-xs" style="color:var(--text-muted)">Sans viande/poisson</div></div>
       </div>
     </div>
@@ -354,22 +398,22 @@
     <p class="text-xs font-semibold mb-1.5" style="color:var(--text-muted)">SUGGESTIONS RAPIDES</p>
     <div class="flex flex-col gap-1.5 mb-3">
       <button onclick="quickDays(['L','Me','V'])" class="card rounded-xl px-3 py-2 flex items-center gap-2.5 text-left">
-        <span class="text-base">3️⃣</span>
+        <span class="num-tile">3</span>
         <div><div class="text-sm font-semibold">3 fois/semaine</div><div class="text-xs" style="color:var(--text-muted)">Lun · Mer · Ven — idéal pour débuter</div></div>
       </button>
       <button onclick="quickDays(['L','M','J','V'])" class="card rounded-xl px-3 py-2 flex items-center gap-2.5 text-left">
-        <span class="text-base">4️⃣</span>
+        <span class="num-tile">4</span>
         <div><div class="text-sm font-semibold">4 fois/semaine</div><div class="text-xs" style="color:var(--text-muted)">Lun · Mar · Jeu · Ven</div></div>
       </button>
       <button onclick="quickDays(['L','M','Me','J','V'])" class="card rounded-xl px-3 py-2 flex items-center gap-2.5 text-left">
-        <span class="text-base">5️⃣</span>
+        <span class="num-tile">5</span>
         <div><div class="text-sm font-semibold">5 fois/semaine</div><div class="text-xs" style="color:var(--text-muted)">Lun → Ven — pour les confirmés</div></div>
       </button>
     </div>
     <div id="days-info" class="text-center text-sm font-semibold py-1.5 rounded-xl mb-2" style="color:var(--text-muted);background:var(--bg-inner)">Aucun jour sélectionné</div>
     <div class="flex gap-3 mt-auto">
       <button onclick="obStep(3)" class="rounded-2xl py-3.5 px-5 card font-display text-xl font-bold">←</button>
-      <button id="ob-next-4" onclick="finishOnboarding()" class="btn-fire flex-1 rounded-2xl py-3.5 text-white font-display text-xl font-bold" disabled>COMMENCER 🚀</button>
+      <button id="ob-next-4" onclick="finishOnboarding()" class="btn-fire flex-1 rounded-2xl py-3.5 text-white font-display text-xl font-bold" disabled>COMMENCER</button>
     </div>
   </div>
 </div>
@@ -395,7 +439,7 @@
     </svg>
     <div class="flex items-center gap-2">
       <div id="streak-badge" class="hidden items-center gap-1 px-3 py-1 rounded-full text-sm font-bold" style="background:var(--bg-inner);border:1px solid var(--border-strong)">
-        <span class="flame">🔥</span><span id="streak-num" class="text-fire"></span>
+        <span style="color:#F97316;display:flex"><svg class="ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span><span id="streak-num"></span>
       </div>
       <button onclick="toggleTheme()" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:var(--bg-inner);border:1px solid var(--border-in)">
         <svg id="theme-icon" class="w-4 h-4" style="color:var(--text-muted)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -408,23 +452,11 @@
   <div id="tab-exercise" class="tab-pane px-5 pt-4" style="padding-bottom:1.5rem"></div>
   <div id="tab-nutrition" class="tab-pane px-5 pt-4" style="padding-bottom:1.5rem"></div>
   <div id="tab-profile" class="tab-pane px-5 pt-4" style="padding-bottom:1.5rem"></div>
-  <nav class="fixed bottom-0 left-0 right-0 z-40 flex" style="background:var(--bg);border-top:1px solid #1e1e1e">
-    <button class="nav-btn active flex-1 flex flex-col items-center py-2.5 gap-1" id="nav-home" onclick="showTab('home',this)">
-      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:var(--bg-inner)"><svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg></div>
-      <span class="nav-lbl text-xs font-semibold" style="color:#F97316">Accueil</span>
-    </button>
-    <button class="nav-btn flex-1 flex flex-col items-center py-2.5 gap-1" onclick="showTab('exercise',this)">
-      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:var(--bg-inner)"><svg class="w-3.5 h-3.5" style="color:var(--text-muted)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
-      <span class="nav-lbl text-xs font-semibold" style="color:var(--text-muted)">Exercices</span>
-    </button>
-    <button class="nav-btn flex-1 flex flex-col items-center py-2.5 gap-1" onclick="showTab('nutrition',this)">
-      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:var(--bg-inner)"><svg class="w-3.5 h-3.5" style="color:var(--text-muted)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
-      <span class="nav-lbl text-xs font-semibold" style="color:var(--text-muted)">Nutrition</span>
-    </button>
-    <button class="nav-btn flex-1 flex flex-col items-center py-2.5 gap-1" onclick="showTab('profile',this)">
-      <div class="nav-dot w-7 h-7 rounded-xl flex items-center justify-center" style="background:var(--bg-inner)"><svg class="w-3.5 h-3.5" style="color:var(--text-muted)" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg></div>
-      <span class="nav-lbl text-xs font-semibold" style="color:var(--text-muted)">Profil</span>
-    </button>
+  <nav class="fixed bottom-0 left-0 right-0 z-40 flex" style="background:var(--bg);border-top:1px solid var(--border)">
+    <button class="nav-btn active" id="nav-home" onclick="showTab('home',this)"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>Accueil</span></button>
+    <button class="nav-btn" onclick="showTab('exercise',this)"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.4 14.4 9.6 9.6"/><path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"/><path d="m21.5 21.5-1.4-1.4"/><path d="M3.9 3.9 2.5 2.5"/><path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/></svg><span>Exercices</span></button>
+    <button class="nav-btn" onclick="showTab('nutrition',this)"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg><span>Nutrition</span></button>
+    <button class="nav-btn" onclick="showTab('profile',this)"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profil</span></button>
   </nav>
 </div>
 
@@ -436,10 +468,10 @@
         <div id="demo-name" class="font-display text-xl font-bold"></div>
         <div id="demo-muscles" class="text-xs mt-0.5" style="color:var(--text-muted)"></div>
       </div>
-      <button onclick="closeDemoModal()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;flex-shrink:0">✕</button>
+      <button onclick="closeDemoModal()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:30px;height:30px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
     </div>
-    <div id="demo-desc" class="text-sm mb-4 rounded-xl p-3" style="background:var(--bg-inner);color:#d1d5db"></div>
-    <a id="demo-yt" href="#" target="_blank" rel="noopener" class="btn-fire flex items-center justify-center gap-2 w-full rounded-2xl py-3.5 text-white font-display text-lg font-bold no-underline">
+    <div id="demo-desc" class="text-sm mb-4 rounded-xl p-3" style="background:var(--bg-inner);color:var(--text);line-height:1.5"></div>
+    <a id="demo-yt" href="#" target="_blank" rel="noopener" class="btn-primary no-underline">
       <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
       Voir la vidéo sur YouTube
     </a>
@@ -455,7 +487,7 @@
     <div class="max-w-sm mx-auto w-full">
       <div class="flex items-center justify-between mb-2">
         <div class="min-w-0">
-          <div class="text-xs font-semibold" style="color:var(--text-muted)">SÉANCE EN COURS</div>
+          <div class="label">Séance en cours</div>
           <div id="sess-title" class="font-display text-xl font-bold truncate"></div>
         </div>
         <div class="text-right flex-shrink-0">
@@ -500,7 +532,7 @@
   <div style="flex:0 0 auto;padding:.75rem 1.25rem calc(env(safe-area-inset-bottom) + .75rem);background:var(--bg);border-top:1px solid var(--border)">
     <div class="max-w-sm mx-auto w-full flex gap-2">
       <button onclick="cancelSession()" class="rounded-2xl px-4 py-3.5 text-sm font-semibold flex-shrink-0" style="background:var(--bg-inner);color:var(--text-muted);border:none;cursor:pointer">Annuler</button>
-      <button onclick="finishSession()" class="btn-fire flex-1 rounded-2xl py-3.5 text-white font-display text-lg font-bold">TERMINER ✓</button>
+      <button onclick="finishSession()" class="btn-fire flex-1 rounded-2xl py-3.5 text-white font-display text-lg font-bold">TERMINER</button>
     </div>
   </div>
 </div>
@@ -529,6 +561,58 @@ const auth  = getAuth(fbApp);
 const db    = getFirestore(fbApp);
 
 // ── Exercise data ──────────────────────────────────
+const ICONS = {"home": "<path d=\"M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8\"/><path d=\"M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/>", "dumbbell": "<path d=\"M14.4 14.4 9.6 9.6\"/><path d=\"M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z\"/><path d=\"m21.5 21.5-1.4-1.4\"/><path d=\"M3.9 3.9 2.5 2.5\"/><path d=\"M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z\"/>", "utensils": "<path d=\"M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2\"/><path d=\"M7 2v20\"/><path d=\"M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7\"/>", "user": "<path d=\"M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2\"/><circle cx=\"12\" cy=\"7\" r=\"4\"/>", "users": "<path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/><path d=\"M22 21v-2a4 4 0 0 0-3-3.87\"/><path d=\"M16 3.13a4 4 0 0 1 0 7.75\"/>", "flame": "<path d=\"M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z\"/>", "play": "<polygon points=\"6 3 20 12 6 21 6 3\"/>", "playCircle": "<circle cx=\"12\" cy=\"12\" r=\"10\"/><polygon points=\"10 8 16 12 10 16 10 8\"/>", "check": "<path d=\"M20 6 9 17l-5-5\"/>", "checkCircle": "<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/>", "alert": "<circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" x2=\"12\" y1=\"8\" y2=\"12\"/><line x1=\"12\" x2=\"12.01\" y1=\"16\" y2=\"16\"/>", "x": "<path d=\"M18 6 6 18\"/><path d=\"m6 6 12 12\"/>", "chevronDown": "<path d=\"m6 9 6 6 6-6\"/>", "chevronRight": "<path d=\"m9 18 6-6-6-6\"/>", "chevronLeft": "<path d=\"m15 18-6-6 6-6\"/>", "shuffle": "<path d=\"m18 14 4 4-4 4\"/><path d=\"m18 2 4 4-4 4\"/><path d=\"M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22\"/><path d=\"M2 6h1.9c1.5 0 2.9.9 3.6 2.2\"/><path d=\"M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8\"/>", "sliders": "<path d=\"M20 7h-9\"/><path d=\"M14 17H5\"/><circle cx=\"17\" cy=\"17\" r=\"3\"/><circle cx=\"7\" cy=\"7\" r=\"3\"/>", "clock": "<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l4 2\"/>", "calendar": "<rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"/><path d=\"M16 2v4\"/><path d=\"M8 2v4\"/><path d=\"M3 10h18\"/>", "activity": "<path d=\"M22 12h-4l-3 9L9 3l-3 9H2\"/>", "target": "<circle cx=\"12\" cy=\"12\" r=\"10\"/><circle cx=\"12\" cy=\"12\" r=\"6\"/><circle cx=\"12\" cy=\"12\" r=\"2\"/>", "trendingUp": "<path d=\"M22 7 13.5 15.5 8.5 10.5 2 17\"/><path d=\"M16 7h6v6\"/>", "trendingDown": "<path d=\"M22 17 13.5 8.5 8.5 13.5 2 7\"/><path d=\"M16 17h6v-6\"/>", "leaf": "<path d=\"M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z\"/><path d=\"M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12\"/>", "moon": "<path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\"/>", "logout": "<path d=\"M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4\"/><path d=\"m16 17 5-5-5-5\"/><path d=\"M21 12H9\"/>", "refresh": "<path d=\"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8\"/><path d=\"M21 3v5h-5\"/><path d=\"M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16\"/><path d=\"M8 16H3v5\"/>", "pencil": "<path d=\"M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z\"/><path d=\"m15 5 4 4\"/>", "plus": "<path d=\"M5 12h14\"/><path d=\"M12 5v14\"/>", "lightbulb": "<path d=\"M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5\"/><path d=\"M9 18h6\"/><path d=\"M10 22h4\"/>", "zap": "<path d=\"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z\"/>", "trophy": "<path d=\"M6 9H4.5a2.5 2.5 0 0 1 0-5H6\"/><path d=\"M18 9h1.5a2.5 2.5 0 0 0 0-5H18\"/><path d=\"M4 22h16\"/><path d=\"M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22\"/><path d=\"M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22\"/><path d=\"M18 2H6v7a6 6 0 0 0 12 0V2Z\"/>", "scale": "<circle cx=\"12\" cy=\"5\" r=\"3\"/><path d=\"M6.5 8a2 2 0 0 0-1.905 1.46L2.1 18.5A2 2 0 0 0 4 21h16a2 2 0 0 0 1.925-2.54L19.4 9.5A2 2 0 0 0 17.48 8Z\"/>", "ruler": "<path d=\"M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z\"/><path d=\"m14.5 12.5 2-2\"/><path d=\"m11.5 9.5 2-2\"/><path d=\"m8.5 6.5 2-2\"/><path d=\"m17.5 15.5 2-2\"/>", "bed": "<path d=\"M2 4v16\"/><path d=\"M2 8h18a2 2 0 0 1 2 2v10\"/><path d=\"M2 17h20\"/><path d=\"M6 8v9\"/>", "eye": "<path d=\"M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>"};
+const ICONS_FILLED = ["play"];
+function ic(name, size, style) {
+  size = size || 20;
+  const fill = ICONS_FILLED.includes(name) ? 'currentColor' : 'none';
+  return `<svg class="ic" width="${size}" height="${size}" viewBox="0 0 24 24" fill="${fill}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"${style?` style="${style}"`:''}>${ICONS[name]||''}</svg>`;
+}
+window.ic = ic;
+
+// Noms lisibles (sans majuscules criardes) et versions courtes pour les puces
+const ZONE_NAME = {chest:'Pectoraux & triceps', back:'Dos & biceps', legs:'Jambes', shoulders:'Épaules', arms:'Bras', glutes:'Fessiers & ischios', core:'Abdos & cardio', fullbody:'Full body'};
+const ZONE_SHORT = {chest:'Pecs', back:'Dos', legs:'Jambes', shoulders:'Épaules', arms:'Bras', glutes:'Fessiers', core:'Abdos', fullbody:'Full body'};
+const WEEK_KEYS = ['L','M','Me','J','V','S','D'];
+const DAY_SHORT = {L:'LUN',M:'MAR',Me:'MER',J:'JEU',V:'VEN',S:'SAM',D:'DIM'};
+const DAY_FULL = {L:'lundi',M:'mardi',Me:'mercredi',J:'jeudi',V:'vendredi',S:'samedi',D:'dimanche'};
+const LEVEL_NAME = {beginner:'Débutant', intermediate:'Intermédiaire', advanced:'Avancé'};
+const todayKeyFn = () => ['D','L','M','Me','J','V','S'][new Date().getDay()];
+// Date locale AAAA-MM-JJ (évite le décalage UTC après minuit)
+const isoLocal = (d) => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+// Lundi → dimanche de la semaine en cours
+function weekDates() {
+  const now = new Date(), dow = (now.getDay()+6)%7;
+  return [...Array(7)].map((_,i) => new Date(now.getFullYear(), now.getMonth(), now.getDate()-dow+i, 12));
+}
+// Prochain jour d'entraînement après aujourd'hui
+function nextTrainingDay(days) {
+  const order = ['D','L','M','Me','J','V','S'], ti = new Date().getDay();
+  for (let i = 1; i <= 7; i++) { const k = order[(ti+i)%7]; if (days.includes(k)) return k; }
+  return null;
+}
+function sessionPreview(zone, p) {
+  const goals = p.goals||(p.goal?[p.goal]:[]);
+  const exes = exercisesFor(p.location, zone);
+  const sets = exes.reduce((a,ex)=>a+(setsOf(adaptExGoals(adaptEx(ex,p.level),goals).s)||1),0);
+  return {n:exes.length, sets, min:Math.round(sets*2.2)};
+}
+// "5 séries de 8-10 répétitions · repos 1min30", en clair
+function exSentence(ae) {
+  const n = setsOf(ae.s), reps = repsOf(ae.s), rest = restOf(ae.r);
+  let t;
+  if (!n) t = `<b>${ae.s}</b> d'effort`;
+  else if (reps === 'un maximum') t = `<b>${n} séries</b> au maximum`;
+  else t = `<b>${n} série${n>1?'s':''}</b> de <b>${reps}</b>`;
+  if (rest) t += ` · <span style="white-space:nowrap">repos <b>${rest}</b></span>`;
+  return t;
+}
+window.toggleEx = (btn) => {
+  const d = btn.parentNode.querySelector('.ex-d'); if (!d) return;
+  d.classList.toggle('hidden');
+  const c = btn.querySelector('.chev'); if (c) c.style.transform = d.classList.contains('hidden') ? '' : 'rotate(180deg)';
+};
+
 const EXERCISES = {
   gym:{
     chest:[
@@ -1331,7 +1415,7 @@ function restOf(str) {
   const sec = parseInt(m[1]);
   if (sec < 60) return sec + ' sec';
   const min = Math.floor(sec/60), rest = sec % 60;
-  return rest ? min + 'min' + String(rest).padStart(2,'0') : min + ' min';
+  return rest ? min + ' min ' + String(rest).padStart(2,'0') : min + ' min';
 }
 const LVL_LABEL = {1:'Facile', 2:'Moyen', 3:'Difficile'};
 
@@ -1405,7 +1489,7 @@ window.renderSavedAccounts = () => {
         <div class="font-semibold text-sm truncate">${a.username}</div>
         <div class="text-xs" style="color:var(--text-faint)">Toucher pour se connecter</div>
       </div>
-      <button onclick="removeSavedAccount('${a.username}',event)" class="text-lg flex-shrink-0" style="background:none;border:none;cursor:pointer;color:var(--text-faint)" aria-label="Retirer">✕</button>
+      <button onclick="removeSavedAccount('${a.username}',event)" class="flex-shrink-0" style="background:none;border:none;cursor:pointer;color:var(--text-faint);display:flex" aria-label="Retirer">${ic('x',18)}</button>
     </div>`).join('');
 };
 window.quickSwitch = async (username) => {
@@ -1471,13 +1555,13 @@ window.migrateToPin = async () => {
       saveAccount({username:u, pin});
       toast('Compte converti 🔐 Connecté !','✅');
     } catch(e2) {
-      show('⚠️ Le code est enregistré, mais Firebase refuse de changer l\'identifiant '
+      show('Le code est enregistré, mais Firebase refuse de changer l\'identifiant '
          + '(<b>'+(e2.code||'')+'</b>).<br>Crée plutôt un nouveau compte depuis l\'onglet Inscription.');
     }
   } catch(e) {
     show(e.code==='auth/wrong-password'||e.code==='auth/invalid-credential'
-      ? '❌ Email ou ancien mot de passe incorrect.'
-      : '❌ '+(e.code||e.message));
+      ? 'Email ou ancien mot de passe incorrect.'
+      : (e.code||e.message));
   }
 };
 
@@ -1611,21 +1695,20 @@ function renderEquipment() {
   const sheet = document.getElementById('eq-sheet'); if (!sheet) return;
   const owned = [..._eqSel];
   const nb = countAvailable(_eqLoc, owned);
-  const locBtn = (k, e, l) => `<button onclick="eqSetLoc('${k}')" class="flex-1 rounded-xl py-3 font-bold text-sm" style="border:none;cursor:pointer;${_eqLoc===k?'background:linear-gradient(135deg,#DC2626,#F97316);color:#fff':'background:var(--bg-inner);color:var(--text-muted)'}">${e} ${l}</button>`;
+  const locBtn = (k, icon, l) => `<button onclick="eqSetLoc('${k}')" class="flex-1 flex items-center justify-center gap-2 rounded-xl py-3 font-bold text-sm" style="border:none;cursor:pointer;${_eqLoc===k?'background:#F97316;color:#fff':'background:var(--bg-inner);color:var(--text-muted)'}">${ic(icon,17)} ${l}</button>`;
   const chips = EQUIPMENT.map(x => {
     const on = _eqSel.has(x.k);
-    return `<button onclick="eqToggle('${x.k}')" class="rounded-xl p-2.5 flex items-center gap-2 text-left" style="cursor:pointer;border:2px solid ${on?'#F97316':'var(--border-in)'};background:${on?'linear-gradient(135deg,#DC262618,#F9731618)':'var(--bg-inner)'}">
-      <span class="text-xl flex-shrink-0">${x.e}</span>
-      <span class="flex-1" style="font-size:12.5px;font-weight:600;line-height:1.2;color:var(--text)">${x.l}</span>
-      <span class="flex-shrink-0 rounded-md flex items-center justify-center" style="width:20px;height:20px;font-size:12px;color:#fff;background:${on?'#F97316':'transparent'};border:1.5px solid ${on?'#F97316':'var(--border-strong)'}">${on?'✓':''}</span>
+    return `<button onclick="eqToggle('${x.k}')" class="rounded-xl flex items-center gap-2 text-left" style="padding:12px;cursor:pointer;border:1.5px solid ${on?'#F97316':'var(--border-in)'};background:${on?'rgba(249,115,22,.1)':'var(--bg-inner)'}">
+      <span class="flex-1" style="font-size:13px;font-weight:600;line-height:1.25;color:var(--text)">${x.l}</span>
+      <span class="flex-shrink-0 rounded-md flex items-center justify-center" style="width:20px;height:20px;color:#fff;background:${on?'#F97316':'transparent'};border:1.5px solid ${on?'#F97316':'var(--border-strong)'}">${on?ic('check',13):''}</span>
     </button>`;
   }).join('');
   sheet.innerHTML = `
     <div class="flex items-center justify-between mb-3">
       <div class="font-display text-2xl font-bold">${_eqMode==='onboarding' ? 'TON MATÉRIEL' : 'LIEU & MATÉRIEL'}</div>
-      <button onclick="closeEquipment()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:30px;height:30px;font-size:15px;cursor:pointer">✕</button>
+      <button onclick="closeEquipment()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center">${ic('x',16)}</button>
     </div>
-    ${_eqMode==='app' ? `<div class="flex gap-2 mb-4">${locBtn('gym','🏋️','Salle')}${locBtn('home','🏠','Maison')}</div>` : ''}
+    ${_eqMode==='app' ? `<div class="flex gap-2 mb-4">${locBtn('gym','dumbbell','Salle')}${locBtn('home','home','Maison')}</div>` : ''}
     ${_eqLoc==='home' ? `
       <p class="text-sm mb-1" style="color:var(--text-muted)">Coche ce que tu as chez toi.</p>
       <p class="text-xs mb-3" style="color:var(--text-faint)">Les exercices au poids du corps sont toujours inclus.</p>
@@ -1637,7 +1720,7 @@ function renderEquipment() {
       <div class="grid grid-cols-2 gap-2 mb-4">${chips}</div>`
     : `<p class="text-sm mb-4" style="color:var(--text-muted)">À la salle, tout le matériel est disponible.</p>`}
     <div class="rounded-xl p-3 mb-3 text-center" style="background:var(--bg-inner)">
-      <span class="font-display text-2xl font-bold text-fire">${nb}</span>
+      <span class="font-display text-2xl font-bold">${nb}</span>
       <span class="text-sm" style="color:var(--text-muted)"> exercices disponibles</span>
     </div>
     <button onclick="saveEquipment()" class="btn-fire w-full rounded-2xl py-3.5 text-white font-display text-lg font-bold">${_eqMode==='onboarding' ? 'CONTINUER →' : 'ENREGISTRER'}</button>`;
@@ -1667,7 +1750,7 @@ window.pickGoal = (v,el) => {
   if(idx===-1){obData.goals.push(v);el.classList.add('on');}
   else{obData.goals.splice(idx,1);el.classList.remove('on');}
   const n=obData.goals.length;
-  const GLBL={shape:'🔥 Remise en forme',strength:'💪 Gain de force',endurance:'🏃 Endurance',loss:'⚡ Perte de poids'};
+  const GLBL={shape:'Remise en forme',strength:'Gain de force',endurance:'Endurance',loss:'Perte de poids'};
   document.getElementById('ob-goals-hint').textContent=n?obData.goals.map(g=>GLBL[g]).join(' + '):'Aucun objectif sélectionné';
   document.getElementById('ob-next-2').disabled=n===0;
 };
@@ -1693,7 +1776,7 @@ function updateDaysInfo(){
   const n=obData.days.length;
   const el=document.getElementById('days-info');
   if(!el)return;
-  el.textContent=n?`✅ ${n} jour${n>1?'s':''} sélectionné${n>1?'s':''}`:'Aucun jour sélectionné';
+  el.textContent=n?`${n} jour${n>1?'s':''} sélectionné${n>1?'s':''}`:'Aucun jour sélectionné';
   el.style.color=n?'#F97316':'var(--text-muted)';
 }
 window.obStep = (n) => {
@@ -1745,7 +1828,7 @@ window.finishOnboarding = async () => {
 };
 
 // ── Difficulty adaptation ──────────────────────────
-const LEVEL_LBL = {beginner:'🌱 Débutant', intermediate:'⚡ Intermédiaire', advanced:'🔥 Avancé'};
+const LEVEL_LBL = {beginner:'Débutant', intermediate:'Intermédiaire', advanced:'Avancé'};
 function adaptEx(ex, level) {
   if (!level || level === 'intermediate') return ex;
   let {s, r} = ex;
@@ -1769,13 +1852,9 @@ function initApp() {
 window.showTab = (name, btnEl) => {
   document.querySelectorAll('.tab-pane[id^="tab-"]').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b=>{
-    b.classList.remove('active');
-    b.querySelector('.nav-dot').style.background='#1e1e1e';
-    b.querySelector('.nav-lbl').style.color='#9ca3af';
-  });
-  btnEl.classList.add('active');
-  btnEl.querySelector('.nav-lbl').style.color='#F97316';
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  if(btnEl) btnEl.classList.add('active');
+  window.scrollTo(0,0);
   if(name==='home') renderHome();
   if(name==='exercise') renderExercise();
   if(name==='nutrition') renderNutrition();
@@ -1797,67 +1876,78 @@ function calcStreak() {
   for(const d of days){if(d===cur){streak++;cur=prevDay(cur);}else if(d<cur)break;}
   return streak;
 }
-const todayStr=()=>new Date().toISOString().slice(0,10);
-const prevDay=s=>{const d=new Date(s);d.setDate(d.getDate()-1);return d.toISOString().slice(0,10);};
+const todayStr=()=>isoLocal(new Date());
+const prevDay=s=>{const [y,m,d]=s.split('-').map(Number);return isoLocal(new Date(y,m-1,d-1,12));};
 const fmtDate=s=>new Date(s).toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
 
 // ── Home ────────────────────────────────────────────
 function renderHome() {
-  const p=userData.profile;
-  const u=userData.username||'Athlète';
-  const dayKeys=['D','L','M','Me','J','V','S'];
-  const todayKey=dayKeys[new Date().getDay()];
-  const days=Array.isArray(p.days)?p.days:[];
-  const isTraining=days.includes(todayKey);
-  const wk=userData.workouts||[];
-  const streak=calcStreak();
-  const totalXP=wk.reduce((a,w)=>a+(w.xp||0),0);
+  const p = userData.profile, u = userData.username || 'Athlète';
+  const days = Array.isArray(p.days) ? p.days : [];
+  const wk = userData.workouts || [];
+  const tk = todayKeyFn(), trains = days.includes(tk);
+  const doneToday = wk.some(w => w.date === todayStr());
+  const nxt = nextTrainingDay(days);
+  const zone = trains ? todayZone() : (nxt ? getZoneForDay(days, days.indexOf(nxt)) : null);
+  const pv = zone ? sessionPreview(zone, p) : null;
+  const dateLbl = new Date().toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
+  const wd = weekDates();
+  const weekDone = wd.filter(d => wk.some(w => w.date === isoLocal(d))).length;
+  const name = u.charAt(0).toUpperCase() + u.slice(1);
 
-  const weekDays=['L','M','Me','J','V','S','D'];
-  const weekBars=weekDays.map((d,i)=>{
-    const active=days.includes(d);
-    const isToday=d===todayKey;
-    const done=wk.some(w=>w.date===todayStr()&&dayKeys[new Date(w.date+'T12:00:00').getDay()]===d);
-    return `<div class="flex flex-col items-center gap-1">
-      <div class="text-xs" style="color:var(--text-faint)">${['L','M','M','J','V','S','D'][i]}</div>
-      <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold${isToday?' ring-2 ring-orange-500':''}"
-        style="${done?'background:linear-gradient(135deg,#DC2626,#F97316);color:white':active?'background:#2a2a2a;color:var(--text-muted)':'background:var(--bg-sub);color:#333'}">
-        ${done?'✓':active?'●':''}
-      </div>
+  const week = wd.map((d,i) => {
+    const k = WEEK_KEYS[i], ds = isoLocal(d);
+    const done = wk.some(w => w.date === ds), plan = days.includes(k), today = ds === todayStr();
+    return `<div class="flex flex-col items-center gap-1.5">
+      <span style="font-size:11px;font-weight:700;color:${today?'#F97316':'var(--text-faint)'}">${['L','M','M','J','V','S','D'][i]}</span>
+      <div class="wk-c ${done?'done':plan?'plan':''}">${done?ic('check',15):''}</div>
     </div>`;
   }).join('');
 
-  const recentHtml=wk.length
-    ?[...wk].reverse().slice(0,3).map(w=>{const z=ZONE_META[w.zone];return`<div class="flex items-center gap-3 py-2.5" style="border-bottom:1px solid var(--border)">
-      <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${z?z.e:'⚡'}</div>
-      <div class="flex-1"><div class="text-sm font-semibold">${z?z.label:w.zone}</div><div class="text-xs" style="color:var(--text-muted)">${fmtDate(w.date)} · ${w.duration} min · ${w.exDone}/${w.exTotal}</div></div>
-      <div class="text-xs font-bold text-fire">+${w.xp} XP</div></div>`;}).join('')
-    :`<div class="text-center py-4 text-sm" style="color:var(--text-faint)">Aucune séance encore 🚀</div>`;
-
-  document.getElementById('tab-home').innerHTML=`<div class="max-w-sm mx-auto">
-    <div class="mb-5"><p class="text-sm" style="color:var(--text-muted)">${isTraining?'💪 Jour d\'entraînement !':'😴 Récupération'}</p>
-      <h1 class="font-display text-4xl font-bold mt-0.5">BONJOUR, <span class="text-fire">${u.toUpperCase()} !</span></h1></div>
-    <div class="rounded-2xl p-5 mb-4 relative overflow-hidden glow" style="background:linear-gradient(135deg,#DC2626,#F97316)">
-      <div class="absolute top-0 right-0 w-32 h-32 rounded-full opacity-20" style="background:white;transform:translate(30%,-30%)"></div>
-      <div class="relative">
-        <div class="text-white/70 text-xs font-semibold mb-1">AUJOURD'HUI</div>
-        <div class="text-white font-display text-2xl font-bold mb-3">${isTraining?'PRÊT À SUER ?':'REPOS ACTIF'}</div>
-        ${isTraining?`<div class="text-white/90 text-sm font-semibold mb-2">${(ZONE_META[todayZone()]||{}).label||''}</div>
-        <button onclick="startSession(todayZone())" class="text-white rounded-xl px-4 py-2.5 text-sm font-bold" style="background:rgba(255,255,255,.25);border:none;cursor:pointer">▶ Démarrer la séance</button>
-        <button onclick="showTab('exercise',document.querySelectorAll('.nav-btn')[1])" class="text-white/80 rounded-xl px-3 py-2.5 text-sm ml-1" style="background:none;border:none;cursor:pointer">Voir ›</button>`
-        :`<p class="text-white/80 text-sm">Hydrate-toi bien aujourd'hui.</p>`}
+  let hero;
+  if (trains && pv) {
+    hero = `<div class="rounded-2xl p-5 mb-4" style="background:linear-gradient(135deg,#DC2626,#F97316);color:#fff">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;opacity:.8">${doneToday?'SÉANCE TERMINÉE':'SÉANCE DU JOUR'}</div>
+      <div class="font-display" style="font-size:30px;font-weight:700;line-height:1.05;margin:6px 0 8px">${ZONE_NAME[zone]}</div>
+      <div class="flex items-center gap-4 mb-4" style="font-size:13.5px;opacity:.9">
+        <span class="flex items-center gap-1.5">${ic('clock',15)} ~${pv.min} min</span>
+        <span>${pv.n} exercices</span>
       </div>
+      <button onclick="startSession(todayZone())" class="flex items-center justify-center gap-2 w-full rounded-xl py-3 font-bold" style="background:#fff;color:#DC2626;border:none;cursor:pointer;font-size:15px">${ic('play',16)} ${doneToday?'Refaire une séance':'Commencer'}</button>
+    </div>`;
+  } else {
+    hero = `<div class="card card-pad mb-4">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="tile">${ic('bed',20)}</div>
+        <div><div class="label">Aujourd'hui</div><div style="font-weight:600;font-size:16px;margin-top:2px">Jour de repos</div></div>
+      </div>
+      ${nxt&&zone?`<p class="muted" style="font-size:14px;margin-bottom:12px">Prochaine séance : <b style="color:var(--text)">${ZONE_NAME[zone]}</b>, ${DAY_FULL[nxt]}.</p>`:''}
+      <button onclick="showTab('exercise',document.querySelectorAll('.nav-btn')[1])" class="btn-soft">Voir le programme ${ic('chevronRight',16)}</button>
+    </div>`;
+  }
+
+  const stats = [[calcStreak(),'jours d\'affilée'],[wk.length,'séances au total'],[wk.reduce((a,w)=>a+(w.duration||0),0),'minutes au total']]
+    .map(([v,l]) => `<div class="card text-center" style="padding:14px 6px"><div class="stat-num">${v}</div><div class="faint" style="font-size:11.5px;margin-top:4px">${l}</div></div>`).join('');
+
+  const recent = wk.length ? [...wk].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3).map(w => `<div class="row">
+      <div class="tile">${ic('dumbbell',18)}</div>
+      <div class="flex-1 min-w-0"><div style="font-weight:600;font-size:14.5px">${ZONE_NAME[w.zone]||w.zone}</div>
+      <div class="faint" style="font-size:12.5px;margin-top:1px">${fmtDate(w.date)} · ${w.duration} min</div></div>
+    </div>`).join('')
+    : `<p class="faint text-center" style="font-size:14px;padding:12px 0">Aucune séance pour l'instant.</p>`;
+
+  document.getElementById('tab-home').innerHTML = `<div class="max-w-sm mx-auto">
+    <div class="mb-5">
+      <div class="faint" style="font-size:13px">${dateLbl.charAt(0).toUpperCase()+dateLbl.slice(1)}</div>
+      <div class="page-title" style="margin-top:4px">Salut ${name}</div>
     </div>
-    <div class="grid grid-cols-3 gap-2 mb-4">
-      ${[['🔥',streak,'Streak'],['🏆',wk.length,'Séances'],['⭐',totalXP,'XP']].map(([e,v,l])=>`
-        <div class="card p-3 text-center rounded-2xl"><div class="font-display text-2xl font-bold text-fire">${v}</div><div class="text-xs mt-0.5" style="color:var(--text-muted)">${e} ${l}</div></div>`).join('')}
+    ${hero}
+    <div class="card card-pad mb-4">
+      <div class="flex items-center justify-between mb-3"><span class="label">Cette semaine</span><span class="faint" style="font-size:12.5px">${weekDone} / ${days.length} séances</span></div>
+      <div class="grid grid-cols-7">${week}</div>
     </div>
-    <div class="card rounded-2xl p-4 mb-4">
-      <div class="flex items-center justify-between mb-3"><h2 class="font-display text-sm font-bold">SEMAINE</h2>
-        <span class="text-xs" style="color:var(--text-muted)">${days.length} j/sem · ${p.location==='gym'?'🏋️':'🏠'}</span></div>
-      <div class="grid grid-cols-7 gap-1">${weekBars}</div>
-    </div>
-    <div class="card rounded-2xl p-4 mb-4"><h2 class="font-display text-sm font-bold mb-1">DERNIÈRES SÉANCES</h2>${recentHtml}</div>
+    <div class="grid grid-cols-3 gap-2 mb-4">${stats}</div>
+    <div class="card" style="padding:4px 16px"><div class="label" style="padding-top:12px">Dernières séances</div>${recent}</div>
   </div>`;
 }
 
@@ -1882,183 +1972,93 @@ window.todayZone = todayZone;
 
 function exListHtml(zone, p, goals) {
   const exes = exercisesFor(p.location, zone);
-  if(!exes.length) return '';
-  return `<div class="space-y-3">
-    ${exes.map((ex,idx)=>{
-      const ae = adaptExGoals(adaptEx(ex, p.level), goals);
-      const nSets = setsOf(ae.s), reps = repsOf(ae.s), rest = restOf(ae.r);
-      const lvl = ae.lvl || 2;
-      const dots = [1,2,3].map(n=>`<span style="display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:2px;background:${n<=lvl?'#F97316':'var(--border-strong)'}"></span>`).join('');
-      // Bloc "recette" de la série : chiffres énormes, mots en toutes lettres
-      const chip = (big,small) => `<div class="rounded-xl px-2 py-2 text-center flex-1" style="background:var(--bg-inner)">
-          <div class="font-display font-bold" style="font-size:19px;line-height:1.05;color:#F97316">${big}</div>
-          <div style="font-size:10px;letter-spacing:.02em;color:var(--text-muted);margin-top:2px">${small}</div>
-        </div>`;
-      return `<div class="card rounded-2xl overflow-hidden">
-        <div class="p-3.5 cursor-pointer" onclick="this.parentNode.querySelector('.ex-d').classList.toggle('hidden')">
-          <div class="flex items-start gap-3 mb-2.5">
-            <div class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl flex-shrink-0" style="background:linear-gradient(135deg,#DC262618,#F9731618)">${ae.e}</div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-start justify-between gap-2">
-                <div class="font-semibold leading-tight" style="font-size:15px">${idx+1}. ${ae.n}</div>
-                <svg class="w-4 h-4 flex-shrink-0 mt-1" style="color:var(--text-faint)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-              </div>
-              <div class="flex items-center gap-2 mt-1">
-                <span style="font-size:11px;color:var(--text-faint)">${dots} ${LVL_LABEL[lvl]}</span>
-              </div>
-              <div class="mt-1" style="font-size:11.5px;color:var(--text-muted)">${ae.m}</div>
-              <div class="flex flex-wrap gap-1 mt-1.5">${(exEq(ex).length ? exEq(ex).map(k=>`<span style="font-size:10.5px;padding:2px 7px;border-radius:999px;background:var(--bg-inner);color:var(--text-muted)">${EQ_BY_KEY[k].e} ${EQ_BY_KEY[k].l}</span>`).join('') : `<span style="font-size:10.5px;padding:2px 7px;border-radius:999px;background:var(--bg-inner);color:var(--text-muted)">🙌 Poids du corps</span>`)}</div>
-            </div>
-          </div>
-          <div class="flex gap-1.5">
-            ${nSets ? chip(nSets, nSets>1?'séries':'série') : chip(ae.s,'durée')}
-            ${chip(reps, nSets ? 'à chaque série' : 'effort')}
-            ${rest ? chip(rest,'de repos') : chip('—','sans repos')}
-          </div>
-        </div>
-        <div class="ex-d hidden px-3.5 pb-3.5">
-          <div class="rounded-xl p-3 mb-2.5" style="background:var(--bg-inner)">
-            <div style="font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--text-faint);margin-bottom:5px">COMMENT FAIRE</div>
-            <p class="text-sm leading-snug">${ae.d}</p>
-          </div>
-          <div class="rounded-xl p-3 mb-2.5" style="background:linear-gradient(135deg,#DC262610,#F9731610);border:1px solid #F9731630">
-            <div style="font-size:10px;font-weight:700;letter-spacing:.05em;color:#F97316;margin-bottom:5px">💡 LE CONSEIL</div>
-            <p class="text-sm leading-snug">${ae.tip}</p>
-          </div>
-          <button onclick="event.stopPropagation();showDemo(${JSON.stringify(ae).replace(/"/g,'&quot;')})" class="btn-fire w-full rounded-xl py-2.5 text-white text-sm font-bold flex items-center justify-center gap-2">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            Voir la technique en vidéo
-          </button>
-        </div>
-      </div>`;
-    }).join('')}
-  </div>`;
+  if (!exes.length) return '';
+  return `<div class="space-y-2">${exes.map((ex,idx) => {
+    const ae = adaptExGoals(adaptEx(ex, p.level), goals);
+    const eq = exEq(ex);
+    const eqTxt = eq.length ? eq.map(k => EQ_BY_KEY[k].l).join(', ') : 'Poids du corps';
+    return `<div class="card">
+      <button class="w-full text-left flex gap-3 items-start" style="padding:14px 16px;background:none;border:none;cursor:pointer;color:inherit" onclick="toggleEx(this)">
+        <span class="num-tile">${idx+1}</span>
+        <span class="flex-1 min-w-0">
+          <span class="ex-name block">${ae.n}</span>
+          <span class="ex-sub block">${ae.m}</span>
+          <span class="ex-line block">${exSentence(ae)}</span>
+        </span>
+        <span class="chev" style="margin-top:6px">${ic('chevronDown',18)}</span>
+      </button>
+      <div class="ex-d hidden" style="padding:0 16px 16px 60px">
+        <p style="font-size:14px;line-height:1.5;margin-bottom:10px">${ae.d}</p>
+        <div class="note mb-3">${ic('lightbulb',16)}<span>${ae.tip}</span></div>
+        <div class="faint mb-3" style="font-size:12.5px">${eqTxt} · ${LVL_LABEL[ae.lvl||2]}</div>
+        <button onclick="event.stopPropagation();showDemo(${JSON.stringify(ae).replace(/"/g,'&quot;')})" class="btn-soft" style="padding:10px">${ic('playCircle',17)} Voir la technique en vidéo</button>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
 }
 
 window.renderExercise = (zone) => {
-  if(zone) currentZone=zone;
-  const p=userData.profile;
-  const goals=p.goals||(p.goal?[p.goal]:[]);
-  const days=p.days||[];
-  const split=WEEKLY_SPLITS[days.length]||WEEKLY_SPLITS[Math.min(days.length,7)]||['fullbody'];
-  const DAY_LABELS={L:'LUN',M:'MAR',Me:'MER',J:'JEU',V:'VEN',S:'SAM',D:'DIM'};
-  const DAY_KEYS=['D','L','M','Me','J','V','S'];
-  const todayKey=DAY_KEYS[new Date().getDay()];
-
-  // Weekly split schedule
-  const splitRows=days.map((d,i)=>{
-    const z=getZoneForDay(days,i);
-    const zm=ZONE_META[z];
-    const isToday=d===todayKey;
-    return`<div onclick="renderExercise('${z}')" class="card rounded-xl p-3 flex items-center gap-3 cursor-pointer${z===currentZone?' sel-card on':''}" style="${isToday?'border:1.5px solid #F97316':''}" >
-      <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0" style="${isToday?'background:linear-gradient(135deg,#DC2626,#F97316);color:white':'background:var(--bg-inner);color:var(--text-muted)'}">${DAY_LABELS[d]||d}</div>
-      <div class="text-lg">${zm?.e||'⚡'}</div>
-      <div class="flex-1"><div class="font-semibold text-sm">${zm?.label||z}</div><div class="text-xs" style="color:var(--text-muted)">${zm?.desc||''}</div></div>
-      ${isToday?'<span class="text-xs font-bold" style="color:#F97316">Aujourd\'hui</span>':''}
-    </div>`;
-  }).join('');
-
-  // Jour d'entraînement -> séance du jour. Jour de repos -> on propose la prochaine
-  // séance plutôt que de laisser l'écran vide.
-  const trainsToday = days.includes(todayKey);
-  let upcomingKey = null;
-  if (!trainsToday && days.length) {
-    const order = ['D','L','M','Me','J','V','S'];
-    const ti = order.indexOf(todayKey);
-    for (let i = 1; i <= 7; i++) {
-      const k = order[(ti + i) % 7];
-      if (days.includes(k)) { upcomingKey = k; break; }
-    }
-  }
-  const defaultZone = trainsToday
-    ? getZoneForDay(days, days.indexOf(todayKey))
-    : (upcomingKey ? getZoneForDay(days, days.indexOf(upcomingKey)) : 'fullbody');
+  if (zone) currentZone = safeZone(zone);
+  const p = userData.profile;
+  const goals = p.goals||(p.goal?[p.goal]:[]);
+  const days = p.days||[];
+  const tk = todayKeyFn(), trains = days.includes(tk);
+  const nxt = trains ? null : nextTrainingDay(days);
+  const defaultZone = trains ? getZoneForDay(days, days.indexOf(tk))
+    : (nxt ? getZoneForDay(days, days.indexOf(nxt)) : 'fullbody');
   const activeZone = currentZone || defaultZone;
-  const activeZoneMeta = activeZone ? ZONE_META[activeZone] : null;
-  const DAY_FULL = {L:'lundi',M:'mardi',Me:'mercredi',J:'jeudi',V:'vendredi',S:'samedi',D:'dimanche'};
-  const contextNote = currentZone ? null
-    : (trainsToday ? 'Ta séance du jour' : 'Repos aujourd\'hui — voici ta prochaine séance' + (upcomingKey ? ' (' + DAY_FULL[upcomingKey] + ')' : ''));
+  const pv = sessionPreview(activeZone, p);
 
-  const poolSize = exercisesFor(p.location, activeZone||'fullbody', true).length;
-  const shown = exercisesFor(p.location, activeZone||'fullbody').length;
-  const totalSetsPreview = exercisesFor(p.location, activeZone||'fullbody')
-    .reduce((a,ex)=>a+(setsOf(adaptExGoals(adaptEx(ex,p.level),goals).s)||1),0);
+  const ctx = (currentZone && currentZone !== defaultZone) ? 'Séance choisie'
+    : trains ? "Aujourd'hui" : (nxt ? 'Prochaine séance · ' + DAY_FULL[nxt] : 'Séance');
 
-  const listSection=activeZone?`
-    <div class="mt-5">
-      <div class="mb-3">
-        ${contextNote?`<div style="font-size:11.5px;font-weight:600;color:#F97316;margin-bottom:3px">${contextNote}</div>`:''}
-        <h2 class="font-display text-2xl font-bold leading-none">${activeZoneMeta?.label||activeZone}</h2>
-        <div class="text-xs mt-1" style="color:var(--text-muted)">${activeZoneMeta?.desc||''}</div>
-      </div>
-      <!-- Résumé de la séance, en clair -->
-      <div class="card rounded-2xl p-3.5 mb-3">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="flex-1 text-center">
-            <div class="font-display text-2xl font-bold text-fire leading-none">${shown}</div>
-            <div style="font-size:10px;color:var(--text-muted);margin-top:3px">exercices</div>
-          </div>
-          <div style="width:1px;height:30px;background:var(--border)"></div>
-          <div class="flex-1 text-center">
-            <div class="font-display text-2xl font-bold text-fire leading-none">${totalSetsPreview}</div>
-            <div style="font-size:10px;color:var(--text-muted);margin-top:3px">séries au total</div>
-          </div>
-          <div style="width:1px;height:30px;background:var(--border)"></div>
-          <div class="flex-1 text-center">
-            <div class="font-display text-2xl font-bold text-fire leading-none">~${Math.round(totalSetsPreview*2.2)}</div>
-            <div style="font-size:10px;color:var(--text-muted);margin-top:3px">minutes</div>
-          </div>
-        </div>
-        <button onclick="startSession('${activeZone}')" class="btn-fire w-full rounded-xl py-3 text-white font-display text-lg font-bold">▶ DÉMARRER LA SÉANCE</button>
-      </div>
-      <!-- Variante : montre que les exercices tournent -->
-      <div class="flex items-center justify-between mb-2.5 px-0.5">
-        <span style="font-size:11.5px;color:var(--text-muted)">Variante <b style="color:#F97316">${variantLabel()}</b> · ${shown} sur ${poolSize} exercices</span>
-        <button onclick="shuffleExercises()" class="rounded-lg px-2.5 py-1.5" style="font-size:11.5px;font-weight:600;background:var(--bg-inner);color:var(--text-muted);border:none;cursor:pointer">🔀 Changer</button>
-      </div>
-      ${exListHtml(activeZone,p,goals)}
-      <p class="text-center mt-3" style="font-size:11px;color:var(--text-faint)">Les exercices changent automatiquement chaque semaine.</p>
-    </div>`:'';
+  // Puces des jours : une par jour d'entraînement
+  let marked = false;
+  const chips = days.map((d,i) => {
+    const z = getZoneForDay(days,i);
+    const on = !marked && z === activeZone; if (on) marked = true;
+    return `<button class="dchip${on?' on':''}" onclick="renderExercise('${z}')"><span class="d">${DAY_SHORT[d]}${d===tk?' · AUJ.':''}</span><span class="z">${ZONE_SHORT[z]}</span></button>`;
+  }).join('') + `<button class="dchip${!marked?' on':''}" onclick="showAllZones()"><span class="d">AUTRE</span><span class="z">${!marked?ZONE_SHORT[activeZone]:'Choisir'}</span></button>`;
 
-  // Goals adaptation hint
-  const adaptHints=[
-    ...(goals.includes('strength')?['💪 +1 série']:[]),
-    ...(goals.includes('endurance')||goals.includes('loss')?['⏱ repos réduits']:[]),
-  ];
+  const zoneGrid = Object.keys(ZONE_META).map(k => `<button onclick="renderExercise('${k}')" class="btn-chip" style="justify-content:flex-start;${k===activeZone?'background:rgba(249,115,22,.13);color:#F97316':''}">${ZONE_NAME[k]}</button>`).join('');
 
-  document.getElementById('tab-exercise').innerHTML=`<div class="max-w-sm mx-auto">
-    <div class="mb-4">
-      <p class="text-sm" style="color:var(--text-muted)">Ton programme • ${p.location==='gym'?'🏋️ Salle':'🏠 Maison'}</p>
-      <h1 class="font-display text-4xl font-bold mt-0.5">PROGRAMME</h1>
+  const eqCount = (p.equipment||[]).length;
+  const locLine = p.location === 'gym' ? 'Salle de sport' : 'Maison · ' + (eqCount ? eqCount + ' équipement' + (eqCount>1?'s':'') : 'poids du corps');
+
+  document.getElementById('tab-exercise').innerHTML = `<div class="max-w-sm mx-auto">
+    <div class="flex items-end justify-between mb-4">
+      <div><div class="page-title">Programme</div><div class="page-sub">${locLine}</div></div>
+      <button onclick="openEquipment('app')" class="btn-chip">${ic('sliders',16)} Matériel</button>
     </div>
-    <button onclick="openEquipment('app')" class="card w-full rounded-2xl p-3 mb-3 flex items-center gap-3 text-left" style="cursor:pointer">
-      <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0" style="background:linear-gradient(135deg,#DC262618,#F9731618)">${p.location==='gym'?'🏋️':'🧰'}</div>
-      <div class="flex-1 min-w-0">
-        <div class="font-semibold text-sm">${p.location==='gym' ? 'Salle de sport' : 'Maison'}</div>
-        <div class="text-xs truncate" style="color:var(--text-muted)">${p.location==='gym' ? 'Tout le matériel disponible' : ((p.equipment||[]).length ? (p.equipment||[]).map(k=>EQ_BY_KEY[k]?EQ_BY_KEY[k].e:'').join(' ')+' · '+(p.equipment||[]).length+' équipement'+((p.equipment||[]).length>1?'s':'') : 'Poids du corps uniquement — ajoute ton matériel')}</div>
+    <div class="hscroll mb-2">${chips}</div>
+    <div id="all-zones" class="hidden grid grid-cols-2 gap-2 mt-2">${zoneGrid}</div>
+    <div class="card card-pad mt-3 mb-5">
+      <div class="label accent">${ctx}</div>
+      <div class="font-display" style="font-size:30px;font-weight:700;line-height:1.05;margin:4px 0 8px">${ZONE_NAME[activeZone]}</div>
+      <div class="flex items-center gap-4 muted mb-4" style="font-size:13.5px">
+        <span class="flex items-center gap-1.5">${ic('clock',15)} ~${pv.min} min</span>
+        <span>${pv.n} exercices · ${pv.sets} séries</span>
       </div>
-      <span class="text-xs font-semibold flex-shrink-0" style="color:#F97316">Modifier ›</span>
-    </button>
-    ${adaptHints.length?`<div class="flex gap-2 mb-3">${adaptHints.map(h=>`<span class="badge" style="background:linear-gradient(90deg,#DC262618,#F9731618);color:#F97316">${h}</span>`).join('')}</div>`:''}
-    <div class="space-y-2 mb-2">${splitRows}</div>
-    <button onclick="showAllZones()" class="w-full text-center text-xs py-2 mb-1" style="background:none;border:none;cursor:pointer;color:var(--text-faint)">Voir toutes les zones musculaires ›</button>
-    <div id="all-zones" class="hidden grid grid-cols-2 gap-2 mb-4">
-      ${Object.entries(ZONE_META).map(([k,v])=>`<div onclick="renderExercise('${k}')" class="sel-card p-3 card flex items-center gap-2 cursor-pointer${k===currentZone?' on':''}"><span class="text-xl">${v.e}</span><div><div class="font-display text-xs font-bold">${v.label}</div></div></div>`).join('')}
+      <button onclick="startSession('${activeZone}')" class="btn-primary">${ic('play',16)} Commencer la séance</button>
     </div>
-    ${listSection}
+    <div class="flex items-center justify-between mb-2">
+      <span class="label">Exercices</span>
+      <button onclick="shuffleExercises()" class="btn-link">${ic('shuffle',15)} Changer</button>
+    </div>
+    ${exListHtml(activeZone, p, goals)}
+    <p class="faint text-center" style="font-size:12px;margin-top:14px">Les exercices changent automatiquement chaque semaine.</p>
   </div>`;
 };
-window.showAllZones=()=>{
-  const el=document.getElementById('all-zones');
+window.showAllZones = () => {
+  const el = document.getElementById('all-zones');
   el.classList.toggle('hidden');
-  el.classList.toggle('grid');
 };
 
 // ── Demo modal ──────────────────────────────────────
 window.showDemo=(ex)=>{
-  document.getElementById('demo-name').textContent=ex.e+' '+ex.n;
+  document.getElementById('demo-name').textContent=ex.n;
   document.getElementById('demo-muscles').textContent=ex.m;
-  document.getElementById('demo-desc').textContent=ex.d+' 💡 '+ex.tip;
+  document.getElementById('demo-desc').textContent=ex.d+' — '+ex.tip;
   document.getElementById('demo-yt').href=`https://www.youtube.com/results?search_query=${encodeURIComponent(ex.n+' exercice technique correct')}`;
   const modal=document.getElementById('demo-modal');
   modal.style.display='flex';
@@ -2138,7 +2138,7 @@ window.startSession = (zone) => {
 function openSessionUI(){
   const ov = document.getElementById('session-overlay');
   ov.style.display = 'flex';
-  document.getElementById('sess-title').textContent = (ZONE_META[sessionData.zone]||{}).label || 'SÉANCE';
+  document.getElementById('sess-title').textContent = ZONE_NAME[sessionData.zone] || 'Séance';
   renderSessExercises();
   updateSessProg();
   if(sessionData.timer) clearInterval(sessionData.timer);
@@ -2160,26 +2160,24 @@ function renderSessExercises(){
     const allDone = marks.length && marks.every(Boolean);
     const setBtns = marks.map((on,si) =>
       `<button onclick="toggleSet(${i},${si})" class="rounded-xl font-display font-bold flex items-center justify-center"
-        style="min-width:36px;flex:1;height:42px;font-size:15px;border:2px solid ${on?'transparent':'var(--border-strong)'};cursor:pointer;
-        background:${on?'linear-gradient(135deg,#DC2626,#F97316)':'var(--bg-inner)'};color:${on?'#fff':'var(--text-faint)'}">${on?'✓':si+1}</button>`
+        style="min-width:36px;flex:1;height:44px;font-size:16px;border:1.5px solid ${on?'transparent':'var(--border-strong)'};cursor:pointer;
+        background:${on?'#F97316':'transparent'};color:${on?'#fff':'var(--text-muted)'}">${on?ic('check',18):si+1}</button>`
     ).join('');
-    return `<div class="card rounded-2xl p-3.5" style="${allDone?'opacity:.6':''}">
+    return `<div class="card" style="padding:14px 16px;${allDone?'opacity:.55':''}">
       <div class="flex items-start gap-3 mb-3">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${ex.e}</div>
+        <span class="num-tile" style="${allDone?'background:#F97316;color:#fff':''}">${allDone?ic('check',16):i+1}</span>
         <div class="flex-1 min-w-0">
-          <div class="font-semibold text-sm">${ex.n}</div>
-          <div class="text-xs mt-0.5"><span class="font-bold text-fire">${ex.s}</span><span style="color:var(--text-faint)"> · repos ${ex.r}</span></div>
+          <div class="ex-name">${ex.n}</div>
+          <div class="ex-line" style="margin-top:3px">${exSentence(ex)}</div>
         </div>
-        <button onclick="event.stopPropagation();showDemo(${JSON.stringify(ex).replace(/"/g,'&quot;')})" class="flex-shrink-0 rounded-lg px-2 py-1.5" style="background:var(--bg-inner);border:none;cursor:pointer" aria-label="Voir la technique">
-          <svg class="w-4 h-4" style="color:#DC2626" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-        </button>
+        <button onclick="event.stopPropagation();showDemo(${JSON.stringify(ex).replace(/"/g,'&quot;')})" class="faint flex-shrink-0" style="background:none;border:none;cursor:pointer;padding:4px" aria-label="Voir la technique">${ic('playCircle',22)}</button>
       </div>
       <div class="flex items-center gap-1.5">
-        <div class="flex items-center flex-shrink-0 rounded-xl" style="background:var(--bg-inner);border:1.5px solid var(--border-in);padding-right:.35rem">
+        <div class="flex items-center flex-shrink-0 rounded-xl" style="background:var(--bg-inner);padding-right:.45rem">
           <input value="${sessionData.weights[i]||''}" onchange="setWeight(${i},this.value)" onclick="event.stopPropagation()"
-            type="number" inputmode="decimal" step="0.5" placeholder="—"
-            style="width:44px;text-align:center;font-size:16px;font-weight:700;padding:.62rem .1rem;background:transparent;border:none;color:var(--text);outline:none"/>
-          <span style="font-size:10px;color:var(--text-faint)">kg</span>
+            type="number" inputmode="decimal" step="0.5" placeholder="–"
+            style="width:46px;text-align:center;font-size:16px;font-weight:700;padding:.7rem .1rem;background:transparent;border:none;color:var(--text);outline:none"/>
+          <span style="font-size:11px;color:var(--text-faint)">kg</span>
         </div>
         <div class="flex gap-1.5 flex-1">${setBtns}</div>
       </div>
@@ -2310,7 +2308,7 @@ window.renderNutrition=(tab)=>{
   if(!nutGoal) nutGoal=defaultNutGoal(p);
   const calAdj=NUT_GOAL_ADJ[nutGoal]||0;
 
-  // ── Macro target (Mifflin-St Jeor) ──
+  // Besoins (Mifflin-St Jeor)
   const w=p.weight_start||70, a=p.age||25;
   const bmr=Math.round(10*w+6.25*170-5*a+5);
   const actFactor={1:1.2,2:1.375,3:1.375,4:1.55,5:1.55,6:1.725,7:1.9}[p.days?.length||3]||1.375;
@@ -2320,108 +2318,65 @@ window.renderNutrition=(tab)=>{
   const lipG=Math.round(target*(nutGoal==='cut'?0.25:0.28)/9);
   const carbG=Math.max(0,Math.round((target-protG*4-lipG*9)/4));
 
-  // ── Goal filter buttons ──
-  const goalBtns=Object.entries(NUT_GOALS).map(([k,v])=>`
-    <button onclick="setNutGoal('${k}')" class="flex-1 rounded-xl py-2 px-1 text-center transition" style="${nutGoal===k?'background:linear-gradient(135deg,#DC2626,#F97316);color:white':'background:var(--bg-inner);color:var(--text-muted)'}">
-      <div class="text-base leading-none">${v.e}</div>
-      <div class="text-xs font-bold mt-0.5">${v.label}</div>
-    </button>`).join('');
+  const goalSeg=Object.entries(NUT_GOALS).map(([k,v])=>`<button class="${nutGoal===k?'on':''}" onclick="setNutGoal('${k}')">${v.label}</button>`).join('');
+  const tabs=[['breakfast','Petit-déj'],['lunch','Déjeuner'],['dinner','Dîner'],['snacks','Collation']];
+  const tabSeg=tabs.map(([k,l])=>`<button class="${nutTab===k?'on':''}" onclick="renderNutrition('${k}')">${l}</button>`).join('');
 
-  // ── Meal tabs ──
-  const tabs=[{k:'breakfast',l:'Petit-déj',e:'🌅'},{k:'lunch',l:'Déjeuner',e:'☀️'},{k:'dinner',l:'Dîner',e:'🌙'},{k:'snacks',l:'Collation',e:'⚡'}];
-  const tabsHtml=tabs.map(t=>`<button onclick="renderNutrition('${t.k}')" class="flex-1 py-2 text-xs font-semibold rounded-xl" style="${nutTab===t.k?'background:linear-gradient(135deg,#DC2626,#F97316);color:white':'color:var(--text-muted)'}">${t.e} ${t.l}</button>`).join('');
-
-  // ── Filter meals by goal ──
   const filtered=MEALS[nutTab].filter(m=>!m.g||m.g.includes(nutGoal));
   const shown=filtered.length?filtered:MEALS[nutTab];
   const mealsHtml=shown.map(raw=>{
     const m=(isVeg&&!raw.veg&&raw.vegAlt)?raw.vegAlt:raw;
     const adjCal=m.cal+(nutTab==='snacks'?Math.round(calAdj/4):Math.round(calAdj/3));
-    const tot=m.mac.p+m.mac.g+m.mac.l;
-    const vegBadge=(isVeg&&!raw.veg&&raw.vegAlt)?'<span class="badge" style="background:#16a34a22;color:#16a34a">🌿 Végé</span>':'';
-    return`<div class="card rounded-xl p-3.5 cursor-pointer" onclick="this.querySelector('.meal-d').classList.toggle('hidden')">
-      <div class="flex items-start gap-3">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${m.e}</div>
-        <div class="flex-1">
-          <div class="flex items-center justify-between"><div class="font-semibold text-sm">${m.n}</div>
-            <div><span class="font-display font-bold text-fire">${adjCal}</span><span class="text-xs" style="color:var(--text-faint)"> kcal</span></div></div>
-          <div class="flex flex-wrap gap-1.5 mt-1">${vegBadge}${m.tags.map(t=>`<span class="badge" style="background:var(--bg-inner);color:var(--text-muted)">${t}</span>`).join('')}<span class="badge" style="background:var(--bg-inner);color:var(--text-muted)">⏱ ${m.t}</span></div>
+    return `<div class="card">
+      <button class="w-full text-left flex gap-3 items-center" style="padding:14px 16px;background:none;border:none;cursor:pointer;color:inherit" onclick="toggleEx(this)">
+        <span class="flex-1 min-w-0">
+          <span class="ex-name block">${m.n}</span>
+          <span class="ex-sub block">${m.t}${m.tags&&m.tags[0]?' · '+m.tags[0]:''}</span>
+        </span>
+        <span class="text-right flex-shrink-0"><span class="block font-display" style="font-size:21px;font-weight:700;line-height:1">${adjCal}</span><span class="block faint" style="font-size:11px">kcal</span></span>
+        <span class="chev">${ic('chevronDown',18)}</span>
+      </button>
+      <div class="ex-d hidden" style="padding:0 16px 16px">
+        <p class="muted" style="font-size:14px;line-height:1.5;margin-bottom:12px">${m.d}</p>
+        ${m.prep?`<div class="label mb-2">Préparation</div>
+          ${m.prep.map((st,si)=>`<div class="flex gap-2.5 mb-2"><span class="step-n">${si+1}</span><span style="font-size:14px;line-height:1.45">${st}</span></div>`).join('')}`:''}
+        <div class="flex gap-4 faint" style="font-size:12.5px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+          <span>Protéines <b style="color:var(--text)">${m.mac.p} g</b></span><span>Glucides <b style="color:var(--text)">${m.mac.g} g</b></span><span>Lipides <b style="color:var(--text)">${m.mac.l} g</b></span>
         </div>
-      </div>
-      <div class="meal-d hidden mt-3 pt-3" style="border-top:1px solid var(--border)">
-        <p class="text-sm mb-3" style="color:var(--text-muted)">${m.d}</p>
-        ${m.prep?`<div class="mb-3">
-          <div class="text-xs font-bold mb-2" style="color:var(--text-muted)">👨‍🍳 PRÉPARATION</div>
-          ${m.prep.map((step,si)=>`<div class="flex gap-2 mb-1.5">
-            <div class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 text-white" style="background:linear-gradient(135deg,#DC2626,#F97316)">${si+1}</div>
-            <div class="text-sm flex-1">${step}</div>
-          </div>`).join('')}
-        </div>`:''}
-        <div class="text-xs font-bold mb-2" style="color:var(--text-muted)">📊 MACROS</div>
-        ${[['Protéines',m.mac.p,'#DC2626'],['Glucides',m.mac.g,'#F97316'],['Lipides',m.mac.l,'#FBBF24']].map(([l,v,c])=>`
-          <div class="flex items-center gap-2 mb-1.5"><span class="text-xs w-16" style="color:var(--text-muted)">${l}</span>
-            <div class="flex-1 h-1.5 rounded-full" style="background:var(--bg-faint)"><div class="h-full rounded-full" style="width:${Math.round(v/tot*100)}%;background:${c}"></div></div>
-            <span class="text-xs font-semibold w-7 text-right">${v}g</span></div>`).join('')}
       </div>
     </div>`;
   }).join('');
 
-  const dietBadge=isVeg?'🌿 Végétarien':'🥩 Omnivore';
+  const tipsByGoal={
+    mass:[['Mange en léger surplus','Environ 300 kcal de plus que ton maintien.'],['Protéines à chaque repas','2 g par kilo, réparties sur 4 à 5 prises.'],['Glucides autour de la séance','Riz, pâtes, avoine, patate douce.']],
+    cut:[['Déficit modéré','Environ 400 kcal de moins : 0,5 kg par semaine.'],['Protéines hautes','2,2 g par kilo pour garder ton muscle.'],['Des légumes à volonté','Ils calent sans apporter de calories.']],
+    balanced:[['Varie tes sources','Change de protéines et de légumes chaque jour.'],['Heures régulières','3 repas et 1 collation à heures fixes.'],['Bois assez','Au moins 2 litres d\'eau par jour.']],
+  };
+  const tips=(tipsByGoal[nutGoal]||[]).map(([t,d])=>`<div class="row" style="align-items:flex-start"><span class="macro-dot" style="background:#F97316;margin-top:7px"></span><div><div style="font-weight:600;font-size:14px">${t}</div><div class="faint" style="font-size:13px;margin-top:1px">${d}</div></div></div>`).join('');
+
   document.getElementById('tab-nutrition').innerHTML=`<div class="max-w-sm mx-auto">
-    <div class="mb-4"><p class="text-sm" style="color:var(--text-muted)">Adaptée à ton objectif</p><h1 class="font-display text-4xl font-bold mt-0.5">NUTRITION</h1></div>
+    <div class="mb-4"><div class="page-title">Nutrition</div><div class="page-sub">${isVeg?'Végétarien':'Omnivore'} · recettes adaptées à ton objectif</div></div>
+    <div class="seg mb-4">${goalSeg}</div>
 
-    <!-- Goal filter -->
-    <div class="flex gap-2 mb-3">${goalBtns}</div>
-    <p class="text-xs mb-4 text-center" style="color:var(--text-faint)">${NUT_GOALS[nutGoal].desc} · ${dietBadge}</p>
-
-    <!-- Daily macro target -->
-    <div class="card rounded-2xl p-4 mb-4">
-      <div class="flex items-center justify-between mb-2">
-        <h3 class="font-display text-sm font-bold">TES BESOINS DU JOUR</h3>
-        <span class="badge font-semibold" style="background:linear-gradient(90deg,#DC262622,#F9731622);color:#F97316">${NUT_GOALS[nutGoal].e} ${NUT_GOALS[nutGoal].label}</span>
-      </div>
-      <div class="text-center mb-3">
-        <span class="font-display text-4xl font-bold text-fire">${target}</span>
-        <span class="text-xs" style="color:var(--text-faint)"> kcal/jour</span>
-        <div class="text-xs mt-0.5" style="color:var(--text-faint)">Maintien ${tdee} kcal ${calAdj>0?'· surplus +'+calAdj:calAdj<0?'· déficit '+calAdj:''}</div>
-      </div>
-      <div class="grid grid-cols-3 gap-2">
-        ${[['Protéines','#DC2626',protG],['Glucides','#F97316',carbG],['Lipides','#FBBF24',lipG]].map(([l,c,v])=>`
-        <div class="rounded-xl p-2 text-center" style="background:var(--bg-inner)">
-          <div class="text-xs" style="color:var(--text-muted)">${l}</div>
-          <div class="font-display text-lg font-bold" style="color:${c}">${v}<span class="text-xs">g</span></div>
-        </div>`).join('')}
+    <div class="card card-pad mb-3">
+      <div class="label mb-2">Tes besoins du jour</div>
+      <div class="flex items-baseline gap-1.5"><span class="font-display" style="font-size:44px;font-weight:700;line-height:1">${target}</span><span class="muted" style="font-size:14px">kcal</span></div>
+      <div class="faint" style="font-size:12.5px;margin-top:2px">Maintien ${tdee} kcal${calAdj?` · ${calAdj>0?'+':''}${calAdj} kcal`:''}</div>
+      <div class="grid grid-cols-3 gap-2 mt-4">
+        ${[['Protéines','#EF4444',protG],['Glucides','#F97316',carbG],['Lipides','#FBBF24',lipG]].map(([l,c,v])=>`
+        <div><div class="flex items-center gap-1.5 faint" style="font-size:12px"><span class="macro-dot" style="background:${c}"></span>${l}</div>
+        <div style="font-weight:700;font-size:17px;margin-top:3px">${v} g</div></div>`).join('')}
       </div>
     </div>
 
-    <!-- Menu du jour -->
-    <button onclick="generateDayMenu()" class="btn-fire w-full rounded-2xl py-3.5 text-white font-display text-lg font-bold mb-4 flex items-center justify-center gap-2">
-      🍽️ GÉNÉRER MON MENU DU JOUR
-    </button>
+    <button onclick="generateDayMenu()" class="btn-primary mb-3">${ic('utensils',17)} Composer mon menu du jour</button>
     <div id="day-menu"></div>
 
-    <!-- Meal tabs + recipes -->
-    <div class="flex gap-1 p-1 rounded-2xl card mb-3">${tabsHtml}</div>
-    <div class="flex items-center justify-between mb-2 px-1">
-      <span class="text-xs font-semibold" style="color:var(--text-muted)">${shown.length} recette${shown.length>1?'s':''} pour ${NUT_GOALS[nutGoal].label.toLowerCase()}</span>
-    </div>
-    <div class="space-y-2.5 mb-5">${mealsHtml}</div>
+    <div class="label mt-6 mb-2">Recettes</div>
+    <div class="seg mb-3">${tabSeg}</div>
+    <div class="space-y-2 mb-6">${mealsHtml}</div>
 
-    <!-- Focus -->
-    <div class="card rounded-2xl p-4">
-      <h3 class="font-display text-sm font-bold mb-3">FOCUS NUTRITIONNEL</h3>
-      ${(()=>{
-        const tipsByGoal={
-          mass:[['💪','Surplus calorique','+300 à +500 kcal/jour pour construire du muscle'],['🍚','Glucides élevés','Riz, pâtes, avoine, patate douce autour des séances'],['🥩','Protéines','2g/kg réparties sur 4-5 repas'],['🌙','Collation du soir','Caséine ou fromage blanc avant de dormir']],
-          cut:[['⚡','Déficit contrôlé','-400 kcal/jour, perte de 0.5-0.7 kg/semaine'],['🥩','Protéines hautes','2.2g/kg pour préserver le muscle en sèche'],['🥦','Volume + fibres','Légumes à volonté pour la satiété'],['💧','Hydratation','2.5-3L/jour, coupe la fausse faim']],
-          balanced:[['🥗','Équilibre','40% glucides / 30% protéines / 30% lipides'],['🌈','Variété','Change de sources pour tous les micronutriments'],['⏰','Régularité','3 repas + 1-2 collations à heures fixes']],
-        };
-        const base=[['💧','Hydratation','2L minimum par jour, plus les jours de sport'],[isVeg?'🌿':'🥩','Source protéines',isVeg?'Légumineuses, tofu, tempeh, œufs, skyr':'Viande maigre, poisson, œufs, laitages']];
-        const seen=new Set(base.map(b=>b[1]));
-        const extra=(tipsByGoal[nutGoal]||[]).filter(([,t])=>!seen.has(t)&&seen.add(t));
-        return [...base,...extra].map(([e,t,d])=>`<div class="flex gap-3 mb-3"><span class="text-lg">${e}</span><div><div class="font-semibold text-sm">${t}</div><div class="text-xs" style="color:var(--text-muted)">${d}</div></div></div>`).join('');
-      })()}
-    </div>
+    <div class="card" style="padding:4px 16px 4px"><div class="label" style="padding-top:12px">Conseils</div>${tips}</div>
   </div>`;
 };
 
@@ -2474,48 +2429,35 @@ window.generateDayMenu=()=>{
   const totP=best.breakfast.mac.p+best.lunch.mac.p+best.snacks.mac.p+best.dinner.mac.p;
   const totC=best.breakfast.mac.g+best.lunch.mac.g+best.snacks.mac.g+best.dinner.mac.g;
   const totL=best.breakfast.mac.l+best.lunch.mac.l+best.snacks.mac.l+best.dinner.mac.l;
-  const labels={breakfast:['🌅','Petit-déjeuner'],lunch:['☀️','Déjeuner'],snacks:['⚡','Collation'],dinner:['🌙','Dîner']};
+  const labels={breakfast:'Petit-déjeuner',lunch:'Déjeuner',snacks:'Collation',dinner:'Dîner'};
 
   const rows=['breakfast','lunch','snacks','dinner'].map(cat=>{
-    const m=best[cat];const[e,l]=labels[cat];
-    return`<div class="py-2.5 cursor-pointer" style="border-bottom:1px solid var(--border)" onclick="this.querySelector('.dm-prep').classList.toggle('hidden')">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg flex-shrink-0" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${m.e}</div>
-        <div class="flex-1 min-w-0">
-          <div class="text-xs" style="color:var(--text-faint)">${e} ${l}</div>
-          <div class="font-semibold text-sm truncate">${m.n}</div>
-          <div class="text-xs" style="color:var(--text-muted)">P${m.mac.p} · G${m.mac.g} · L${m.mac.l} · 👨‍🍳 voir recette</div>
-        </div>
-        <div class="text-right flex-shrink-0"><span class="font-display font-bold text-fire">${m.cal}</span><div class="text-xs" style="color:var(--text-faint)">kcal</div></div>
-      </div>
-      <div class="dm-prep hidden mt-2 pl-12">
-        <p class="text-xs mb-2" style="color:var(--text-muted)">${m.d}</p>
-        ${(m.prep||[]).map((step,si)=>`<div class="flex gap-2 mb-1">
-          <div class="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 text-white" style="background:linear-gradient(135deg,#DC2626,#F97316);font-size:10px">${si+1}</div>
-          <div class="text-xs flex-1">${step}</div>
-        </div>`).join('')}
+    const m=best[cat];
+    return `<div style="border-bottom:1px solid var(--border)">
+      <button class="w-full text-left flex items-center gap-3" style="padding:12px 0;background:none;border:none;cursor:pointer;color:inherit" onclick="toggleEx(this)">
+        <span class="flex-1 min-w-0"><span class="label block">${labels[cat]}</span><span class="ex-name block" style="margin-top:2px">${m.n}</span></span>
+        <span class="font-display flex-shrink-0" style="font-size:19px;font-weight:700">${m.cal}</span>
+        <span class="chev">${ic('chevronDown',16)}</span>
+      </button>
+      <div class="ex-d hidden" style="padding:0 0 12px">
+        ${(m.prep||[]).map((st,si)=>`<div class="flex gap-2.5 mb-2"><span class="step-n">${si+1}</span><span style="font-size:13.5px;line-height:1.45">${st}</span></div>`).join('')}
       </div>
     </div>`;
   }).join('');
 
-  const diffPct=Math.round((best._tot-target));
+  const diff=Math.round(best._tot-target), ok=Math.abs(diff)<=150;
   document.getElementById('day-menu').innerHTML=`
-    <div class="card rounded-2xl p-4 mb-4">
+    <div class="card card-pad mb-2">
       <div class="flex items-center justify-between mb-1">
-        <h3 class="font-display text-sm font-bold">🍽️ MENU DU JOUR</h3>
-        <button onclick="generateDayMenu()" class="text-xs font-semibold px-2.5 py-1 rounded-lg" style="background:var(--bg-inner);color:var(--text-muted)">🔄 Régénérer</button>
+        <span class="label">Menu du jour</span>
+        <button onclick="generateDayMenu()" class="btn-link">${ic('refresh',14)} Autre menu</button>
       </div>
-      <p class="text-xs mb-2" style="color:var(--text-faint)">${NUT_GOALS[nutGoal].e} ${NUT_GOALS[nutGoal].label}${isVeg?' · 🌿 Végé':''}</p>
       ${rows}
-      <div class="mt-3 pt-3 grid grid-cols-4 gap-2 text-center" style="border-top:1px solid var(--border)">
-        <div><div class="font-display text-lg font-bold text-fire">${best._tot}</div><div class="text-xs" style="color:var(--text-muted)">kcal</div></div>
-        <div><div class="font-display text-lg font-bold" style="color:#DC2626">${totP}</div><div class="text-xs" style="color:var(--text-muted)">prot.</div></div>
-        <div><div class="font-display text-lg font-bold" style="color:#F97316">${totC}</div><div class="text-xs" style="color:var(--text-muted)">gluc.</div></div>
-        <div><div class="font-display text-lg font-bold" style="color:#FBBF24">${totL}</div><div class="text-xs" style="color:var(--text-muted)">lip.</div></div>
+      <div class="flex justify-between mt-3" style="font-size:12.5px">
+        <span class="faint">Total <b style="color:var(--text);font-size:14px">${best._tot} kcal</b></span>
+        <span class="faint">P ${totP} g · G ${totC} g · L ${totL} g</span>
       </div>
-      <div class="mt-2 text-xs text-center rounded-lg py-1.5" style="background:var(--bg-inner);color:${Math.abs(diffPct)<=150?'#16a34a':'var(--text-muted)'}">
-        Cible : ${target} kcal · ${diffPct>=0?'+':''}${diffPct} kcal ${Math.abs(diffPct)<=150?'✅ parfait':''}
-      </div>
+      <div class="flex items-center gap-1.5 mt-2" style="font-size:12.5px;color:${ok?'#22c55e':'var(--text-muted)'}">${ok?ic('checkCircle',15):''}${ok?'Dans ta cible':'Écart avec ta cible : '+(diff>0?'+':'')+diff+' kcal'} (${target} kcal)</div>
     </div>`;
   document.getElementById('day-menu').scrollIntoView({behavior:'smooth',block:'nearest'});
 };
@@ -2525,191 +2467,103 @@ window.renderProfile=()=>{
   const p=userData.profile;
   const wk=userData.workouts||[];
   const totalXP=wk.reduce((a,w)=>a+(w.xp||0),0);
-  const streak=calcStreak();
   const totalMin=wk.reduce((a,w)=>a+(w.duration||0),0);
-  const lvl=Math.floor(totalXP/500)+1;
-  const xpInLvl=totalXP%500;
+  const lvl=Math.floor(totalXP/500)+1, xpIn=totalXP%500;
   const u=userData.username||'?';
-  const initials=u.slice(0,2).toUpperCase();
-  const zoneCounts={};wk.forEach(w=>{zoneCounts[w.zone]=(zoneCounts[w.zone]||0)+1;});
-  const favZone=Object.entries(zoneCounts).sort((a,b)=>b[1]-a[1])[0];
+  const weights=userData.weight||[];
+  const curW=weights.length?weights[weights.length-1].kg:p.weight_start;
 
-  const last7=[];
-  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);last7.push(wk.filter(w=>w.date===d.toISOString().slice(0,10)).length);}
-  const maxBar=Math.max(...last7,1);
-  const chartHtml=last7.map((v,i)=>{
-    const h=Math.max(4,Math.round(v/maxBar*56));
-    return`<div class="flex flex-col items-center gap-1"><div style="height:${h}px;width:24px;border-radius:4px 4px 0 0;${v?'background:linear-gradient(180deg,#F97316,#DC2626)':'background:var(--bg-faint)'}"></div><span class="text-xs" style="color:var(--text-faint)">${['L','M','M','J','V','S','D'][i]}</span></div>`;
-  }).join('');
+  // 7 derniers jours
+  const last7=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));return {d, n:wk.filter(w=>w.date===isoLocal(d)).length};});
+  const maxBar=Math.max(1,...last7.map(x=>x.n));
+  const chart=last7.map(({d,n})=>`<div class="flex flex-col items-center gap-1.5 flex-1">
+      <div style="height:56px;display:flex;align-items:flex-end"><div style="width:18px;height:${n?Math.max(10,Math.round(n/maxBar*56)):4}px;border-radius:5px;background:${n?'#F97316':'var(--bg-faint)'}"></div></div>
+      <span class="faint" style="font-size:11px;font-weight:600">${['D','L','M','M','J','V','S'][d.getDay()]}</span></div>`).join('');
 
-  const histHtml=wk.length?[...wk].reverse().slice(0,10).map(w=>{const z=ZONE_META[w.zone];return`<div class="flex items-center gap-3 py-2.5" style="border-bottom:1px solid var(--border)">
-    <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${z?z.e:'⚡'}</div>
-    <div class="flex-1"><div class="text-sm font-semibold">${z?z.label:w.zone}</div><div class="text-xs" style="color:var(--text-muted)">${fmtDate(w.date)} · ${w.duration} min</div></div>
-    <div class="text-right"><div class="text-xs font-bold text-fire">+${w.xp} XP</div><div class="text-xs" style="color:var(--text-faint)">${w.exDone}/${w.exTotal}</div></div></div>`;}).join('')
-  :`<div class="text-center py-6 text-sm" style="color:var(--text-faint)">Aucune séance enregistrée</div>`;
+  const infoRow=(l,v)=>`<div class="row"><span class="flex-1 muted" style="font-size:14px">${l}</span><span style="font-weight:600;font-size:14px">${v}</span></div>`;
+  const goalsTxt=(p.goals||[p.goal]).filter(Boolean).map(g=>GOAL_LBL[g]).join(', ');
+
+  const hist=wk.length?[...wk].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5).map(w=>`<div class="row">
+      <div class="flex-1 min-w-0"><div style="font-weight:600;font-size:14px">${ZONE_NAME[w.zone]||w.zone}</div><div class="faint" style="font-size:12.5px">${fmtDate(w.date)} · ${w.duration} min</div></div>
+      <span class="faint" style="font-size:12.5px">${w.exDone}/${w.exTotal} séries</span></div>`).join('')
+    :`<p class="faint text-center" style="font-size:14px;padding:12px 0">Aucune séance enregistrée.</p>`;
+
+  const measures=userData.measurements||[];
+  const lastM=measures[measures.length-1], prevM=measures[measures.length-2];
+  const mFields=[['Taille','height'],['Tour de taille','waist'],['Hanches','hips'],['Bras','arm'],['Cuisse','thigh'],['Poitrine','chest']];
+  const measHtml=lastM?mFields.filter(([,k])=>lastM[k]).map(([l,k])=>{
+      const dlt=prevM&&prevM[k]?+(lastM[k]-prevM[k]).toFixed(1):null;
+      return infoRow(l, lastM[k]+' cm'+(dlt?` <span style="color:${dlt>0?'#22c55e':'#EF4444'};font-weight:500">${dlt>0?'+':''}${dlt}</span>`:''));
+    }).join('')
+    :`<p class="faint" style="font-size:14px;padding:10px 0">Aucune mesure pour l'instant.</p>`;
+
+  const setRow=(icon,label,action,right,danger)=>`<button onclick="${action}" class="row row-btn" style="${danger?'color:#EF4444':''}">
+      <span class="${danger?'':'faint'}" style="display:flex">${ic(icon,19)}</span><span class="flex-1">${label}</span>
+      ${right?`<span class="faint" style="font-size:12.5px">${right}</span>`:''}${danger?'':`<span class="faint" style="display:flex">${ic('chevronRight',17)}</span>`}</button>`;
 
   document.getElementById('tab-profile').innerHTML=`<div class="max-w-sm mx-auto pb-4">
     <div class="flex items-center gap-4 mb-5">
-      <div class="avatar w-16 h-16 text-2xl flex-shrink-0 glow">${initials}</div>
-      <div class="flex-1">
-        <div class="font-display text-2xl font-bold">${u}</div>
-        <div class="flex flex-wrap gap-1 mt-1">${(p.goals||[p.goal]).filter(Boolean).map(g=>`<span class="badge" style="background:linear-gradient(90deg,#DC262618,#F9731618);color:#F97316">${GOAL_E[g]} ${GOAL_LBL[g]}</span>`).join('')}<span class="badge" style="background:var(--bg-inner);color:var(--text-muted)">${p.location==='gym'?'🏋️ Salle':'🏠 Maison'}</span></div>
-        ${p.level?`<div class="mt-1"><span class="badge text-xs font-semibold px-2 py-0.5 rounded-full" style="background:linear-gradient(90deg,#DC262622,#F9731622);color:#F97316;border:1px solid #F9731644">${LEVEL_LBL[p.level]||p.level}</span></div>`:''}
-        <div class="flex items-center gap-2 mt-1.5">
-          <span class="text-xs font-bold text-fire">Niv. ${lvl}</span>
-          <div class="flex-1 h-1.5 rounded-full" style="background:var(--bg-faint)"><div class="h-full rounded-full" style="width:${Math.round(xpInLvl/500*100)}%;background:linear-gradient(90deg,#DC2626,#F97316)"></div></div>
-          <span class="text-xs" style="color:var(--text-faint)">${xpInLvl}/500</span>
-        </div>
+      <div class="avatar w-14 h-14 text-xl flex-shrink-0">${u.slice(0,2).toUpperCase()}</div>
+      <div class="flex-1 min-w-0">
+        <div class="page-title" style="font-size:28px">${u.charAt(0).toUpperCase()+u.slice(1)}</div>
+        <div class="faint" style="font-size:12.5px;margin:3px 0 6px">Niveau ${lvl} · ${xpIn} / 500 XP</div>
+        <div style="height:5px;border-radius:9px;background:var(--bg-faint)"><div style="height:100%;width:${Math.round(xpIn/500*100)}%;border-radius:9px;background:#F97316"></div></div>
       </div>
     </div>
-    <div class="grid grid-cols-4 gap-2 mb-4">
-      ${[['🔥',streak,'Streak'],['🏆',wk.length,'Séances'],['⏱️',totalMin,'Min'],['⭐',totalXP,'XP']].map(([e,v,l])=>`
-        <div class="card rounded-xl p-2.5 text-center"><div class="text-base">${e}</div><div class="font-display text-lg font-bold text-fire">${v}</div><div class="text-xs" style="color:var(--text-muted)">${l}</div></div>`).join('')}
+
+    <div class="grid grid-cols-3 gap-2 mb-4">
+      ${[[wk.length,'séances'],[totalMin,'minutes'],[calcStreak(),'jours d\'affilée']].map(([v,l])=>`<div class="card text-center" style="padding:14px 6px"><div class="stat-num">${v}</div><div class="faint" style="font-size:11.5px;margin-top:4px">${l}</div></div>`).join('')}
     </div>
-    <div class="card rounded-2xl p-4 mb-4">
-      <div class="flex items-center justify-between mb-3"><h3 class="font-display text-sm font-bold">ACTIVITÉ 7 JOURS</h3>
-        <span class="text-xs font-bold text-fire">${last7.reduce((a,b)=>a+b,0)} séance${last7.reduce((a,b)=>a+b,0)>1?'s':''}</span></div>
-      <div class="flex items-end justify-between" style="height:72px">${chartHtml}</div>
+
+    <div class="card card-pad mb-4">
+      <div class="flex items-center justify-between mb-3"><span class="label">7 derniers jours</span><span class="faint" style="font-size:12.5px">${last7.reduce((a,x)=>a+x.n,0)} séance(s)</span></div>
+      <div class="flex">${chart}</div>
     </div>
-    ${favZone?`<div class="card rounded-2xl p-4 mb-4 flex items-center gap-3">
-      <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" style="background:linear-gradient(135deg,#DC262615,#F9731615)">${ZONE_META[favZone[0]]?.e||'⚡'}</div>
-      <div><div class="text-xs font-semibold" style="color:var(--text-muted)">ZONE FAVORITE</div>
-        <div class="font-display text-lg font-bold">${ZONE_META[favZone[0]]?.label||favZone[0]}</div>
-        <div class="text-xs text-fire">${favZone[1]} séance${favZone[1]>1?'s':''}</div></div></div>`:''}
-    <div class="card rounded-2xl p-4 mb-4">
-      <h3 class="font-display text-sm font-bold mb-3">MON PROFIL PHYSIQUE</h3>
-      <div class="grid grid-cols-3 gap-2 mb-3">
-        <div class="rounded-xl p-2.5 text-center" style="background:var(--bg-inner)">
-          <div class="text-base">🎂</div>
-          <div class="font-display text-lg font-bold text-fire">${p.age||'—'}</div>
-          <div class="text-xs" style="color:var(--text-muted)">Ans</div>
-        </div>
-        <div class="rounded-xl p-2.5 text-center" style="background:var(--bg-inner)">
-          <div class="text-base">⚖️</div>
-          <div class="font-display text-lg font-bold text-fire">${(userData.weight&&userData.weight.length)?userData.weight[userData.weight.length-1].kg:p.weight_start||'—'}</div>
-          <div class="text-xs" style="color:var(--text-muted)">kg actuel</div>
-        </div>
-        <div class="rounded-xl p-2.5 text-center" style="background:var(--bg-inner)">
-          <div class="text-base">${p.level==='beginner'?'🌱':p.level==='advanced'?'🔥':'⚡'}</div>
-          <div class="font-display text-base font-bold text-fire">${p.level==='beginner'?'Déb.':p.level==='advanced'?'Avancé':'Inter.'}</div>
-          <div class="text-xs" style="color:var(--text-muted)">Niveau</div>
-        </div>
-        <div class="rounded-xl p-2.5 text-center" style="background:var(--bg-inner)">
-          <div class="text-base">🎯</div>
-          <div class="font-display text-lg font-bold text-fire">${p.weight_goal||'—'}</div>
-          <div class="text-xs" style="color:var(--text-muted)">kg objectif</div>
-        </div>
-      </div>
-      ${p.diet?`<div class="text-xs rounded-xl p-2 mb-1" style="background:var(--bg-sub);color:var(--text-muted)">${p.diet==='vegetarian'?'🌿 Régime Végétarien — alternatives végé affichées en nutrition':'🥩 Régime Omnivore'}</div>`:''}
-      ${p.age&&p.weight_start?`<div class="text-xs rounded-xl p-2.5" style="background:var(--bg-sub);color:var(--text-muted)">
-        💡 Apport conseillé&nbsp;: <span class="font-semibold text-fire">${Math.round(p.weight_start*({'shape':30,'strength':35,'endurance':33,'loss':25}[p.goal]||30))} kcal/jour</span>
-        · Protéines&nbsp;: <span class="font-semibold text-fire">${Math.round(p.weight_start*1.8)}g</span>
-      </div>`:''}
-      <button onclick="showEditStats()" class="w-full mt-3 rounded-xl py-2 text-sm font-semibold" style="background:var(--bg-inner);color:var(--text-muted)">✏️ Modifier profil</button>
+
+    <div class="card mb-4" style="padding:4px 16px">
+      <div class="flex items-center justify-between" style="padding-top:12px"><span class="label">Mon profil</span><button onclick="showEditStats()" class="btn-link">${ic('pencil',14)} Modifier</button></div>
+      ${infoRow('Objectifs', goalsTxt||'—')}
+      ${infoRow('Niveau', LEVEL_NAME[p.level]||'—')}
+      ${infoRow('Âge', (p.age||'—')+' ans')}
+      ${infoRow('Poids objectif', (p.weight_goal||'—')+' kg')}
+      ${infoRow('Alimentation', p.diet==='vegetarian'?'Végétarien':'Omnivore')}
     </div>
-    <!-- Calculateur macros -->
-    ${(()=>{
-      const w=p.weight_start||70, a=p.age||25, wg=p.weight_goal||w;
-      const isMale=true; // TODO: add gender to profile
-      // Mifflin-St Jeor BMR
-      const bmr=Math.round(10*w + 6.25*170 - 5*a + (isMale?5:-161));
-      const actFactor={1:1.2,2:1.375,3:1.375,4:1.55,5:1.55,6:1.725,7:1.9}[p.days?.length||3]||1.375;
-      const tdee=Math.round(bmr*actFactor);
-      const diff=wg-w;
-      const target=diff<-0.5?tdee-400:diff>0.5?tdee+250:tdee;
-      const protG=Math.round(w*2);
-      const lipG=Math.round(target*0.28/9);
-      const carbG=Math.round((target-protG*4-lipG*9)/4);
-      const pPct=Math.round(protG*4/target*100);
-      const lPct=Math.round(lipG*9/target*100);
-      const cPct=100-pPct-lPct;
-      return`<div class="card rounded-2xl p-4 mb-4">
-        <h3 class="font-display text-sm font-bold mb-1">CALCULATEUR MACROS</h3>
-        <p class="text-xs mb-3" style="color:var(--text-muted)">Basé sur ton poids, ton activité et ton objectif.</p>
-        <div class="rounded-xl p-3 mb-3 text-center" style="background:linear-gradient(135deg,#DC262618,#F9731618)">
-          <div class="text-xs font-semibold mb-0.5" style="color:var(--text-muted)">CALORIES JOURNALIÈRES</div>
-          <div class="font-display text-4xl font-bold text-fire">${target}</div>
-          <div class="text-xs" style="color:var(--text-faint)">TDEE ${tdee} kcal · ${diff<-0.5?'déficit -400':''}${diff>0.5?'surplus +250':'maintien'}</div>
-        </div>
-        <div class="grid grid-cols-3 gap-2 mb-3">
-          ${[['Protéines','#DC2626',protG,'g',pPct+'%'],['Glucides','#F97316',carbG,'g',cPct+'%'],['Lipides','#FBBF24',lipG,'g',lPct+'%']].map(([l,c,v,u,pct])=>`
-          <div class="rounded-xl p-2.5 text-center" style="background:var(--bg-inner)">
-            <div class="text-xs mb-1" style="color:var(--text-muted)">${l}</div>
-            <div class="font-display text-xl font-bold" style="color:${c}">${v}<span class="text-xs">${u}</span></div>
-            <div class="text-xs" style="color:var(--text-faint)">${pct}</div>
-          </div>`).join('')}
-        </div>
-        <div class="flex h-2 rounded-full overflow-hidden mb-1">
-          <div style="width:${pPct}%;background:#DC2626"></div>
-          <div style="width:${cPct}%;background:#F97316"></div>
-          <div style="width:${lPct}%;background:#FBBF24"></div>
-        </div>
-        <div class="flex justify-between text-xs" style="color:var(--text-faint)">
-          <span>🔴 Protéines</span><span>🟠 Glucides</span><span>🟡 Lipides</span>
-        </div>
-      </div>`;
-    })()}
-    <!-- Suivi du poids -->
-    <div class="card rounded-2xl p-4 mb-4">
-      <h3 class="font-display text-sm font-bold mb-3">SUIVI DU POIDS</h3>
-      <div class="max-h-32 overflow-y-auto mb-3 space-y-1">
-        ${(userData.weight||[]).slice(-5).reverse().map(w=>`<div class="flex justify-between text-sm py-1" style="border-bottom:1px solid var(--border)"><span style="color:var(--text-muted)">${fmtDate(w.date)}</span><span class="font-semibold">${w.kg} kg</span></div>`).join('')||`<p class="text-sm" style="color:var(--text-faint)">Aucune mesure</p>`}
-      </div>
-      <div class="flex gap-2">
-        <input id="weight-input" type="number" step="0.1" placeholder="Ex: 72.5" class="inp flex-1" style="padding:.625rem .875rem" inputmode="decimal"/>
-        <button onclick="logWeight()" class="btn-fire text-white rounded-xl px-4 py-2 text-sm font-bold">+ Ajouter</button>
+
+    <div class="card card-pad mb-4">
+      <div class="flex items-center justify-between mb-1"><span class="label">Poids</span><span style="font-weight:700;font-size:15px">${curW||'—'} kg</span></div>
+      ${weights.slice(-4).reverse().map(w=>`<div class="flex justify-between faint" style="font-size:13px;padding:6px 0;border-bottom:1px solid var(--border)"><span>${fmtDate(w.date)}</span><span style="color:var(--text)">${w.kg} kg</span></div>`).join('')}
+      <div class="flex gap-2 mt-3">
+        <input id="weight-input" type="number" step="0.1" placeholder="Nouveau poids (kg)" class="inp flex-1" style="padding:.65rem .9rem" inputmode="decimal"/>
+        <button onclick="logWeight()" class="btn-chip" style="background:#F97316;color:#fff;padding:0 14px">${ic('plus',18)}</button>
       </div>
     </div>
-    <!-- Mensurations -->
-    <div class="card rounded-2xl p-4 mb-4">
-      <div class="flex items-center justify-between mb-3">
-        <h3 class="font-display text-sm font-bold">MENSURATIONS</h3>
-        <button onclick="showMeasureModal()" class="text-xs font-semibold px-3 py-1.5 rounded-xl" style="background:var(--bg-inner);color:var(--text-muted)">+ Mesurer</button>
-      </div>
-      ${(()=>{
-        const measures=userData.measurements||[];
-        const last=measures[measures.length-1];
-        const prev=measures[measures.length-2];
-        if(!last) return '<p class="text-sm text-center py-4" style="color:var(--text-faint)">Aucune mensuration enregistrée</p>';
-        const fields=[['Taille','height','cm'],['Tour de taille','waist','cm'],['Hanches','hips','cm'],['Bras (contracté)','arm','cm'],['Cuisse','thigh','cm'],['Poitrine','chest','cm']];
-        return`<div class="text-xs mb-2" style="color:var(--text-faint)">${fmtDate(last.date)}</div>
-        <div class="grid grid-cols-2 gap-2">
-          ${fields.filter(([,k])=>last[k]).map(([l,k,u])=>{
-            const delta=prev&&prev[k]?+(last[k]-prev[k]).toFixed(1):null;
-            const arrow=delta===null?'':delta>0?` <span style="color:#16a34a">+${delta}</span>`:delta<0?` <span style="color:#DC2626">${delta}</span>`:'';
-            return`<div class="rounded-xl p-2.5" style="background:var(--bg-inner)">
-              <div class="text-xs mb-0.5" style="color:var(--text-muted)">${l}</div>
-              <div class="font-semibold text-sm">${last[k]} ${u}${arrow}</div>
-            </div>`;
-          }).join('')}
-        </div>`;
-      })()}
+
+    <div class="card mb-4" style="padding:4px 16px">
+      <div class="flex items-center justify-between" style="padding-top:12px"><span class="label">Mensurations</span><button onclick="showMeasureModal()" class="btn-link">${ic('plus',14)} Mesurer</button></div>
+      ${lastM?`<div class="faint" style="font-size:12px;margin-top:2px">${fmtDate(lastM.date)}</div>`:''}
+      ${measHtml}
     </div>
-    <div class="card rounded-2xl p-4 mb-4"><h3 class="font-display text-sm font-bold mb-1">HISTORIQUE</h3>${histHtml}</div>
-    <div class="card rounded-2xl p-4">
-      <h3 class="font-display text-sm font-bold mb-3">PARAMÈTRES</h3>
-      <button onclick="showScreen('onboarding');obData={location:null,goals:[],days:[],age:null,weight:null,weight_goal:null,level:null,diet:null};obStep(1)" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
-        <span>⚙️</span><span>Reconfigurer le profil</span><span class="ml-auto" style="color:#444">›</span></button>
-      <button onclick="openEquipment('app')" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
-        <span>🧰</span><span>Lieu & matériel</span><span class="ml-auto text-xs" style="color:var(--text-faint)">${p.location==='gym'?'Salle':'Maison · '+(p.equipment||[]).length+' équip.'}</span><span style="color:#444">›</span></button>
-      <button onclick="toggleTheme()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
-        <span>🌙</span><span>Thème sombre / clair</span><span class="ml-auto" style="color:#444">›</span></button>
-      <button onclick="switchAccount()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="border-bottom:1px solid var(--border)">
-        <span>🔄</span><span>Changer de compte</span><span class="ml-auto" style="color:#444">›</span></button>
-      <button onclick="logout()" class="w-full text-left flex items-center gap-3 py-3 text-sm" style="color:#EF4444">
-        <span>🚪</span><span>Se déconnecter</span></button>
+
+    <div class="card mb-4" style="padding:4px 16px"><div class="label" style="padding-top:12px">Historique</div>${hist}</div>
+
+    <div class="card" style="padding:0 16px">
+      ${setRow('sliders','Lieu & matériel',"openEquipment('app')",p.location==='gym'?'Salle':'Maison')}
+      ${setRow('moon','Thème clair / sombre','toggleTheme()')}
+      ${setRow('users','Changer de compte','switchAccount()')}
+      ${setRow('refresh','Refaire le questionnaire',"showScreen('onboarding');obData={location:null,goals:[],days:[],age:null,weight:null,weight_goal:null,level:null,diet:null};obStep(1)")}
+      ${setRow('logout','Se déconnecter','logout()','',true)}
     </div>
   </div>`;
 };
 
 window.showEditStats=()=>{
   const p=userData.profile;
-  const lvls=[['beginner','🌱 Débutant'],['intermediate','⚡ Intermédiaire'],['advanced','🔥 Avancé']];
+  const lvls=[['beginner','Débutant'],['intermediate','Intermédiaire'],['advanced','Avancé']];
   const html=`<div id="edit-stats-modal" style="position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center" onclick="if(event.target===this)closeEditStats()">
     <div style="background:var(--bg-card);border:1px solid var(--border-in);border-radius:1.5rem 1.5rem 0 0;width:100%;max-width:480px;padding:1.5rem;padding-bottom:calc(1.5rem + env(safe-area-inset-bottom))">
       <div class="flex items-center justify-between mb-4">
         <div class="font-display text-xl font-bold">MON PROFIL</div>
-        <button onclick="closeEditStats()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer">✕</button>
+        <button onclick="closeEditStats()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center">${ic('x',16)}</button>
       </div>
       <div class="flex gap-2 mb-3">
         <div class="flex-1"><label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">ÂGE</label>
@@ -2725,7 +2579,7 @@ window.showEditStats=()=>{
       </div>
       <label class="text-xs font-semibold mb-1.5 block" style="color:var(--text-muted)">RÉGIME ALIMENTAIRE</label>
       <div class="flex gap-2 mb-4">
-        ${[['omnivore','🥩 Omnivore'],['vegetarian','🌿 Végétarien']].map(([k,l])=>`<button onclick="esPickDiet('${k}',this)" class="flex-1 rounded-xl py-2.5 text-xs font-bold transition" style="${p.diet===k?'background:linear-gradient(90deg,#DC2626,#F97316);color:white':'background:var(--bg-inner);color:var(--text-muted)'}">${l}</button>`).join('')}
+        ${[['omnivore','Omnivore'],['vegetarian','Végétarien']].map(([k,l])=>`<button onclick="esPickDiet('${k}',this)" class="flex-1 rounded-xl py-2.5 text-xs font-bold transition" style="${p.diet===k?'background:linear-gradient(90deg,#DC2626,#F97316);color:white':'background:var(--bg-inner);color:var(--text-muted)'}">${l}</button>`).join('')}
       </div>
       <button onclick="saveEditStats()" class="btn-fire w-full rounded-2xl py-3.5 text-white font-display text-lg font-bold">ENREGISTRER</button>
     </div>
@@ -2765,7 +2619,7 @@ window.showMeasureModal=()=>{
     <div style="background:var(--bg-card);border:1px solid var(--border-in);border-radius:1.5rem 1.5rem 0 0;width:100%;max-width:480px;padding:1.5rem;padding-bottom:calc(1.5rem + env(safe-area-inset-bottom));max-height:90vh;overflow-y:auto">
       <div class="flex items-center justify-between mb-4">
         <div class="font-display text-xl font-bold">MENSURATIONS</div>
-        <button onclick="closeMeasureModal()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer">✕</button>
+        <button onclick="closeMeasureModal()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center">${ic('x',16)}</button>
       </div>
       <p class="text-xs mb-4" style="color:var(--text-muted)">Remplis seulement les champs que tu veux suivre.</p>
       <div class="grid grid-cols-2 gap-3 mb-4">
@@ -2824,7 +2678,10 @@ window.toggleTheme=()=>{
 let toastTimer=null;
 function toast(msg,icon=''){
   const el=document.getElementById('toast');
-  el.textContent=(icon?icon+' ':'')+msg;
+  const clean=String(msg).replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B50}\u{23F0}-\u{23FA}\u{FE0F}\u{200D}]/gu,'').replace(/\s{2,}/g,' ').trim();
+  const bad=['❌','⚠️','⏳','📶'].includes(icon);
+  el.innerHTML=`<span style="color:${bad?'#EF4444':'#F97316'};display:flex">${ic(bad?'alert':'checkCircle',18)}</span><span></span>`;
+  el.lastChild.textContent=clean;
   el.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>el.classList.remove('show'),2800);
@@ -2837,9 +2694,9 @@ if(isIOS&&!navigator.standalone&&!localStorage.getItem('ff_install_dismissed')){
     const b=document.createElement('div');
     b.innerHTML=`<div style="position:fixed;bottom:0;left:0;right:0;z-index:999;padding:1rem 1.25rem;padding-bottom:calc(1rem + env(safe-area-inset-bottom));background:var(--bg-sub);border-top:1px solid #333;display:flex;align-items:center;gap:12px">
       <img src="apple-touch-icon.png" style="width:44px;height:44px;border-radius:10px;flex-shrink:0"/>
-      <div style="flex:1"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:#f9fafb">INSTALLER FITFLEX</div>
-        <div style="font-size:.75rem;color:var(--text-muted);margin-top:2px">Appuie sur <b style="color:#F97316">⎋ Partager</b> → <b style="color:#F97316">"Sur l'écran d'accueil"</b></div></div>
-      <button onclick="localStorage.setItem('ff_install_dismissed','1');this.closest('div').parentNode.remove()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:28px;height:28px;font-size:14px;cursor:pointer">✕</button>
+      <div style="flex:1"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--text)">INSTALLER FITFLEX</div>
+        <div style="font-size:.75rem;color:var(--text-muted);margin-top:2px">Appuie sur <b style="color:#F97316">Partager</b> → <b style="color:#F97316">"Sur l'écran d'accueil"</b></div></div>
+      <button onclick="localStorage.setItem('ff_install_dismissed','1');this.closest('div').parentNode.remove()" style="background:var(--bg-faint);border:1px solid var(--border-strong);color:var(--text-muted);border-radius:50%;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center">${ic('x',14)}</button>
     </div>`;
     document.body.appendChild(b);
   }, 3000);
